@@ -14,13 +14,6 @@ let mix = require('laravel-mix');
 mix.styles([
     'resources/assets/plantillas/css/font-awesome.min.css',
     'resources/assets/plantillas/css/simple-line-icons.min.css',
-    'resources/assets/plantillas/css/style.css'
+    'resources/assets/plantillas/css/style.css',
 ], 'public/css/all.css')
-.scripts([
-    'resources/assets/plantillas/js/jquery.min.js',
-    'resources/assets/plantillas/js/popper.min.js',
-    'resources/assets/plantillas/js/bootstrap.min.js',
-    'resources/assets/plantillas/js/pace.min.js',
-    'resources/assets/plantillas/js/Chart.min.js',
-    'resources/assets/plantillas/js/template.js',
-], 'public/js/all.js');
+    .js(['resources/assets/js/app.js'], 'public/js/app.js');
