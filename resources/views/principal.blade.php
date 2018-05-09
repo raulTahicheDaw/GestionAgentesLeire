@@ -76,85 +76,8 @@
     </header>
 
     <div class="app-body">
-        <div class="sidebar">
-            <nav class="sidebar-nav">
-                <ul class="nav">
-                    <li class="nav-title">
-                        Gestión
-                    </li>
-                    <li class="nav-item nav-dropdown">
-                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-user"></i> Clientes</a>
-                        <ul class="nav-dropdown-items">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-people"></i> Listado Clientes </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-user-follow"></i> Nuevo Cliente </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item nav-dropdown">
-                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-user"></i> Referencias</a>
-                        <ul class="nav-dropdown-items">
-                            <li class="nav-item">
-                                <a class="nav-link" href="i#"><i class="icon-people"></i> Listado Referencias</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-user-follow"></i> Nueva Referencia</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item nav-dropdown">
-                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-event"></i> Vencimientos</a>
-                        <ul class="nav-dropdown-items">
-                            <li class="nav-item">
-                                <a class="nav-link" href="i#"><i class="icon-calendar"></i> Mes </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-book-open"></i> Rango</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item nav-dropdown">
-                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-people"></i> Agenda</a>
-                        <ul class="nav-dropdown-items">
-                            <li class="nav-item">
-                                <a class="nav-link" href="i#"><i class="icon-clock"></i> Citas Hoy</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-calendar"></i> Calendario</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item nav-dropdown">
-                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-settings"></i>
-                            Configuraciones</a>
-                        <ul class="nav-dropdown-items">
-                            <li class="nav-item">
-                                <a class="nav-link" href="i#"><i class="icon-briefcase"></i> Productos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-list"></i> Categorías</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="icon-options"></i> Ramos</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="main.html"><i class="icon-question"></i> Ayuda <span
-                                    class="badge badge-danger">PDF</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="main.html"><i class="icon-info"></i> Acerca de...<span
-                                    class="badge badge-info">SGASL</span></a>
-                    </li>
-                </ul>
-            </nav>
-            <button class="sidebar-minimizer brand-minimizer" type="button"></button>
-        </div>
-
-        <!-- Contenido Principal -->
+    @include('plantilla.sidebar')
+    <!-- Contenido Principal -->
     @yield('contenido')
     <!-- /Fin del contenido principal -->
     </div>

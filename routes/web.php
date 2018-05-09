@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('contenido/contenido');
 });
+
+Route::get('cliente', 'ClienteController@index');
+Route::post('cliente/registrar', 'ClienteController@store');
+Route::put('cliente/actulizar', 'ClienteController@update');
+Route::put('cliente/desactivar', 'ClienteController@desactivar');
+Route::put('cliente/activar', 'ClienteController@activar');

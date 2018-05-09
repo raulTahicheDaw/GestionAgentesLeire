@@ -30,6 +30,7 @@ class CreateClientesTable extends Migration
             $table->string('profesion',50);
             $table->string('contacto',50);
             $table->boolean('activo');
+            $table->longText('observaciones');
             $table->unsignedInteger('id_categoria');
             $table->timestamps();
             $table->foreign('id_categoria')
