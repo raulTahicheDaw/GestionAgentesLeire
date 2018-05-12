@@ -58,7 +58,7 @@ class ClienteController extends Controller
      */
     public function update(Request $request)
     {
-        $cliente = Cliente::finfOrFail($request->id);
+        $cliente = Cliente::findOrFail($request->id);
         $cliente->nombre = $request->nombre;
         $cliente->apellidos = $request->apellidos;
         $cliente->dni = $request->dni;
@@ -81,14 +81,14 @@ class ClienteController extends Controller
 
     public function desactivar(Request $request)
     {
-        $cliente = Cliente::finfOrFail($request->id);
+        $cliente = Cliente::findOrFail($request->id);
         $cliente->activo = '0';
         $cliente->save();
     }
 
     public function activar(Request $request)
     {
-        $cliente = Cliente::finfOrFail($request->id);
+        $cliente = Cliente::findOrFail($request->id);
         $cliente->activo = '1';
         $cliente->save();
     }

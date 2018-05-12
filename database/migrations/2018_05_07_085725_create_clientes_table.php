@@ -29,7 +29,7 @@ class CreateClientesTable extends Migration
             $table->string('cuentaBancaria',30)->nullable();
             $table->string('profesion',50)->nullable();
             $table->string('contacto',50)->nullable();
-            $table->boolean('activo');
+            $table->boolean('activo')->default(1);
             $table->longText('observaciones')->nullable();
             $table->unsignedInteger('id_categoria');
             $table->timestamps();

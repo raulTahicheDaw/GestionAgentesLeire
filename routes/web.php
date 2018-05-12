@@ -17,6 +17,7 @@ Route::get('/', function () {
 
 Route::get('cliente', 'ClienteController@index');
 Route::post('cliente/registrar', 'ClienteController@store');
-Route::put('cliente/actulizar', 'ClienteController@update');
+Route::put('cliente/actualizar', 'ClienteController@update');
 Route::put('cliente/desactivar', 'ClienteController@desactivar');
 Route::put('cliente/activar', 'ClienteController@activar');
+Route::get('categoria', 'CategoriaController@index');
