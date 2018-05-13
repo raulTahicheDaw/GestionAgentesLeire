@@ -15,7 +15,14 @@ class ClienteController extends Controller
     public function index(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-        $clientes = Cliente::paginate(5);
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if ($buscar == '') {
+            $clientes = Cliente::orderBy('id', 'desc')->paginate(5);
+        } else {
+            $clientes = Cliente::where($criterio, 'like', '%' . $buscar . '%')->orderBy('nombre', 'asc')->paginate(5);
+        }
         return [
             'pagination' => [
                 'total' => $clientes->total(),

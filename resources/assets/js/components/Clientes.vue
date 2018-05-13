@@ -21,13 +21,17 @@
                             <div class="input-group">
                                 <select class="form-control col-md-3" v-model="criterio">
                                     <option value="nombre">Nombre</option>
-                                    <option value="descripcion">Apellidos</option>
-                                    <option value="descripcion">DNI</option>
-
+                                    <option value="apellidos">Apellidos</option>
+                                    <option value="dni">DNI</option>
                                 </select>
-                                <input type="text" v-model="buscar" class="form-control"
+                                <input type="text" v-model="buscar" @keyup.enter="listarCliente(1,buscar,criterio)"
+                                       class="form-control"
                                        placeholder="Texto a buscar">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Buscar
+                                <button type="submit" @click="listarCliente(1,buscar,criterio)" class="btn btn-primary">
+                                    <i class="fa fa-search"></i> Buscar
+                                </button>
+                                <button type="submit" @click="listarCliente(1,'','nombre')" class="btn btn-primary">
+                                    <i class="fa fa-align-justify"></i> Mostrar todos
                                 </button>
                             </div>
                         </div>
@@ -94,14 +98,18 @@
                     </table>
                     <nav>
                         <ul class="pagination">
-                            <li class="page-item" v-if="pagination.current_page >1 " >
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1)">Ant</a>
+                            <li class="page-item" v-if="pagination.current_page >1 ">
+                                <a class="page-link" href="#"
+                                   @click.prevent="cambiarPagina(pagination.current_page - 1, buscar, criterio)">Ant</a>
                             </li>
-                            <li class="page-item" v-for="page in pagesNumbers" :key="page" :class="[page== isActive ? 'active' : '']">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page)" v-text="page"></a>
+                            <li class="page-item" v-for="page in pagesNumbers" :key="page"
+                                :class="[page== isActive ? 'active' : '']">
+                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page, buscar, criterio)"
+                                   v-text="page"></a>
                             </li>
                             <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1)">Sig</a>
+                                <a class="page-link" href="#"
+                                   @click.prevent="cambiarPagina(pagination.current_page + 1, buscar, criterio)">Sig</a>
                             </li>
                         </ul>
                     </nav>
@@ -140,9 +148,10 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-control-label"
-                                           :class="{'text-error' : errorMostrarMsgCliente.includes('DNI')}">DNI<sup>*</sup></label>
+                                           :class="{'text-error' : errorMostrarMsgCliente.includes('DNI')}">DNI/NIE<sup>*</sup></label>
 
                                     <input type="text" v-model="dni" class="form-control"
+                                           pattern="(([X-Z]{1})([-]?)(\d{7})([-]?)([A-Z]{1}))|((\d{8})([-]?)([A-Z]{1}))"
                                            :class="{'is-invalid' : errorMostrarMsgCliente.includes('DNI')}"
                                            placeholder="Introduzca el DNI/CIF">
                                 </div>
@@ -229,12 +238,14 @@
                             </div>
                             <div v-show="errorCliente" class="form-group row div-error">
                                 <div class="text-center text-error">
-                                    Los siguientes campos no pueden estar vacíos: <br>
+                                    <p>Los siguientes campos no pueden estar vacíos o son incorrectos:</p>
                                     <span v-for="error in errorMostrarMsgCliente" :key="error"
                                           v-text="error + ', '"> </span>
                                 </div>
                             </div>
-
+                            <div v-show="errorFormatoDni" class="text-error text-center">
+                                <p>DNI/NIE (12345678A o X1234567A)</p>
+                            </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
                                 <button type="button" v-if="tipoAccion==1" class="btn btn-primary"
@@ -270,6 +281,7 @@
                 tipoAccion: 0,
                 errorCliente: 0,
                 errorMostrarMsgCliente: [],
+                errorFormatoDni: 0,
                 cliente_id: 0,
                 pagination: {
                     'total': 0,
@@ -280,8 +292,8 @@
                     'to': 0,
                 },
                 offset: 3,
-                criterio : 'nombre',
-                buscar : ''
+                criterio: 'nombre',
+                buscar: ''
             }
         },
         computed: {
@@ -319,9 +331,9 @@
                         console.log(error);
                     });
             },
-            listarCliente(page) {
+            listarCliente(page, buscar, criterio) {
                 let me = this;
-                var url = '/cliente?page=' + page;
+                var url = '/cliente?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
                 axios.get(url).then(function (response) {
                     var respuesta = response.data;
                     me.arrayCliente = respuesta.clientes.data;
@@ -331,11 +343,11 @@
                         console.log(error);
                     });
             },
-            cambiarPagina(page) {
+            cambiarPagina(page, buscar, criterio) {
                 let me = this;
                 //Actualiza la página actual
                 me.pagination.current_page = page;
-                me.listarCliente(page);
+                me.listarCliente(page, buscar, criterio);
             },
             registrarCliente() {
                 if (this.validarCliente()) {
@@ -361,7 +373,7 @@
                     'profesion': this.profesion
                 }).then(function (response) {
                     me.cerrarModal();
-                    me.listarCliente();
+                    me.listarCliente(1, '', 'nombre');
                 })
                     .catch(function (error) {
                         console.log(error);
@@ -392,7 +404,7 @@
                     'id': this.cliente_id
                 }).then(function (response) {
                     me.cerrarModal();
-                    me.listarCliente();
+                    me.listarCliente(1, '', 'nombre');
                 })
                     .catch(function (error) {
                         console.log(error);
@@ -416,7 +428,7 @@
                         axios.put('/cliente/desactivar', {
                             'id': id
                         }).then(function (response) {
-                            me.listarCliente();
+                            me.listarCliente(1, '', 'nombre');
                             swalWithBootstrapButtons(
                                 'Desactivado!',
                                 'El Cliente ha sido desactivado con éxito.',
@@ -457,7 +469,7 @@
                         axios.put('/cliente/activar', {
                             'id': id
                         }).then(function (response) {
-                            me.listarCliente();
+                            me.listarCliente(1, '', 'nombre');
                             swalWithBootstrapButtons(
                                 'Desactivado!',
                                 'El Cliente ha sido activado con éxito.',
@@ -488,8 +500,31 @@
                 if (!this.dni) this.errorMostrarMsgCliente.push('DNI');
                 if (!this.telefono) this.errorMostrarMsgCliente.push('Teléfono');
                 if (!this.id_categoria) this.errorMostrarMsgCliente.push('Categoría');
+                if (!this.validarDni(this.dni)) {
+                    this.errorFormatoDni = 1;
+                    this.errorCliente = 1;
+                }
                 if (this.errorMostrarMsgCliente.length > 0) this.errorCliente = 1;
                 return this.errorCliente;
+            },
+            validarDni(value) {
+                let validChars = 'TRWAGMYFPDXBNJZSQVHLCKET';
+                let nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+                let nieRexp = /^[XYZ]{1}[0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+                let str = value.toString().toUpperCase();
+
+                if (!nifRexp.test(str) && !nieRexp.test(str)) return false;
+
+                let nie = str
+                    .replace(/^[X]/, '0')
+                    .replace(/^[Y]/, '1')
+                    .replace(/^[Z]/, '2');
+
+                let letter = str.substr(-1);
+                let charIndex = parseInt(nie.substr(0, 8)) % 23;
+
+                if (validChars.charAt(charIndex) === letter) return true;
+                return false;
             },
             cerrarModal() {
                 this.modal = 0;
@@ -569,7 +604,7 @@
             },
         },
         mounted() {
-            this.listarCliente();
+            this.listarCliente(1, this.buscar, this.criterio);
             this.listarCategoria();
         }
     }

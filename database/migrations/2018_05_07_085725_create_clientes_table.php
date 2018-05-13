@@ -20,12 +20,12 @@ class CreateClientesTable extends Migration
             $table->string('dni',10);
             $table->string('email',150)->nullable();
             $table->string('telefono',12);
-            $table->date('fechaNacimiento');
+            $table->date('fechaNacimiento')->nullable();
             $table->string('sexo',10);
-            $table->string('domicilio',150);
-            $table->string('localidad',50);
-            $table->string('codigoPostal',5);
-            $table->string('provincia',50);
+            $table->string('domicilio',150)->nullable();
+            $table->string('localidad',50)->nullable();
+            $table->string('codigoPostal',5)->nullable();
+            $table->string('provincia',50)->nullable();
             $table->string('cuentaBancaria',30)->nullable();
             $table->string('profesion',50)->nullable();
             $table->string('contacto',50)->nullable();
