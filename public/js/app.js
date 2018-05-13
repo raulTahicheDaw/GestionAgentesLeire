@@ -48044,6 +48044,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(error);
             });
         },
+        mostarTodos: function mostarTodos() {
+            this.listarCliente(1, '', 'nombre');
+            this.buscar = '';
+        },
         cambiarPagina: function cambiarPagina(page, buscar, criterio) {
             var me = this;
             //Actualiza la página actual
@@ -48423,16 +48427,17 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-primary",
+                    staticStyle: { "margin-left": "10px" },
                     attrs: { type: "submit" },
                     on: {
                       click: function($event) {
-                        _vm.listarCliente(1, "", "nombre")
+                        _vm.mostarTodos()
                       }
                     }
                   },
                   [
                     _c("i", { staticClass: "fa fa-align-justify" }),
-                    _vm._v(" Mostrar todos\n                            ")
+                    _vm._v("Mostrar todos\n                            ")
                   ]
                 )
               ])

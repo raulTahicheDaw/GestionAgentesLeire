@@ -2,7 +2,7 @@
     <nav class="sidebar-nav">
         <ul class="nav">
             <li @click="menu=0" class="nav-title">
-                Gestión
+                <a class="nav-link" href="#">Inicio</a>
             </li>
             <li class="nav-item nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-user"></i> Clientes</a>
@@ -11,7 +11,7 @@
                         <a class="nav-link" href="#"><i class="icon-people"></i> Listado Clientes </a>
                     </li>
                     <li @click="menu=2" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-user-follow"></i> Nuevo Cliente </a>
+                        <a class="nav-link" href="#"><i class="icon-docs"></i> Informes de Clientes </a>
                     </li>
                 </ul>
             </li>

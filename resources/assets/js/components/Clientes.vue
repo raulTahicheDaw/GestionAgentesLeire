@@ -30,8 +30,8 @@
                                 <button type="submit" @click="listarCliente(1,buscar,criterio)" class="btn btn-primary">
                                     <i class="fa fa-search"></i> Buscar
                                 </button>
-                                <button type="submit" @click="listarCliente(1,'','nombre')" class="btn btn-primary">
-                                    <i class="fa fa-align-justify"></i> Mostrar todos
+                                <button style="margin-left: 10px;" type="submit" @click="mostarTodos()" class="btn btn-primary">
+                                    <i class="fa fa-align-justify"></i>Mostrar todos
                                 </button>
                             </div>
                         </div>
@@ -342,6 +342,10 @@
                     .catch(function (error) {
                         console.log(error);
                     });
+            },
+            mostarTodos(){
+              this.listarCliente(1,'','nombre');
+              this.buscar='';
             },
             cambiarPagina(page, buscar, criterio) {
                 let me = this;

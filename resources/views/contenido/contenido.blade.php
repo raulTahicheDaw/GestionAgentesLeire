@@ -1,7 +1,11 @@
 @extends('principal')
 @section('contenido')
     <template v-if="menu==0">
-        <div><h1>Contenido de menu 0</h1></div>
+        <div class="container-fluid text-center">
+            <h1 style="color: #CF9FE2">Bienvenido a: </h1>
+            <br>
+            <img src="img/logoGrande" class="img-fluid" alt="Responsive image" style="width: 60%;">
+        </div>
     </template>
     <template v-if="menu==1">
         <cliente-component></cliente-component>

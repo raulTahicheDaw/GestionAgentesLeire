@@ -25,7 +25,7 @@
         </button>
         <ul class="nav navbar-nav d-md-down-none">
             <li class="nav-item px-3">
-                <a class="nav-link" href="#" ><i
+                <a class="nav-link" href="#"><i
                             class="icon-user-follow"></i> Nuevo Cliente</a>
             </li>
             <li class="nav-item px-3">
@@ -84,7 +84,7 @@
 </div>
 
 
-<footer class="app-footer">
+<footer class="app-footer fixed-bottom" style="height: 50px;">
     <span>Raúl González</a> &copy; 2018</span>
     <span class="ml-auto">Desarrollado por Raúl González Moreno 1º D.A.W. <a href="http://www.ieszonzamas.es">C.I.F. Zonzamas</a></span>
 </footer>
