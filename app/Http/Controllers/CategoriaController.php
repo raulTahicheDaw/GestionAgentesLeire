@@ -12,8 +12,9 @@ class CategoriaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if (!$request->ajax()) return redirect('/');
         $categorias = Categoria::all();
         return $categorias;
     }
@@ -36,7 +37,8 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (!$request->ajax()) return redirect('/');
+
     }
 
     /**
@@ -47,7 +49,7 @@ class CategoriaController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**

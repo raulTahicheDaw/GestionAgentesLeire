@@ -88,6 +88,7 @@
     <span>Raúl González</a> &copy; 2018</span>
     <span class="ml-auto">Desarrollado por Raúl González Moreno 1º D.A.W. <a href="http://www.ieszonzamas.es">C.I.F. Zonzamas</a></span>
 </footer>
+<script src="js/sweetalert2.all.js"></script>
 <script src="js/app.js"></script>
 <script src="js/jquery.min.js"></script>
 <script src="js/pace.min.js"></script>

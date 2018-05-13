@@ -12,21 +12,34 @@ class ClienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $clientes = Cliente::all();
-        return $clientes;
+        if (!$request->ajax()) return redirect('/');
+        $clientes = Cliente::paginate(5);
+        return [
+            'pagination' => [
+                'total' => $clientes->total(),
+                'current_page' => $clientes->currentPage(),
+                'per_page' => $clientes->perPage(),
+                'last_page' => $clientes->lastPage(),
+                'from' => $clientes->firstItem(),
+                'to' => $clientes->lastItem()
+            ],
+            'clientes' => $clientes
+        ];
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+        if (!$request->ajax()) return redirect('/');
+
         $cliente = new Cliente();
         $cliente->nombre = $request->nombre;
         $cliente->apellidos = $request->apellidos;
@@ -52,12 +65,13 @@ class ClienteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
+        if (!$request->ajax()) return redirect('/');
         $cliente = Cliente::findOrFail($request->id);
         $cliente->nombre = $request->nombre;
         $cliente->apellidos = $request->apellidos;
@@ -81,6 +95,8 @@ class ClienteController extends Controller
 
     public function desactivar(Request $request)
     {
+        if (!$request->ajax()) return redirect('/');
+
         $cliente = Cliente::findOrFail($request->id);
         $cliente->activo = '0';
         $cliente->save();
@@ -88,6 +104,8 @@ class ClienteController extends Controller
 
     public function activar(Request $request)
     {
+        if (!$request->ajax()) return redirect('/');
+
         $cliente = Cliente::findOrFail($request->id);
         $cliente->activo = '1';
         $cliente->save();

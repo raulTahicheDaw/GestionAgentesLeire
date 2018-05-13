@@ -16,4 +16,6 @@ mix.styles([
     'resources/assets/plantillas/css/simple-line-icons.min.css',
     'resources/assets/plantillas/css/style.css',
 ], 'public/css/all.css')
+    .scripts(['resources/assets/plantillas/js/sweetalert2.all.js'
+    ],'public/js/all.js')
     .js(['resources/assets/js/app.js'], 'public/js/app.js');

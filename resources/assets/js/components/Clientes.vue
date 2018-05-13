@@ -19,13 +19,13 @@
                     <div class="form-group row">
                         <div class="col-md-6">
                             <div class="input-group">
-                                <select class="form-control col-md-3" id="opcion" name="opcion">
+                                <select class="form-control col-md-3" v-model="criterio">
                                     <option value="nombre">Nombre</option>
                                     <option value="descripcion">Apellidos</option>
                                     <option value="descripcion">DNI</option>
 
                                 </select>
-                                <input type="text" id="texto" name="texto" class="form-control"
+                                <input type="text" v-model="buscar" class="form-control"
                                        placeholder="Texto a buscar">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Buscar
                                 </button>
@@ -57,9 +57,19 @@
                                         class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
                                 </button> &nbsp;
-                                <button type="button" class="btn btn-danger btn-sm">
-                                    <i class="icon-trash"></i>
-                                </button>
+                                <template v-if="cliente.activo">
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                            @click="desactivarCliente(cliente.id)">
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </template>
+                                <template v-else>
+                                    <button type="button" class="btn btn-success btn-sm"
+                                            @click="activarCliente(cliente.id)">
+                                        <i class="icon-check"></i>
+                                    </button>
+                                </template>
+
                             </td>
                             <td v-text="cliente.nombre"></td>
                             <td v-text="cliente.apellidos"></td>
@@ -84,23 +94,14 @@
                     </table>
                     <nav>
                         <ul class="pagination">
-                            <li class="page-item">
-                                <a class="page-link" href="#">Ant</a>
+                            <li class="page-item" v-if="pagination.current_page >1 " >
+                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1)">Ant</a>
                             </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">1</a>
+                            <li class="page-item" v-for="page in pagesNumbers" :key="page" :class="[page== isActive ? 'active' : '']">
+                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page)" v-text="page"></a>
                             </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Sig</a>
+                            <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                                <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1)">Sig</a>
                             </li>
                         </ul>
                     </nav>
@@ -240,37 +241,16 @@
                                         @click="registrarCliente()">Guardar
                                 </button>
                                 <button type="button" v-if="tipoAccion==2" class="btn btn-primary"
-                                        @click="actualizarCliente()">Actualizar</button>
+                                        @click="actualizarCliente()">Actualizar
+                                </button>
                             </div>
 
                         </form>
                     </div>
-                    <!-- /.modal-content -->
-                    <!-- /.modal-dialog -->
-                    <!--Fin del modal-->
-                    <!-- Inicio del modal Eliminar -->
-                    <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog"
-                         aria-labelledby="myModalLabel"
-                         style="display: none;" aria-hidden="true">
-                        <div class="modal-dialog modal-danger" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Eliminar Cliente</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Estas seguro de eliminar este cliente?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-danger">Eliminar</button>
-                                </div>
-                            </div>
-                        </div><!-- /.modal-content -->
-                    </div> <!-- /.modal-dialog -->
-                </div>
+                </div>    <!-- /.modal-content -->
+                <!-- /.modal-dialog -->
+                <!--Fin del modal-->
+                <!-- Inicio del modal Eliminar -->
             </div><!-- Fin del modal Eliminar -->
         </div>
     </main>
@@ -290,8 +270,43 @@
                 tipoAccion: 0,
                 errorCliente: 0,
                 errorMostrarMsgCliente: [],
-                cliente_id:0
-
+                cliente_id: 0,
+                pagination: {
+                    'total': 0,
+                    'current_page': 0,
+                    'per_page': 0,
+                    'last_page': 0,
+                    'from': 0,
+                    'to': 0,
+                },
+                offset: 3,
+                criterio : 'nombre',
+                buscar : ''
+            }
+        },
+        computed: {
+            isActive: function () {
+                return this.pagination.current_page;
+            },
+            //Calcula los elementos de la paginación
+            pagesNumbers: function () {
+                if (!this.pagination.to) {
+                    return []
+                }
+                var from = this.pagination.current_page - this.offset;
+                if (from < 1) {
+                    from = 1;
+                }
+                var to = from + (this.offset * 2);
+                if (to >= this.pagination.last_page) {
+                    to = this.pagination.last_page;
+                }
+                var pagesArray = [];
+                while (from < to) {
+                    pagesArray.push(from);
+                    from++;
+                }
+                return pagesArray;
             }
         },
         methods: {
@@ -304,14 +319,23 @@
                         console.log(error);
                     });
             },
-            listarCliente() {
+            listarCliente(page) {
                 let me = this;
-                axios.get('/cliente').then(function (response) {
-                    me.arrayCliente = response.data;
+                var url = '/cliente?page=' + page;
+                axios.get(url).then(function (response) {
+                    var respuesta = response.data;
+                    me.arrayCliente = respuesta.clientes.data;
+                    me.pagination = respuesta.pagination;
                 })
                     .catch(function (error) {
                         console.log(error);
                     });
+            },
+            cambiarPagina(page) {
+                let me = this;
+                //Actualiza la página actual
+                me.pagination.current_page = page;
+                me.listarCliente(page);
             },
             registrarCliente() {
                 if (this.validarCliente()) {
@@ -343,7 +367,7 @@
                         console.log(error);
                     });
             },
-            actualizarCliente(){
+            actualizarCliente() {
                 if (this.validarCliente()) {
                     return;
                 }
@@ -373,6 +397,88 @@
                     .catch(function (error) {
                         console.log(error);
                     });
+            },
+            desactivarCliente(id) {
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: true,
+                });
+                swalWithBootstrapButtons({
+                    title: '¿Está seguro de desactivar este Cliente?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.value) {
+                        let me = this;
+                        axios.put('/cliente/desactivar', {
+                            'id': id
+                        }).then(function (response) {
+                            me.listarCliente();
+                            swalWithBootstrapButtons(
+                                'Desactivado!',
+                                'El Cliente ha sido desactivado con éxito.',
+                                'success'
+                            )
+                        })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+
+                    } else if (
+                        // Read more about handling dismissals
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons(
+                            'Cancelado',
+                            'No se ha desactivado el Cliente.',
+                            'error'
+                        )
+                    }
+                })
+            },
+            activarCliente(id) {
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: true,
+                });
+                swalWithBootstrapButtons({
+                    title: '¿Está seguro de activar este Cliente?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.value) {
+                        let me = this;
+                        axios.put('/cliente/activar', {
+                            'id': id
+                        }).then(function (response) {
+                            me.listarCliente();
+                            swalWithBootstrapButtons(
+                                'Desactivado!',
+                                'El Cliente ha sido activado con éxito.',
+                                'success'
+                            )
+                        })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+
+                    } else if (
+                        // Read more about handling dismissals
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons(
+                            'Cancelado',
+                            'No se ha activado el Cliente.',
+                            'error'
+                        )
+                    }
+                })
             },
             validarCliente() {
                 this.errorCliente = 0;
