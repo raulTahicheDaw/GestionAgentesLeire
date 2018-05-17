@@ -22,9 +22,11 @@ class CreateReferenciasTable extends Migration
             $table->string('codigoPostal',5)->nulable();
             $table->string('provincia',50)->nulable();
             $table->string('email',150)->nulable();
-            $table->char('sexo');
+            $table->string('sexo');
+            $table->string('profesion')->nullable();
             $table->string('dni')->nulable();
-            $table->string('telefono',12)->nulable();
+            $table->string('contacto')->nulable();
+            $table->string('telefono',12);
             $table->date('fechaNacimiento')->nulable();
             $table->string('nacionalidad')->nulable();
             $table->string('intereses',256)->nulable();

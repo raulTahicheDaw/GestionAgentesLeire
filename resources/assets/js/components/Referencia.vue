@@ -5,12 +5,11 @@
             <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
         </ol>
         <div class="container-fluid">
-            <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Listado de Clientes
-                    <button @click="abrirModal('cliente','registrar')" type="button" class="btn btn-secondary">
-                        <i class="icon-plus"></i>&nbsp;Nuevo
+                    <i class="fa fa-align-justify"></i> Listado de Referencias
+                    <button @click="abrirModal('referencia','registrar')" type="button" class="btn btn-secondary">
+                        <i class="icon-plus"></i>&nbsp;Nueva
                     </button>
                 </div>
                 <div class="card-body">
@@ -20,16 +19,16 @@
                                 <select class="form-control col-md-3" v-model="criterio">
                                     <option value="nombre">Nombre</option>
                                     <option value="apellidos">Apellidos</option>
-                                    <option value="dni">DNI</option>
                                 </select>
-                                <input type="text" v-model="buscar" @keyup.enter="listarCliente(1,buscar,criterio)"
+                                <input type="text" v-model="buscar" @keyup.enter="(1,buscar,criterio)"
                                        class="form-control"
                                        placeholder="Texto a buscar">
-                                <button type="submit" @click="listarCliente(1,buscar,criterio)" class="btn btn-primary">
+                                <button type="submit" @click="listarReferencias(1,buscar,criterio)" class="btn btn-primary">
                                     <i class="fa fa-search"></i> Buscar
                                 </button>
-                                <button style="margin-left: 10px;" type="submit" @click="mostarTodos()" class="btn btn-primary">
-                                    <i class="fa fa-align-justify"></i>Mostrar todos
+                                <button style="margin-left: 10px;" type="submit" @click="mostarTodos()"
+                                        class="btn btn-primary">
+                                    <i class="fa fa-align-justify"></i>Mostrar todas
                                 </button>
                             </div>
                         </div>
@@ -47,49 +46,48 @@
                             <th>Localidad</th>
                             <th>Profesión</th>
                             <th>Contacto</th>
-                            <th>Categoría</th>
+                            <th>Intereses</th>
                             <th>Estado</th>
 
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="cliente in arrayCliente" :key="cliente.id">
+                        <tr v-for="referencia in arrayReferencias" :key="referencia.id">
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm">
                                     <i class="icon-magnifier-add"></i>
                                 </button> &nbsp;
-                                <button @click="abrirModal('cliente','actualizar', cliente)" type="button"
+                                <button @click="abrirModal('referencia','actualizar', referencia)" type="button"
                                         class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
                                 </button> &nbsp;
-                                <template v-if="cliente.activo">
+                                <template v-if="referencia.activo">
                                     <button type="button" class="btn btn-danger btn-sm"
-                                            @click="desactivarCliente(cliente.id)">
+                                            @click="desactivarReferencia(referencia.id)">
                                         <i class="icon-trash"></i>
                                     </button>
                                 </template>
                                 <template v-else>
                                     <button type="button" class="btn btn-success btn-sm"
-                                            @click="activarCliente(cliente.id)">
+                                            @click="activarReferencia(referencia.id)">
                                         <i class="icon-check"></i>
                                     </button>
                                 </template>
 
 
                             </td>
-                            <td v-text="cliente.nombre"></td>
-                            <td v-text="cliente.apellidos"></td>
-                            <td v-text="cliente.dni"></td>
-                            <td v-text="cliente.email"></td>
-                            <td v-text="cliente.telefono"></td>
-                            <td v-text="cliente.domicilio"></td>
-                            <td v-text="cliente.localidad"></td>
-                            <td v-text="cliente.profesion"></td>
-                            <td v-text="cliente.contacto"></td>
-                            <td v-text="cliente.nombre_categoria"></td>
-
+                            <td v-text="referencia.nombre"></td>
+                            <td v-text="referencia.apellidos"></td>
+                            <td v-text="referencia.dni"></td>
+                            <td v-text="referencia.email"></td>
+                            <td v-text="referencia.telefono"></td>
+                            <td v-text="referencia.domicilio"></td>
+                            <td v-text="referencia.localidad"></td>
+                            <td v-text="referencia.profesion"></td>
+                            <td v-text="referencia.contacto"></td>
+                            <td v-text="referencia.intereses"></td>
                             <td>
-                                <div v-if="cliente.activo">
+                                <div v-if="referencia.activo">
                                     <span class="badge badge-success">Activo</span>
                                 </div>
                                 <div v-else>
@@ -136,36 +134,36 @@
                             <div class="form-group row">
                                 <div class="col-md-4">
                                     <label class="form-control-label"
-                                           :class="{'text-error' : errorMostrarMsgCliente.includes('Nombre')}">Nombre<sup>*</sup></label>
+                                           :class="{'text-error' : errorMostrarMsgReferencia.includes('Nombre')}">Nombre<sup>*</sup></label>
                                     <input type="text" v-model="nombre" class="form-control"
-                                           :class="{'is-invalid' : errorMostrarMsgCliente.includes('Nombre')}"
+                                           :class="{'is-invalid' : errorMostrarMsgReferencia.includes('Nombre')}"
                                            placeholder="Introduzca el nombre">
                                 </div>
                                 <div class="col-md-5">
                                     <label class=" form-control-label"
-                                           :class="{'text-error' : errorMostrarMsgCliente.includes('Apellidos')}">Apellidos<sup>*</sup></label>
+                                           :class="{'text-error' : errorMostrarMsgReferencia.includes('Apellidos')}">Apellidos<sup>*</sup></label>
 
                                     <input type="text" v-model="apellidos" class="form-control"
-                                           :class="{'is-invalid' : errorMostrarMsgCliente.includes('Apellidos')}"
+                                           :class="{'is-invalid' : errorMostrarMsgReferencia.includes('Apellidos')}"
                                            placeholder="Introduzca los apellidos">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-control-label"
-                                           :class="{'text-error' : errorMostrarMsgCliente.includes('DNI')}">DNI/NIE<sup>*</sup></label>
+                                           :class="{'text-error' : errorMostrarMsgReferencia.includes('DNI')}">DNI/NIE<sup>*</sup></label>
 
                                     <input type="text" v-model="dni" class="form-control"
                                            pattern="(([X-Zx-z]{1})([-]?)(\d{7})([-]?)([A-Za-z]{1}))|((\d{8})([-]?)([A-Za-z]{1}))"
-                                           :class="{'is-invalid' : errorMostrarMsgCliente.includes('DNI')}"
+                                           :class="{'is-invalid' : errorMostrarMsgReferencia.includes('DNI')}"
                                            placeholder="Introduzca el DNI/CIF">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-md-4">
                                     <label class="form-control-label"
-                                           :class="{'text-error' : errorMostrarMsgCliente.includes('Teléfono')}">Teléfono<sup>*</sup></label>
+                                           :class="{'text-error' : errorMostrarMsgReferencia.includes('Teléfono')}">Teléfono<sup>*</sup></label>
                                     <input type="text" v-model="telefono" class="form-control"
                                            placeholder="Introduzca teléfono"
-                                           :class="{'is-invalid' : errorMostrarMsgCliente.includes('Teléfono')}">
+                                           :class="{'is-invalid' : errorMostrarMsgReferencia.includes('Teléfono')}">
                                 </div>
                                 <div class="col-md-5">
                                     <label class="form-control-label">Email</label>
@@ -196,7 +194,7 @@
                                 <div class="col-md-3">
                                     <label class="form-control-label">Provincia</label>
 
-                                    <input type="text" v-model="provicia" class="form-control"
+                                    <input type="text" v-model="provincia" class="form-control"
                                            placeholder="Provincia">
                                 </div>
                             </div>
@@ -206,11 +204,6 @@
                                     <input type="text" v-model="profesion" class="form-control"
                                            placeholder="Profesión">
                                 </div>
-                                <div class="col-md-5">
-                                    <label class="form-control-label">Cuenta</label>
-                                    <input type="text" v-model="cuentaBancaria" class="form-control"
-                                           placeholder="Introduzca IBAN o número de cuenta">
-                                </div>
                                 <div class="col-md-3">
                                     <label class="form-control-label">Sexo</label>
                                     <select class="form-control" v-model="sexo">
@@ -218,31 +211,38 @@
                                         <option value="Mujer">Mujer</option>
                                     </select>
                                 </div>
+                                <div class="col-md-5">
+                                    <label class="form-control-label">Nacionalidad</label>
+                                    <input type="text" v-model="nacionalidad" class="form-control"
+                                           placeholder="Nacionalidad">
+                                </div>
+
                             </div>
 
                             <div class="form-group row">
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <label class="form-control-label col-md-4">Contacto</label>
                                     <input type="text" v-model="contacto" class="form-control col-md-8"
                                            placeholder="Persona contacto">
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-2">
+                                    <label class="form-control-label col-md-4">Comp. Orígen</label>
+                                    <input type="text" v-model="compañia_origen" class="form-control col-md-8"
+                                           placeholder="Compañía de orígen">
+                                </div>
+                                <div class="col-md-3">
                                     <label class="col-md-1 form-control-label">Observac.</label>
                                     <textarea class="form-control" rows="5" v-model="observaciones"></textarea>
                                 </div>
-                                <div class="col-md-3">
-                                    <label class="form-control-label">Categoría</label>
-                                    <select v-model="id_categoria" class="form-control">
-                                        <option v-for="categoria in arrayCategorias" :key="categoria.id" :value="categoria.id"
-                                                v-text="categoria.nombre">
-                                        </option>
-                                    </select>
+                                <div class="col-md-4">
+                                    <label class="col-md-1 form-control-label">Intereses</label>
+                                    <textarea class="form-control" rows="5" v-model="intereses"></textarea>
                                 </div>
                             </div>
-                            <div v-show="errorCliente" class="form-group row div-error">
+                            <div v-show="errorReferencia" class="form-group row div-error">
                                 <div class="text-center text-error">
                                     <p>Los siguientes campos no pueden estar vacíos o son incorrectos:</p>
-                                    <span v-for="error in errorMostrarMsgCliente" :key="error"
+                                    <span v-for="error in errorMostrarMsgReferencia" :key="error"
                                           v-text="error + ', '"> </span>
                                 </div>
                             </div>
@@ -252,10 +252,10 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
                                 <button type="button" v-if="tipoAccion==1" class="btn btn-primary"
-                                        @click="registrarCliente()">Guardar
+                                        @click="registrarReferencia()">Guardar
                                 </button>
                                 <button type="button" v-if="tipoAccion==2" class="btn btn-primary"
-                                        @click="actualizarCliente()">Actualizar
+                                        @click="actualizarReferencia()">Actualizar
                                 </button>
                             </div>
 
@@ -274,16 +274,15 @@
     export default {
         data() {
             return {
-                cliente_id: 0, nombre: '', apellidos: '', dni: '', email: '', telefono: '', fechaNacimiento: '',
-                sexo: 'Hombre', domicilio: '', localidad: '', codigoPostal: '', provicia: '', cuentaBancaria: '',
-                profesion: '', contacto: '', id_categoria: 1, observaciones: '',
-                arrayCliente: [],
-                arrayCategorias: [],
+                referencia_id: 0, nombre: '', apellidos: '', domicilio: '', localidad: '', codigoPostal: '',
+                provincia: '', email: '', sexo: '', dni: '', telefono: '', fechaNacimiento: '', nacionalidad: '',
+                intereses: '', compañia_origen: '', observaciones: '', contacto: '', profesion: '',
+                arrayReferencias: [],
                 modal: 0,
                 tituloModal: '',
                 tipoAccion: 0,
-                errorCliente: 0,
-                errorMostrarMsgCliente: [],
+                errorReferencia: 0,
+                errorMostrarMsgReferencia: [],
                 errorFormatoDni: 0,
                 pagination: {
                     'total': 0,
@@ -324,106 +323,100 @@
             }
         },
         methods: {
-            listarCategoria() {
+            listarReferencias(page, buscar, criterio) {
                 let me = this;
-                axios.get('/categoria/selectcategoria').then(function (response) {
-                    me.arrayCategorias = response.data.categorias;
-                })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            listarCliente(page, buscar, criterio) {
-                let me = this;
-                var url = '/cliente?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+                var url = '/referencia?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
                 axios.get(url).then(function (response) {
                     var respuesta = response.data;
-                    me.arrayCliente = respuesta.clientes.data;
+                    me.arrayReferencias = respuesta.referencias.data;
                     me.pagination = respuesta.pagination;
                 })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
-            mostarTodos(){
-              this.listarCliente(1,'','nombre');
-              this.buscar='';
+            mostarTodos() {
+                this.listarReferencias(1, '', 'nombre');
+                this.buscar = '';
             },
             cambiarPagina(page, buscar, criterio) {
                 let me = this;
                 //Actualiza la página actual
                 me.pagination.current_page = page;
-                me.listarCliente(page, buscar, criterio);
+                me.listarReferencias(page, buscar, criterio);
             },
-            registrarCliente() {
-                if (this.validarCliente()) {
+            registrarReferencia() {
+                if (this.validarReferencia()) {
                     return;
                 }
                 let me = this;
-                axios.post('/cliente/registrar', {
+                axios.post('/referencia/registrar', {
                     'nombre': this.nombre,
                     'apellidos': this.apellidos,
-                    'dni': this.dni,
+                    'domicilio': this.domicilio,
+                    'localidad': this.localidad,
+                    'codigoPostal': this.codigoPostal,
+                    'provincia': this.provincia,
                     'email': this.email,
+                    'dni': this.dni,
                     'telefono': this.telefono,
                     'fechaNacimiento': this.fechaNacimiento,
                     'sexo': this.sexo,
-                    'domicilio': this.domicilio,
-                    'codigoPostal': this.codigoPostal,
-                    'provincia': this.provicia,
-                    'cuentaBancaria': this.cuentaBancaria,
+                    'nacionalidad': this.nacionalidad,
+                    'intereses': this.intereses,
+                    'compañia_origen': this.compañia_origen,
                     'contacto': this.contacto,
-                    'id_categoria': this.id_categoria,
                     'observaciones': this.observaciones,
-                    'localidad': this.localidad,
-                    'profesion': this.profesion
-                }).then(function (response) {
-                    me.cerrarModal();
-                    me.listarCliente(1, '', 'nombre');
-                })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            actualizarCliente() {
-                if (this.validarCliente()) {
-                    return;
-                }
-                let me = this;
-                axios.put('/cliente/actualizar', {
-                    'nombre': this.nombre,
-                    'apellidos': this.apellidos,
-                    'dni': this.dni,
-                    'email': this.email,
-                    'telefono': this.telefono,
-                    'fechaNacimiento': this.fechaNacimiento,
-                    'sexo': this.sexo,
-                    'domicilio': this.domicilio,
-                    'codigoPostal': this.codigoPostal,
-                    'provincia': this.provicia,
-                    'cuentaBancaria': this.cuentaBancaria,
-                    'contacto': this.contacto,
-                    'id_categoria': this.id_categoria,
-                    'observaciones': this.observaciones,
-                    'localidad': this.localidad,
                     'profesion': this.profesion,
-                    'id': this.cliente_id
+
                 }).then(function (response) {
                     me.cerrarModal();
-                    me.listarCliente(1, '', 'nombre');
+                    me.listarReferencias(1, '', 'nombre');
                 })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
-            desactivarCliente(id) {
+            actualizarReferencia() {
+                if (this.validarReferencia()) {
+                    return;
+                }
+                let me = this;
+                axios.put('/referencia/actualizar', {
+                    'nombre': this.nombre,
+                    'apellidos': this.apellidos,
+                    'domicilio': this.domicilio,
+                    'localidad': this.localidad,
+                    'codigoPostal': this.codigoPostal,
+                    'provincia': this.provincia,
+                    'email': this.email,
+                    'dni': this.dni,
+                    'telefono': this.telefono,
+                    'fechaNacimiento': this.fechaNacimiento,
+                    'sexo': this.sexo,
+                    'nacionalidad': this.nacionalidad,
+                    'intereses': this.intereses,
+                    'compañia_origen': this.compañia_origen,
+                    'contacto': this.contacto,
+                    'observaciones': this.observaciones,
+                    'profesion': this.profesion,
+                    'id': this.referencia_id
+                }).then(function (response) {
+                    me.cerrarModal();
+                    me.listarReferencias(1, '', 'nombre');
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            desactivarReferencia(id) {
                 const swalWithBootstrapButtons = swal.mixin({
                     confirmButtonClass: 'btn btn-success',
                     cancelButtonClass: 'btn btn-danger',
                     buttonsStyling: true,
                 });
                 swalWithBootstrapButtons({
-                    title: '¿Está seguro de desactivar este Cliente?',
+                    title: '¿Está seguro de desactivar esta Referencia?',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Aceptar',
@@ -431,13 +424,13 @@
                 }).then((result) => {
                     if (result.value) {
                         let me = this;
-                        axios.put('/cliente/desactivar', {
+                        axios.put('/referencia/desactivar', {
                             'id': id
                         }).then(function (response) {
-                            me.listarCliente(1, '', 'nombre');
+                            me.listarReferencias(1, '', 'nombre');
                             swalWithBootstrapButtons(
-                                'Desactivado!',
-                                'El Cliente ha sido desactivado con éxito.',
+                                'Desactivada!',
+                                'La Referencia ha sido desactivada con éxito.',
                                 'success'
                             )
                         })
@@ -451,20 +444,20 @@
                     ) {
                         swalWithBootstrapButtons(
                             'Cancelado',
-                            'No se ha desactivado el Cliente.',
+                            'No se ha desactivado la Referencia.',
                             'error'
                         )
                     }
                 })
             },
-            activarCliente(id) {
+            activarReferencia(id) {
                 const swalWithBootstrapButtons = swal.mixin({
                     confirmButtonClass: 'btn btn-success',
                     cancelButtonClass: 'btn btn-danger',
                     buttonsStyling: true,
                 });
                 swalWithBootstrapButtons({
-                    title: '¿Está seguro de activar este Cliente?',
+                    title: '¿Está seguro de activar esta Referencia?',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Aceptar',
@@ -472,13 +465,13 @@
                 }).then((result) => {
                     if (result.value) {
                         let me = this;
-                        axios.put('/cliente/activar', {
+                        axios.put('/referencia/activar', {
                             'id': id
                         }).then(function (response) {
-                            me.listarCliente(1, '', 'nombre');
+                            me.listarReferencias(1, '', 'nombre');
                             swalWithBootstrapButtons(
-                                'Activado!',
-                                'El Cliente ha sido activado con éxito.',
+                                'Activada!',
+                                'La Referencia ha sido activada con éxito.',
                                 'success'
                             )
                         })
@@ -492,26 +485,25 @@
                     ) {
                         swalWithBootstrapButtons(
                             'Cancelado',
-                            'No se ha activado el Cliente.',
+                            'No se ha activado la Referencia.',
                             'error'
                         )
                     }
                 })
             },
-            validarCliente() {
-                this.errorCliente = 0;
-                this.errorMostrarMsgCliente = [];
-                if (!this.nombre) this.errorMostrarMsgCliente.push('Nombre');
-                if (!this.apellidos) this.errorMostrarMsgCliente.push('Apellidos');
-                if (!this.dni) this.errorMostrarMsgCliente.push('DNI');
-                if (!this.telefono) this.errorMostrarMsgCliente.push('Teléfono');
-                if (!this.id_categoria) this.errorMostrarMsgCliente.push('Categoría');
+            validarReferencia() {
+                this.errorReferencia = 0;
+                this.errorMostrarMsgReferencia = [];
+                if (!this.nombre) this.errorMostrarMsgReferencia.push('Nombre');
+                if (!this.apellidos) this.errorMostrarMsgReferencia.push('Apellidos');
+                if (!this.dni) this.errorMostrarMsgReferencia.push('DNI');
+                if (!this.telefono) this.errorMostrarMsgReferencia.push('Teléfono');
                 if (!this.validarDni(this.dni)) {
                     this.errorFormatoDni = 1;
-                    this.errorCliente = 1;
+                    this.errorReferencia = 1;
                 }
-                if (this.errorMostrarMsgCliente.length > 0) this.errorCliente = 1;
-                return this.errorCliente;
+                if (this.errorMostrarMsgReferencia.length > 0) this.errorReferencia = 1;
+                return this.errorReferencia;
             },
             validarDni(value) {
                 let validChars = 'TRWAGMYFPDXBNJZSQVHLCKET';
@@ -537,82 +529,83 @@
                 this.tituloModal = '';
                 this.nombre = '';
                 this.apellidos = '';
-                this.dni = '';
+                this.domicilio = '';
+                this.localidad = '';
+                this.codigoPostal = '';
+                this.provincia = '';
                 this.email = '';
+                this.sexo = '';
+                this.dni = '';
                 this.telefono = '';
                 this.fechaNacimiento = '';
-                this.sexo = '';
-                this.domicilio = '';
-                this.codigoPostal = '';
-                this.localidad = '';
-                this.provicia = '';
-                this.cuentaBancaria = '';
-                this.contacto = '';
-                this.id_categoria = '';
+                this.nacionalidad = '';
+                this.intereses = '';
+                this.compañia_origen = '';
                 this.observaciones = '';
+                this.contacto = '';
                 this.profesion = '';
             },
             abrirModal(modelo, accion, data = []) {
-                this.errorMostrarMsgCliente = [];
-                this.errorCliente = 0;
+                this.errorMostrarMsgReferencia = [];
+                this.errorReferencia = 0;
                 this.errorFormatoDni = 0;
                 switch (modelo) {
-                    case "cliente": {
+                    case "referencia": {
                         switch (accion) {
                             case 'registrar': {
                                 this.modal = 1;
                                 this.nombre = '';
                                 this.apellidos = '';
-                                this.dni = '';
+                                this.domicilio = '';
+                                this.localidad = '';
+                                this.codigoPostal = '';
+                                this.provincia = '';
                                 this.email = '';
+                                this.dni = '';
                                 this.telefono = '';
                                 this.fechaNacimiento = '';
-                                this.domicilio = '';
-                                this.codigoPostal = '';
-                                this.provicia = '';
-                                this.cuentaBancaria = '';
-                                this.contacto = '';
+                                this.nacionalidad = '';
+                                this.intereses = '';
+                                this.compañia_origen = '';
                                 this.observaciones = '';
+                                this.contacto = '';
                                 this.profesion = '';
-                                this.localidad = '';
-                                this.tituloModal = 'Registrar Nuevo Cliente';
+                                this.tituloModal = 'Registrar Nueva Referencia';
                                 this.tipoAccion = 1;
                                 this.sexo = "Hombre";
-                                this.id_categoria = 1;
                                 break;
                             }
                             case 'actualizar': {
                                 //console.log(data);
                                 this.modal = 1;
-                                this.tituloModal = "Actualizar Cliente";
+                                this.tituloModal = "Actualizar Referencia";
                                 this.tipoAccion = 2;
                                 this.nombre = data['nombre'];
                                 this.apellidos = data['apellidos'];
-                                this.dni = data['dni'];
-                                this.email = data['email'];
-                                this.telefono = data['telefono'];
-                                this.fechaNacimiento = data['fechaNacimiento'];
-                                this.sexo = data['sexo'];
                                 this.domicilio = data['domicilio'];
                                 this.localidad = data['localidad'];
                                 this.codigoPostal = data['codigoPostal'];
-                                this.provicia = data['provicia'];
-                                this.cuentaBancaria = data['cuentaBancaria'];
-                                this.profesion = data['profesion'];
-                                this.contacto = data['contacto'];
-                                this.id_categoria = data['id_categoria'];
+                                this.provincia = data['provincia'];
+                                this.email = data['email'];
+                                this.dni = data['dni'];
+                                this.telefono = data['telefono'];
+                                this.fechaNacimiento = data['fechaNacimiento'];
+                                this.nacionalidad = data['nacionalidad'];
+                                this.intereses = data['intereses'];
+                                this.compañia_origen = data['compañia_origen'];
                                 this.observaciones = data['observaciones'];
-                                this.cliente_id = data['id'];
+                                this.contacto = data['contacto'];
+                                this.profesion = data['profesion'];
+                                this.sexo = data['sexo'];
                                 break;
                             }
                         }
                     }
                 }
-                this.listarCategoria();
             }
         },
         mounted() {
-            this.listarCliente(1, this.buscar, this.criterio);
+            this.listarReferencias(1, this.buscar, this.criterio);
         }
     }
 </script>

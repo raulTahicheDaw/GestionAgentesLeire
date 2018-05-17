@@ -100,7 +100,7 @@
         <!--Inicio del modal agregar/actualizar-->
         <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel"
              style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-primary modal-lg" role="document">
+            <div class="modal-dialog modal-primary modal-sm" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" v-text="tituloModal"></h4>
@@ -111,7 +111,7 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
-                                <div class="col-md-4">
+                                <div class="col-md-12">
                                     <label class="form-control-label"
                                            :class="{'text-error' : errorMostrarMsgCategoria.includes('Nombre')}">Nombre<sup>*</sup></label>
                                     <input type="text" v-model="nombre" class="form-control"
@@ -120,7 +120,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-md-4">
+                                <div class="col-md-12">
                                     <label class="form-control-label">Descripción</label>
                                     <input type="text" v-model="descripcion" class="form-control"
                                            placeholder="Introduzca una descripción">

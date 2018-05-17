@@ -24,15 +24,15 @@ class ClienteController extends Controller
                          'clientes.telefono', 'clientes.fechaNacimiento', 'clientes.sexo', 'clientes.domicilio', 'clientes.localidad',
                          'clientes.codigoPostal', 'clientes.provincia', 'clientes.cuentaBancaria', 'clientes.profesion', 'clientes.contacto',
                          'clientes.activo', 'clientes.observaciones', 'clientes.id_categoria', 'categorias.nombre as nombre_categoria')
-                ->orderBy('nombre', 'asc')->paginate(5);
+                ->orderBy('nombre', 'asc')->paginate(7);
         } else {
             $clientes = Cliente::join('categorias', 'clientes.id_categoria', '=', 'categorias.id')
                 ->select('clientes.id', 'clientes.nombre', 'clientes.apellidos', 'clientes.dni', 'clientes.email',
                     'clientes.telefono', 'clientes.fechaNacimiento', 'clientes.sexo', 'clientes.domicilio', 'clientes.localidad',
                     'clientes.codigoPostal', 'clientes.provincia', 'clientes.cuentaBancaria', 'clientes.profesion', 'clientes.contacto',
                     'clientes.activo', 'clientes.observaciones', 'clientes.id_categoria', 'categorias.nombre as nombre_categoria')
-                ->where('articulos.'.$criterio, 'like', '%' . $buscar . '%')
-                ->orderBy('nombre', 'asc')->paginate(5);
+                ->where('clientes.'.$criterio, 'like', '%' . $buscar . '%')
+                ->orderBy('nombre', 'asc')->paginate(7);
 
         }
         return [
