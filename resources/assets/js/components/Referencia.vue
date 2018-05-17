@@ -597,6 +597,7 @@
                                 this.contacto = data['contacto'];
                                 this.profesion = data['profesion'];
                                 this.sexo = data['sexo'];
+                                this.referencia_id=data['id'];
                                 break;
                             }
                         }
