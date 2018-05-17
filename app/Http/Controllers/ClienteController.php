@@ -19,35 +19,41 @@ class ClienteController extends Controller
         $criterio = $request->criterio;
 
         if ($buscar == '') {
-            $clientes = Cliente::orderBy('id', 'desc')->paginate(5);
+            $clientes = Cliente::join('categorias', 'clientes.id_categoria', '=', 'categorias.id')
+                ->select('clientes.id', 'clientes.nombre', 'clientes.apellidos', 'clientes.dni', 'clientes.email',
+                         'clientes.telefono', 'clientes.fechaNacimiento', 'clientes.sexo', 'clientes.domicilio', 'clientes.localidad',
+                         'clientes.codigoPostal', 'clientes.provincia', 'clientes.cuentaBancaria', 'clientes.profesion', 'clientes.contacto',
+                         'clientes.activo', 'clientes.observaciones', 'clientes.id_categoria', 'categorias.nombre as nombre_categoria')
+                ->orderBy('nombre', 'asc')->paginate(5);
         } else {
-            $clientes = Cliente::where($criterio, 'like', '%' . $buscar . '%')->orderBy('nombre', 'asc')->paginate(5);
+            $clientes = Cliente::join('categorias', 'clientes.id_categoria', '=', 'categorias.id')
+                ->select('clientes.id', 'clientes.nombre', 'clientes.apellidos', 'clientes.dni', 'clientes.email',
+                    'clientes.telefono', 'clientes.fechaNacimiento', 'clientes.sexo', 'clientes.domicilio', 'clientes.localidad',
+                    'clientes.codigoPostal', 'clientes.provincia', 'clientes.cuentaBancaria', 'clientes.profesion', 'clientes.contacto',
+                    'clientes.activo', 'clientes.observaciones', 'clientes.id_categoria', 'categorias.nombre as nombre_categoria')
+                ->where('articulos.'.$criterio, 'like', '%' . $buscar . '%')
+                ->orderBy('nombre', 'asc')->paginate(5);
+
         }
         return [
             'pagination' => [
-                'total' => $clientes->total(),
-                'current_page' => $clientes->currentPage(),
-                'per_page' => $clientes->perPage(),
-                'last_page' => $clientes->lastPage(),
-                'from' => $clientes->firstItem(),
-                'to' => $clientes->lastItem()
+                'total'         => $clientes->total(),
+                'current_page'  => $clientes->currentPage(),
+                'per_page'      => $clientes->perPage(),
+                'last_page'     => $clientes->lastPage(),
+                'from'          => $clientes->firstItem(),
+                'to'            => $clientes->lastItem()
             ],
             'clientes' => $clientes
         ];
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
 
         $cliente = new Cliente();
+        $cliente->id_categoria = $request->id_categoria;
         $cliente->nombre = $request->nombre;
         $cliente->apellidos = $request->apellidos;
         $cliente->dni = $request->dni;
@@ -63,11 +69,9 @@ class ClienteController extends Controller
         $cliente->profesion = $request->profesion;
         $cliente->contacto = $request->contacto;
         $cliente->activo = '1';
-        $cliente->id_categoria = $request->id_categoria;
         $cliente->observaciones = $request->observaciones;
         $cliente->save();
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -80,6 +84,7 @@ class ClienteController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
         $cliente = Cliente::findOrFail($request->id);
+        $cliente->id_categoria = $request->id_categoria;
         $cliente->nombre = $request->nombre;
         $cliente->apellidos = $request->apellidos;
         $cliente->dni = $request->dni;
@@ -95,7 +100,6 @@ class ClienteController extends Controller
         $cliente->profesion = $request->profesion;
         $cliente->contacto = $request->contacto;
         $cliente->activo = '1';
-        $cliente->id_categoria = $request->id_categoria;
         $cliente->observaciones = $request->observaciones;
         $cliente->save();
     }

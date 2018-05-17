@@ -15,12 +15,13 @@ class CreateProductosTable extends Migration
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nombre');
             $table->boolean('campaña');
             $table->date('fecha_lanzamiento');
             $table->date('fecha_vencimiento');
             $table->longText('coberturas');
             $table->longText('observaciones');
-            $table->boolean('activo');
+            $table->boolean('activo')->default(1);
             $table->timestamps();
             $table->unsignedInteger('id_ramo');
             $table->foreign('id_ramo')

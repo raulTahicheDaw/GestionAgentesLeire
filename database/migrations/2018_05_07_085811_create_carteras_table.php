@@ -16,7 +16,7 @@ class CreateCarterasTable extends Migration
         Schema::create('carteras', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_cliente')->unsigned();
-            $table->boolean('activo');
+            $table->boolean('activo')->default(1);
             $table->timestamps();
             $table->foreign('id_cliente')
                 ->references('id')->on('clientes')

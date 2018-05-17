@@ -7,82 +7,75 @@ use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-        $categorias = Categoria::all();
-        return $categorias;
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if ($buscar == '') {
+            $categorias = Categoria::orderBy('id', 'desc')->paginate(5);
+        } else {
+            $categorias = Categoria::where($criterio, 'like', '%' . $buscar . '%')->orderBy('id', 'asc')->paginate(5);
+        }
+        return [
+            'pagination' => [
+                'total' => $categorias->total(),
+                'current_page' => $categorias->currentPage(),
+                'per_page' => $categorias->perPage(),
+                'last_page' => $categorias->lastPage(),
+                'from' => $categorias->firstItem(),
+                'to' => $categorias->lastItem()
+            ],
+            'categorias' => $categorias
+        ];
+    }
+    public function listarCategorias(Request $request){
+        if (!$request->ajax()) return redirect('/');
+        $categorias = Categoria::where('activo','=','1')
+        ->select('id','nombre')->orderBy('nombre','asc')
+        ->get();
+        return ['categorias' =>$categorias];
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
 
+        $categoria = new Categoria();
+        $categoria->nombre = $request->nombre;
+        $categoria->descripcion = $request->descripcion;
+        $categoria->activo = '1';
+        $categoria->save();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function update(Request $request)
     {
-
+        if (!$request->ajax()) return redirect('/');
+        $categoria = Categoria::findOrFail($request->id);
+        $categoria->nombre = $request->nombre;
+        $categoria->descripcion = $request->descripcion;
+        
+        $categoria->activo = '1';
+        $categoria->save();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function desactivar(Request $request)
     {
-        //
+        if (!$request->ajax()) return redirect('/');
+
+        $categoria = Categoria::findOrFail($request->id);
+        $categoria->activo = '0';
+        $categoria->save();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function activar(Request $request)
     {
-        //
-    }
+        if (!$request->ajax()) return redirect('/');
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $categoria = Categoria::findOrFail($request->id);
+        $categoria->activo = '1';
+        $categoria->save();
     }
 }

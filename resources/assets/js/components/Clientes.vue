@@ -2,9 +2,7 @@
     <main class="main">
         <!-- Breadcrumb -->
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Home</li>
-            <li class="breadcrumb-item"><a href="#">Raúl</a></li>
-            <li class="breadcrumb-item active">Clientes</li>
+            <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
         </ol>
         <div class="container-fluid">
             <!-- Ejemplo de tabla Listado -->
@@ -50,6 +48,7 @@
                             <th>Provincia</th>
                             <th>Profesión</th>
                             <th>Contacto</th>
+                            <th>Categoría</th>
                             <th>Estado</th>
 
                         </tr>
@@ -57,6 +56,9 @@
                         <tbody>
                         <tr v-for="cliente in arrayCliente" :key="cliente.id">
                             <td>
+                                <button type="button" class="btn btn-primary btn-sm">
+                                    <i class="icon-magnifier-add"></i>
+                                </button> &nbsp;
                                 <button @click="abrirModal('cliente','actualizar', cliente)" type="button"
                                         class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
@@ -74,6 +76,7 @@
                                     </button>
                                 </template>
 
+
                             </td>
                             <td v-text="cliente.nombre"></td>
                             <td v-text="cliente.apellidos"></td>
@@ -85,6 +88,8 @@
                             <td v-text="cliente.provincia"></td>
                             <td v-text="cliente.profesion"></td>
                             <td v-text="cliente.contacto"></td>
+                            <td v-text="cliente.nombre_categoria"></td>
+
                             <td>
                                 <div v-if="cliente.activo">
                                     <span class="badge badge-success">Activo</span>
@@ -151,7 +156,7 @@
                                            :class="{'text-error' : errorMostrarMsgCliente.includes('DNI')}">DNI/NIE<sup>*</sup></label>
 
                                     <input type="text" v-model="dni" class="form-control"
-                                           pattern="(([X-Z]{1})([-]?)(\d{7})([-]?)([A-Z]{1}))|((\d{8})([-]?)([A-Z]{1}))"
+                                           pattern="(([X-Zx-z]{1})([-]?)(\d{7})([-]?)([A-Za-z]{1}))|((\d{8})([-]?)([A-Za-z]{1}))"
                                            :class="{'is-invalid' : errorMostrarMsgCliente.includes('DNI')}"
                                            placeholder="Introduzca el DNI/CIF">
                                 </div>
@@ -228,10 +233,10 @@
                                     <textarea class="form-control" rows="5" v-model="observaciones"></textarea>
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-control-label">Categoría de</label>
+                                    <label class="form-control-label">Categoría</label>
                                     <select v-model="id_categoria" class="form-control">
-                                        <option v-for="categoria in arrayCategorias" :value="categoria.id">
-                                            {{ categoria.nombre }}
+                                        <option v-for="categoria in arrayCategorias" :key="categoria.id" :value="categoria.id"
+                                                v-text="categoria.nombre">
                                         </option>
                                     </select>
                                 </div>
@@ -271,7 +276,7 @@
     export default {
         data() {
             return {
-                nombre: '', apellidos: '', dni: '', email: '', telefono: '', fechaNacimiento: '',
+                cliente_id: 0, nombre: '', apellidos: '', dni: '', email: '', telefono: '', fechaNacimiento: '',
                 sexo: 'Hombre', domicilio: '', localidad: '', codigoPostal: '', provicia: '', cuentaBancaria: '',
                 profesion: '', contacto: '', id_categoria: 1, observaciones: '',
                 arrayCliente: [],
@@ -282,7 +287,6 @@
                 errorCliente: 0,
                 errorMostrarMsgCliente: [],
                 errorFormatoDni: 0,
-                cliente_id: 0,
                 pagination: {
                     'total': 0,
                     'current_page': 0,
@@ -324,8 +328,8 @@
         methods: {
             listarCategoria() {
                 let me = this;
-                axios.get('/categoria').then(function (response) {
-                    me.arrayCategorias = response.data;
+                axios.get('/categoria/selectcategoria').then(function (response) {
+                    me.arrayCategorias = response.data.categorias;
                 })
                     .catch(function (error) {
                         console.log(error);
@@ -475,7 +479,7 @@
                         }).then(function (response) {
                             me.listarCliente(1, '', 'nombre');
                             swalWithBootstrapButtons(
-                                'Desactivado!',
+                                'Activado!',
                                 'El Cliente ha sido activado con éxito.',
                                 'success'
                             )
@@ -553,6 +557,7 @@
             abrirModal(modelo, accion, data = []) {
                 this.errorMostrarMsgCliente = [];
                 this.errorCliente = 0;
+                this.errorFormatoDni = 0;
                 switch (modelo) {
                     case "cliente": {
                         switch (accion) {
@@ -605,11 +610,11 @@
                         }
                     }
                 }
-            },
+                this.listarCategoria();
+            }
         },
         mounted() {
             this.listarCliente(1, this.buscar, this.criterio);
-            this.listarCategoria();
         }
     }
 </script>

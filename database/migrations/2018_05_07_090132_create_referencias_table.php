@@ -16,20 +16,21 @@ class CreateReferenciasTable extends Migration
         Schema::create('referencias', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',50);
-            $table->string('apellidos',100);
-            $table->string('domicilio',150);
-            $table->string('localidad',50);
-            $table->string('codigoPostal',5);
-            $table->string('provincia',50);
-            $table->string('email',150);
+            $table->string('apellidos',100)->nulable();
+            $table->string('domicilio',150)->nulable();
+            $table->string('localidad',50)->nulable();
+            $table->string('codigoPostal',5)->nulable();
+            $table->string('provincia',50)->nulable();
+            $table->string('email',150)->nulable();
             $table->char('sexo');
-            $table->string('dni');
-            $table->string('telefono',12);
-            $table->date('fechaNacimiento');
-            $table->string('nacionalidad');
-            $table->string('intereses',256);
-            $table->string('compañia_origen',100);
-            $table->longText('observaciones');
+            $table->string('dni')->nulable();
+            $table->string('telefono',12)->nulable();
+            $table->date('fechaNacimiento')->nulable();
+            $table->string('nacionalidad')->nulable();
+            $table->string('intereses',256)->nulable();
+            $table->string('compañia_origen',100)->nulable();
+            $table->longText('observaciones')->nulable();
+            $table->boolean('activo')->default(1);
             $table->timestamps();
         });
     }
