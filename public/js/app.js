@@ -48463,7 +48463,7 @@ var render = function() {
                       "td",
                       [
                         _vm._m(2, true),
-                        _vm._v("  \n                            "),
+                        _vm._v(" "),
                         _c(
                           "button",
                           {
@@ -51383,7 +51383,7 @@ var render = function() {
                       "td",
                       [
                         _vm._m(2, true),
-                        _vm._v("  \n                            "),
+                        _vm._v(" "),
                         _c(
                           "button",
                           {

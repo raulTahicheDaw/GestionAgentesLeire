@@ -19,8 +19,8 @@ class CreateProductosTable extends Migration
             $table->boolean('campaña');
             $table->date('fecha_lanzamiento');
             $table->date('fecha_vencimiento');
-            $table->longText('coberturas');
-            $table->longText('observaciones');
+            $table->longText('coberturas')->nullable();
+            $table->longText('observaciones')->nullable();
             $table->boolean('activo')->default(1);
             $table->timestamps();
             $table->unsignedInteger('id_ramo');

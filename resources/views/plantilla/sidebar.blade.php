@@ -22,7 +22,7 @@
                         <a class="nav-link" href="#"><i class="icon-people"></i> Listado Referencias</a>
                     </li>
                     <li @click="menu=4" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-user-follow"></i> Nueva Referencia</a>
+                        <a class="nav-link" href="#"><i class="icon-user-follow"></i> Informes de Referencias</a>
                     </li>
                 </ul>
             </li>

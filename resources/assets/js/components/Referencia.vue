@@ -56,7 +56,7 @@
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm">
                                     <i class="icon-magnifier-add"></i>
-                                </button> &nbsp;
+                                </button>
                                 <button @click="abrirModal('referencia','actualizar', referencia)" type="button"
                                         class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
