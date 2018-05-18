@@ -222,12 +222,12 @@
 
                             <div class="form-group row">
                                 <div class="col-md-4">
-                                    <label class="form-control-label col-md-4">Contacto</label>
-                                    <input type="text" v-model="contacto" class="form-control col-md-8"
+                                    <label class="form-control-label">Contacto</label>
+                                    <input type="text" v-model="contacto" class="form-control"
                                            placeholder="Persona contacto">
                                 </div>
                                 <div class="col-md-5">
-                                    <label class="col-md-1 form-control-label">Observac.</label>
+                                    <label class="form-control-label">Observac.</label>
                                     <textarea class="form-control" rows="5" v-model="observaciones"></textarea>
                                 </div>
                                 <div class="col-md-3">

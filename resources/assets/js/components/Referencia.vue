@@ -141,16 +141,13 @@
                                 </div>
                                 <div class="col-md-5">
                                     <label class=" form-control-label"
-                                           :class="{'text-error' : errorMostrarMsgReferencia.includes('Apellidos')}">Apellidos<sup>*</sup></label>
-
-                                    <input type="text" v-model="apellidos" class="form-control"
-                                           :class="{'is-invalid' : errorMostrarMsgReferencia.includes('Apellidos')}"
-                                           placeholder="Introduzca los apellidos">
+                                           :class="{'text-error' : errorMostrarMsgReferencia.includes('Apellidos')}">Apellidos</label>
+                                    <input type="text" v-model="apellidos" class="form-control" placeholder="Introduzca los apellidos">
                                 </div>
+
                                 <div class="col-md-3">
                                     <label class="form-control-label"
-                                           :class="{'text-error' : errorMostrarMsgReferencia.includes('DNI')}">DNI/NIE<sup>*</sup></label>
-
+                                           :class="{'text-error' : errorMostrarMsgReferencia.includes('DNI')}">DNI/NIE</label>
                                     <input type="text" v-model="dni" class="form-control"
                                            pattern="(([X-Zx-z]{1})([-]?)(\d{7})([-]?)([A-Za-z]{1}))|((\d{8})([-]?)([A-Za-z]{1}))"
                                            :class="{'is-invalid' : errorMostrarMsgReferencia.includes('DNI')}"
@@ -220,23 +217,25 @@
                             </div>
 
                             <div class="form-group row">
-                                <div class="col-md-2">
-                                    <label class="form-control-label col-md-4">Contacto</label>
-                                    <input type="text" v-model="contacto" class="form-control col-md-8"
+                                <div class="col-md-4">
+                                    <label class="form-control-label">Contacto</label>
+                                    <input type="text" v-model="contacto" class="form-control"
                                            placeholder="Persona contacto">
                                 </div>
-                                <div class="col-md-2">
-                                    <label class="form-control-label col-md-4">Comp. Orígen</label>
-                                    <input type="text" v-model="compañia_origen" class="form-control col-md-8"
+                                <div class="col-md-4">
+                                    <label class="form-control-label">Comp. Orígen</label>
+                                    <input type="text" v-model="compañia_origen" class="form-control"
                                            placeholder="Compañía de orígen">
                                 </div>
-                                <div class="col-md-3">
-                                    <label class="col-md-1 form-control-label">Observac.</label>
-                                    <textarea class="form-control" rows="5" v-model="observaciones"></textarea>
-                                </div>
                                 <div class="col-md-4">
-                                    <label class="col-md-1 form-control-label">Intereses</label>
-                                    <textarea class="form-control" rows="5" v-model="intereses"></textarea>
+                                    <label class="form-control-label">Intereses</label>
+                                    <textarea class="form-control" rows="3" v-model="intereses"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <label class="form-control-label">Observaciones</label>
+                                    <textarea class="form-control" rows="4" v-model="observaciones"></textarea>
                                 </div>
                             </div>
                             <div v-show="errorReferencia" class="form-group row div-error">
@@ -495,10 +494,8 @@
                 this.errorReferencia = 0;
                 this.errorMostrarMsgReferencia = [];
                 if (!this.nombre) this.errorMostrarMsgReferencia.push('Nombre');
-                if (!this.apellidos) this.errorMostrarMsgReferencia.push('Apellidos');
-                if (!this.dni) this.errorMostrarMsgReferencia.push('DNI');
                 if (!this.telefono) this.errorMostrarMsgReferencia.push('Teléfono');
-                if (!this.validarDni(this.dni)) {
+                if (this.dni && !this.validarDni(this.dni)) {
                     this.errorFormatoDni = 1;
                     this.errorReferencia = 1;
                 }
