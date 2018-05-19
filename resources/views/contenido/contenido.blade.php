@@ -29,7 +29,7 @@
         <h1>Contenido de menu 7</h1>
     </template>
     <template v-if="menu==8">
-        <h1>Contenido de menu 8</h1>
+        <calendario-component></calendario-component>
     </template>
     <template v-if="menu==9">
         <h1>Contenido de menu 9</h1>

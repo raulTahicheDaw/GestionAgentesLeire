@@ -15,6 +15,8 @@ mix.styles([
     'resources/assets/plantillas/css/font-awesome.min.css',
     'resources/assets/plantillas/css/simple-line-icons.min.css',
     'resources/assets/plantillas/css/style.css',
+    'resources/assets/plantillas/css/default.css',
+    'resources/assets/plantillas/css/holiday-us.css',
 ], 'public/css/all.css')
     .scripts(['resources/assets/plantillas/js/sweetalert2.all.js'
     ],'public/js/all.js')
