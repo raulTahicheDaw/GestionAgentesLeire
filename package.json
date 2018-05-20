@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "fullcalendar": "^3.9.0",
+        "vue-full-calendar": "0.0.3",
         "vue-simple-calendar": "^3.0.2"
     }
 }
