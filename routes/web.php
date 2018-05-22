@@ -15,6 +15,12 @@ Route::get('/', function () {
     return view('contenido/contenido');
 });
 
+Route::get('agenda', 'AgendaController@index');
+Route::get('agenda/recuperaCita', 'AgendaController@recuperaCita');
+Route::post('agenda/registrar', 'AgendaController@store');
+
+
+
 Route::get('cliente', 'ClienteController@index');
 Route::post('cliente/registrar', 'ClienteController@store');
 Route::put('cliente/actualizar', 'ClienteController@update');

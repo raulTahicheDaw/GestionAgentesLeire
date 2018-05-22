@@ -13,4 +13,8 @@ class Cliente extends Model
     public function categoria(){
         return $this->belongsTo('App\Categoria');
     }
+    public function roles()
+    {
+        return $this->belongsToMany('App\Agenda');
+    }
 }
