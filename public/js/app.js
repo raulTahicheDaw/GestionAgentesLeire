@@ -53072,6 +53072,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -53117,7 +53130,8 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
             motivo: '',
             fin: '',
             hora: '08:00',
-            resumen: ''
+            resumen: '',
+            activo: true
 
         };
     },
@@ -53137,11 +53151,6 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
             };
         }
     },
-    mounted: function mounted() {
-        this.listarEventos();
-        this.newEventStartDate = this.isoYearMonthDay(this.today());
-        this.newEventEndDate = this.isoYearMonthDay(this.today());
-    },
 
     methods: {
         listarEventos: function listarEventos() {
@@ -53160,7 +53169,7 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
                 }
             }).then(function (response) {
                 me.lugar = response.data[0].lugar;
-                me.cliente = response.data[0].id_cliente;
+                me.cliente = response.data[0].nombre;
                 me.fecha = response.data[0].fecha.substr(0, 10).replace(/^(\d{4})-(\d{2})-(\d{2})$/g, '$3/$2/$1');
                 me.hora = response.data[0].fecha.substr(11, 5);
                 me.acuerdos = response.data[0].acuerdos;
@@ -53196,14 +53205,6 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
             event.originalEvent.endDate = this.addDays(event.endDate, eLength);
         },
         clickTestAddEvent: function clickTestAddEvent() {
-            /*
-            this.events.push({
-                startDate: this.newEventStartDate,
-                endDate: this.newEventEndDate,
-                title: this.hora + " " + this.cliente,
-            });
-            this.message = "You added an event!";
-            */
             var me = this;
             var fechaAux = this.newEventStartDate.split('-');
             var hora = this.hora.split(':');
@@ -53226,6 +53227,12 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
                 console.log(error.response);
             });
         },
+        editarCita: function editarCita() {
+            this.activo = false;
+        },
+        desactivarEditar: function desactivarEditar() {
+            this.activo = true;
+        },
         cerrarModal: function cerrarModal() {
             this.modal = 0;
             this.fecha = '';
@@ -53236,7 +53243,13 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
             this.motivo = '';
             this.hora = '08:00';
             this.resumen = '';
+            this.desactivarEditar();
         }
+    },
+    mounted: function mounted() {
+        this.listarEventos();
+        this.newEventStartDate = this.isoYearMonthDay(this.today());
+        this.newEventEndDate = this.isoYearMonthDay(this.today());
     }
 });
 
@@ -55092,7 +55105,7 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control",
-                      attrs: { type: "text", disabled: "" },
+                      attrs: { type: "text", disabled: _vm.activo },
                       domProps: { value: _vm.fecha },
                       on: {
                         input: function($event) {
@@ -55122,7 +55135,7 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { disabled: "" },
+                        attrs: { id: "hora", disabled: _vm.activo },
                         on: {
                           change: function($event) {
                             var $$selectedVal = Array.prototype.filter
@@ -55275,8 +55288,8 @@ var render = function() {
                           expression: "lugar"
                         }
                       ],
-                      staticClass: "form-control ",
-                      attrs: { type: "text", disabled: "" },
+                      staticClass: "form-control",
+                      attrs: { type: "text", disabled: _vm.activo },
                       domProps: { value: _vm.lugar },
                       on: {
                         input: function($event) {
@@ -55303,8 +55316,8 @@ var render = function() {
                           expression: "cliente"
                         }
                       ],
-                      staticClass: "form-control ",
-                      attrs: { type: "text", disabled: "" },
+                      staticClass: "form-control",
+                      attrs: { type: "text", disabled: _vm.activo },
                       domProps: { value: _vm.cliente },
                       on: {
                         input: function($event) {
@@ -55334,7 +55347,7 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control",
-                      attrs: { rows: "5", disabled: "" },
+                      attrs: { rows: "5", disabled: _vm.activo },
                       domProps: { value: _vm.acuerdos },
                       on: {
                         input: function($event) {
@@ -55362,7 +55375,7 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control",
-                      attrs: { rows: "5", disabled: "" },
+                      attrs: { rows: "5", disabled: _vm.activo },
                       domProps: { value: _vm.observaciones },
                       on: {
                         input: function($event) {
@@ -55381,7 +55394,49 @@ var render = function() {
                 _vm._m(0),
                 _vm._v(" "),
                 _c("div", [
-                  _vm._m(1),
+                  !_vm.activo
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              _vm.desactivarEditar()
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "icon-note" })]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.activo
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-warning",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              _vm.editarCita()
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "icon-lock-open" })]
+                      )
+                    : _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              _vm.editarCita()
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "icon-lock" })]
+                      ),
                   _vm._v(" "),
                   _c(
                     "button",
@@ -55410,35 +55465,19 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-5" }, [
+    return _c("div", [
       _c(
         "button",
-        {
-          staticClass: "btn btn-success align-content-center",
-          attrs: { type: "button" }
-        },
+        { staticClass: "btn btn-success", attrs: { type: "button" } },
         [_c("i", { staticClass: "icon-check" })]
       ),
       _vm._v(" "),
       _c(
         "button",
-        {
-          staticClass: "btn btn-danger align-content-center",
-          attrs: { type: "button" }
-        },
+        { staticClass: "btn btn-danger", attrs: { type: "button" } },
         [_c("i", { staticClass: "icon-trash" })]
       )
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      { staticClass: "btn btn-warning", attrs: { type: "button" } },
-      [_c("i", { staticClass: "icon-pencil" })]
-    )
   }
 ]
 render._withStripped = true

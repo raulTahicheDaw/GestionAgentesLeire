@@ -139,11 +139,11 @@
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <label class="form-control-label">Fecha</label>
-                                <input type="text" class="form-control" v-model="fecha" disabled>
+                                <input type="text" class="form-control" v-model="fecha" v-bind:disabled="activo">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-control-label">Hora</label>
-                                <select v-model="hora" class="form-control" disabled>
+                                <select v-model="hora" class="form-control" id="hora" v-bind:disabled="activo">
                                     <option value="08:00">08:00</option>
                                     <option value="08:30">08:30</option>
                                     <option value="09:00">09:00</option>
@@ -180,37 +180,48 @@
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <label class="form-control-label">Lugar</label>
-                                <input type="text" class="form-control " v-model="lugar" disabled>
+                                <input type="text" class="form-control" v-model="lugar" v-bind:disabled="activo">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-control-label">Cliente</label>
-                                <input type="text" class="form-control " v-model="cliente" disabled>
+                                <input type="text" class="form-control" v-model="cliente" v-bind:disabled="activo">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <label class="form-control-label">Acuerdos</label>
-                                <textarea rows="5" class="form-control" v-model="acuerdos" disabled></textarea>
+                                <textarea rows="5" class="form-control" v-model="acuerdos"
+                                          v-bind:disabled="activo"></textarea>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-control-label">Observaciones</label>
-                                <textarea rows="5" class="form-control" v-model="observaciones" disabled></textarea>
+                                <textarea rows="5" class="form-control" v-model="observaciones"
+                                          v-bind:disabled="activo"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="col-5">
-                            <button type="button" class="btn btn-success align-content-center"><i
+                        <div>
+                            <button type="button" class="btn btn-success"><i
                                     class="icon-check"></i>
                             </button>
-
-                            <button type="button" class="btn btn-danger align-content-center"><i class="icon-trash"></i>
+                            <button type="button" class="btn btn-danger"><i class="icon-trash"></i>
                             </button>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-warning"><i class="icon-pencil"></i>
+                            <button type="button" v-if="!activo" class="btn btn-success"
+                                    @click="desactivarEditar()"><i
+                                    class="icon-note"></i>
                             </button>
-                            <button type="button" class="btn btn-secondary" @click="cerrarModal()" data-dismiss="modal">
+                            <button type="button" v-if="activo" class="btn btn-warning" @click="editarCita()">
+                                <i class="icon-lock-open"></i>
+                            </button>
+                            <button type="button" v-else class="btn btn-danger" @click="editarCita()">
+                                <i class="icon-lock"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-secondary" @click="cerrarModal()"
+                                    data-dismiss="modal">
                                 <i class="icon-close"></i></button>
                         </div>
                     </div>
@@ -218,7 +229,6 @@
             </div>
         </div>
     </div>
-
 
 </template>
 <script>
@@ -264,9 +274,11 @@
                 acuerdos: '',
                 observaciones: '',
                 motivo: '',
-                fin:'',
+                fin: '',
                 hora: '08:00',
-                resumen: ''
+                resumen: '',
+                activo: true
+
 
             }
         },
@@ -285,11 +297,7 @@
                 }
             },
         },
-        mounted() {
-            this.listarEventos();
-            this.newEventStartDate = this.isoYearMonthDay(this.today());
-            this.newEventEndDate = this.isoYearMonthDay(this.today());
-        },
+
         methods: {
             listarEventos() {
                 let me = this;
@@ -309,7 +317,7 @@
                 })
                     .then(function (response) {
                         me.lugar = response.data[0].lugar;
-                        me.cliente = response.data[0].id_cliente;
+                        me.cliente = response.data[0].nombre;
                         me.fecha = response.data[0].fecha.substr(0, 10).replace(/^(\d{4})-(\d{2})-(\d{2})$/g, '$3/$2/$1');
                         me.hora = response.data[0].fecha.substr(11, 5);
                         me.acuerdos = response.data[0].acuerdos;
@@ -348,18 +356,10 @@
                 event.originalEvent.endDate = this.addDays(event.endDate, eLength);
             },
             clickTestAddEvent() {
-                /*
-                this.events.push({
-                    startDate: this.newEventStartDate,
-                    endDate: this.newEventEndDate,
-                    title: this.hora + " " + this.cliente,
-                });
-                this.message = "You added an event!";
-                */
                 let me = this;
                 let fechaAux = this.newEventStartDate.split('-');
                 let hora = this.hora.split(':');
-                let fechaMontada = new Date(fechaAux[0],fechaAux[1]-1,fechaAux[2],hora[0],hora[1]).toISOString().slice(0, 19).replace('T', ' ');
+                let fechaMontada = new Date(fechaAux[0], fechaAux[1] - 1, fechaAux[2], hora[0], hora[1]).toISOString().slice(0, 19).replace('T', ' ');
                 console.log(fechaMontada);
 
                 axios.post('/agenda/registrar', {
@@ -381,17 +381,29 @@
 
 
             },
+            editarCita() {
+                this.activo = false;
+            },
+            desactivarEditar() {
+                this.activo = true;
+            },
             cerrarModal() {
                 this.modal = 0;
-                this.fecha= '';
-                this.lugar= '';
-                this.cliente= '';
-                this.acuerdos= '';
-                this.observaciones= '';
-                this.motivo= '';
-                this.hora= '08:00';
-                this.resumen= '';
+                this.fecha = '';
+                this.lugar = '';
+                this.cliente = '';
+                this.acuerdos = '';
+                this.observaciones = '';
+                this.motivo = '';
+                this.hora = '08:00';
+                this.resumen = '';
+                this.desactivarEditar()
             }
+        },
+        mounted() {
+            this.listarEventos();
+            this.newEventStartDate = this.isoYearMonthDay(this.today());
+            this.newEventEndDate = this.isoYearMonthDay(this.today());
         },
     }
 </script>

@@ -5,15 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Agenda;
 use DateTime;
+use Illuminate\Support\Facades\DB;
 
 class AgendaController extends Controller
 {
+    private function recuperaNombre($id){
+        $clientes = DB::table('clientes')->select('id','nombre','apellidos')->get();
+        foreach ($clientes as $cliente){
+            if($cliente->id==$id){
+                return $cliente->nombre . " " . $cliente->apellidos;
+            }
+        }
+    }
+
     public function index()
     {
         $arrayResultado = [];
         $data = Agenda::all();
         foreach ($data as $cita) {
-            $citaMontada = array('id' => $cita->id, 'title' => $cita->id_cliente, 'startDate' => $cita->fecha);
+            $citaMontada = array('id' => $cita->id, 'title' => $this->recuperaNombre($cita->id_cliente), 'startDate' => $cita->fecha);
             $arrayResultado[] = $citaMontada;
         }
         return $arrayResultado;
@@ -36,6 +46,9 @@ class AgendaController extends Controller
     public function recuperaCita(Request $request)
     {
         $cita = Agenda::where('id', $request->id)->get();
+        foreach ($cita as $citas){
+            $citas['nombre'] = $this->recuperaNombre($citas->id_cliente);
+        }
         return $cita;
     }
 
