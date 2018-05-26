@@ -68,15 +68,17 @@
                     </div>
                 </div>
                 <div class="field">
-                    <div class="control">
-                        <label class="label">Cliente</label>
-                        <input v-model="cliente" class="input form-control" type="text">
-                    </div>
+                    <label class="label">Cliente</label>
+                    <select v-model="id_cliente" class="form-control">
+                        <option v-for="cliente in arrayClientes" :key="cliente.id" :value="cliente.id"
+                                v-text="cliente.nombre">
+                        </option>
+                    </select>
                 </div>
                 <div class="field">
                     <div class="control">
                         <label class="label">Lugar</label>
-                        <input v-model="lugar" class="input form-control" type="text">
+                        <input v-model="lugar" class="input form-control" type="text" >
                     </div>
                 </div>
                 <div class="field">
@@ -92,14 +94,6 @@
                         <input v-model="newEventStartDate" class="input form-control" type="date">
                     </div>
                 </div>
-
-                <div class="field">
-                    <label class="label">Fecha Fin</label>
-                    <div class="control">
-                        <input v-model="newEventEndDate" class="input form-control" type="date">
-                    </div>
-                </div>
-
                 <button class="btn btn-primary mb-2" @click="clickTestAddEvent">Añadir cita al calendario
                 </button>
             </div>
@@ -183,9 +177,14 @@
                                 <input type="text" class="form-control" v-model="lugar" v-bind:disabled="activo">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-control-label">Cliente</label>
-                                <input type="text" class="form-control" v-model="cliente" v-bind:disabled="activo">
+                                <label class="label">Cliente</label>
+                                <select v-model="id_cliente" class="form-control" v-bind:disabled="activo">
+                                    <option v-for="cliente in arrayClientes" :key="cliente.id" :value="cliente.id"
+                                            v-text="cliente.nombre">
+                                    </option>
+                                </select>
                             </div>
+
                         </div>
                         <div class="form-group row">
                             <div class="col-md-6">
@@ -200,15 +199,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <div>
-                            <button type="button" class="btn btn-success"><i
+                    <div class="modal-footer row justify-content-between">
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-info"><i
                                     class="icon-check"></i>
                             </button>
                             <button type="button" class="btn btn-danger"><i class="icon-trash"></i>
                             </button>
                         </div>
-                        <div>
+                        <div class="col-auto">
                             <button type="button" v-if="!activo" class="btn btn-success"
                                     @click="desactivarEditar()"><i
                                     class="icon-note"></i>
@@ -216,10 +215,6 @@
                             <button type="button" v-if="activo" class="btn btn-warning" @click="editarCita()">
                                 <i class="icon-lock-open"></i>
                             </button>
-                            <button type="button" v-else class="btn btn-danger" @click="editarCita()">
-                                <i class="icon-lock"></i>
-                            </button>
-
                             <button type="button" class="btn btn-secondary" @click="cerrarModal()"
                                     data-dismiss="modal">
                                 <i class="icon-close"></i></button>
@@ -270,14 +265,15 @@
                 modal: 0,
                 fecha: '',
                 lugar: '',
-                cliente: '',
+                id_cliente: '',
                 acuerdos: '',
                 observaciones: '',
                 motivo: '',
                 fin: '',
                 hora: '08:00',
                 resumen: '',
-                activo: true
+                activo: true,
+                arrayClientes: []
 
 
             }
@@ -299,6 +295,7 @@
         },
 
         methods: {
+
             listarEventos() {
                 let me = this;
                 axios.get('/agenda').then(function (response) {
@@ -359,11 +356,10 @@
                 let me = this;
                 let fechaAux = this.newEventStartDate.split('-');
                 let hora = this.hora.split(':');
-                let fechaMontada = new Date(fechaAux[0], fechaAux[1] - 1, fechaAux[2], hora[0], hora[1]).toISOString().slice(0, 19).replace('T', ' ');
-                console.log(fechaMontada);
+                let fechaMontada = new Date(fechaAux[0], fechaAux[1] - 1, fechaAux[2], hora[0], hora[1],0,0).toISOString().slice(0, 19).replace('T', ' ');
 
                 axios.post('/agenda/registrar', {
-                    'id_cliente': me.cliente,
+                    'id_cliente': me.id_cliente,
                     'motivo': me.motivo,
                     'lugar': me.lugar,
                     'color': me.color,
@@ -398,13 +394,25 @@
                 this.hora = '08:00';
                 this.resumen = '';
                 this.desactivarEditar()
+            },
+            listarClientes() {
+                let me = this;
+                axios.get('/cliente/selectcliente').then(function (response) {
+                    me.arrayClientes = response.data.clientes;
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
+
         },
         mounted() {
             this.listarEventos();
+            this.listarClientes();
             this.newEventStartDate = this.isoYearMonthDay(this.today());
             this.newEventEndDate = this.isoYearMonthDay(this.today());
-        },
+        }
+
     }
 </script>
 

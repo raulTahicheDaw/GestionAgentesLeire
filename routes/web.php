@@ -26,6 +26,7 @@ Route::post('cliente/registrar', 'ClienteController@store');
 Route::put('cliente/actualizar', 'ClienteController@update');
 Route::put('cliente/desactivar', 'ClienteController@desactivar');
 Route::put('cliente/activar', 'ClienteController@activar');
+Route::get('cliente/selectcliente', 'ClienteController@listarClientes');
 
 Route::get('referencia', 'ReferenciaController@index');
 Route::post('referencia/registrar', 'ReferenciaController@store');

@@ -22,6 +22,8 @@
     "dependencies": {
         "fullcalendar": "^3.9.0",
         "vue-full-calendar": "0.0.3",
-        "vue-simple-calendar": "^3.0.2"
+        "vue-simple-calendar": "^3.0.2",
+        "vue2-autocomplete-js": "^0.2.2",
+        "vuejs-auto-complete": "^0.6.5"
     }
 }

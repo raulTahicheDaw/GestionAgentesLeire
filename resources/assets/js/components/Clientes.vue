@@ -28,7 +28,8 @@
                                 <button type="submit" @click="listarCliente(1,buscar,criterio)" class="btn btn-primary">
                                     <i class="fa fa-search"></i> Buscar
                                 </button>
-                                <button style="margin-left: 10px;" type="submit" @click="mostarTodos()" class="btn btn-primary">
+                                <button style="margin-left: 10px;" type="submit" @click="mostarTodos()"
+                                        class="btn btn-primary">
                                     <i class="fa fa-align-justify"></i>Mostrar todos
                                 </button>
                             </div>
@@ -55,7 +56,7 @@
                         <tbody>
                         <tr v-for="cliente in arrayCliente" :key="cliente.id">
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm">
+                                <button type="button" class="btn btn-primary btn-sm" @click="verResumen()">
                                     <i class="icon-magnifier-add"></i>
                                 </button>
                                 <button @click="abrirModal('cliente','actualizar', cliente)" type="button"
@@ -233,7 +234,8 @@
                                 <div class="col-md-3">
                                     <label class="form-control-label">Categoría</label>
                                     <select v-model="id_categoria" class="form-control">
-                                        <option v-for="categoria in arrayCategorias" :key="categoria.id" :value="categoria.id"
+                                        <option v-for="categoria in arrayCategorias" :key="categoria.id"
+                                                :value="categoria.id"
                                                 v-text="categoria.nombre">
                                         </option>
                                     </select>
@@ -267,6 +269,35 @@
                 <!-- Inicio del modal Eliminar -->
             </div><!-- Fin del modal Eliminar -->
         </div>
+        <!--Inicio modal Resumen Cliente-->
+        <div class="modal fade" tabindex="-1" :class="{'mostrar' : modalResumen}" role="dialog"
+             aria-labelledby="myModalLabel"
+             style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-success modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Ficha del Cliente</h4>
+                        <button type="button" class="close" @click="cerrarResumen()" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="media border">
+                            <div class="row justify-content-between">
+                                <div class="col-3"><h4>Raúl González Moreno</h4></div>
+                                <div class="col-3">
+                                    <h5><i>78544062M </i></h5>
+                                </div>
+                                <div class="col-3">
+                                    <h5>620324500</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 </template>
 
@@ -280,6 +311,7 @@
                 arrayCliente: [],
                 arrayCategorias: [],
                 modal: 0,
+                modalResumen: 0,
                 tituloModal: '',
                 tipoAccion: 0,
                 errorCliente: 0,
@@ -345,9 +377,9 @@
                         console.log(error);
                     });
             },
-            mostarTodos(){
-              this.listarCliente(1,'','nombre');
-              this.buscar='';
+            mostarTodos() {
+                this.listarCliente(1, '', 'nombre');
+                this.buscar = '';
             },
             cambiarPagina(page, buscar, criterio) {
                 let me = this;
@@ -551,6 +583,12 @@
                 this.id_categoria = '';
                 this.observaciones = '';
                 this.profesion = '';
+            },
+            verResumen() {
+                this.modalResumen = 1;
+            },
+            cerrarResumen() {
+                this.modalResumen = 0;
             },
             abrirModal(modelo, accion, data = []) {
                 this.errorMostrarMsgCliente = [];
