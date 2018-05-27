@@ -23,7 +23,8 @@
                                 <input type="text" v-model="buscar" @keyup.enter="(1,buscar,criterio)"
                                        class="form-control"
                                        placeholder="Texto a buscar">
-                                <button type="submit" @click="listarReferencias(1,buscar,criterio)" class="btn btn-primary">
+                                <button type="submit" @click="listarReferencias(1,buscar,criterio)"
+                                        class="btn btn-primary">
                                     <i class="fa fa-search"></i> Buscar
                                 </button>
                                 <button style="margin-left: 10px;" type="submit" @click="mostarTodos()"
@@ -53,28 +54,22 @@
                         </thead>
                         <tbody>
                         <tr v-for="referencia in arrayReferencias" :key="referencia.id">
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm">
+                            <td width="120px">
+                                <button type="button" class="btn btn-primary btn-sm" @click="verResumen(referencia)">
                                     <i class="icon-magnifier-add"></i>
                                 </button>
                                 <button @click="abrirModal('referencia','actualizar', referencia)" type="button"
                                         class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
-                                </button> &nbsp;
-                                <template v-if="referencia.activo">
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                            @click="desactivarReferencia(referencia.id)">
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </template>
-                                <template v-else>
-                                    <button type="button" class="btn btn-success btn-sm"
-                                            @click="activarReferencia(referencia.id)">
-                                        <i class="icon-check"></i>
-                                    </button>
-                                </template>
-
-
+                                </button>
+                                <button v-if="referencia.activo" type="button" class="btn btn-danger btn-sm"
+                                        @click="desactivarReferencia(referencia.id)">
+                                    <i class="icon-trash"></i>
+                                </button>
+                                <button v-else type="button" class="btn btn-success btn-sm"
+                                        @click="activarReferencia(referencia.id)">
+                                    <i class="icon-check"></i>
+                                </button>
                             </td>
                             <td v-text="referencia.nombre"></td>
                             <td v-text="referencia.apellidos"></td>
@@ -118,7 +113,7 @@
             </div>
             <!-- Fin ejemplo de tabla Listado -->
         </div>
-        <!--Inicio del modal agregar/actualizar-->
+
         <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel"
              style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-primary modal-lg" role="document">
@@ -142,7 +137,8 @@
                                 <div class="col-md-5">
                                     <label class=" form-control-label"
                                            :class="{'text-error' : errorMostrarMsgReferencia.includes('Apellidos')}">Apellidos</label>
-                                    <input type="text" v-model="apellidos" class="form-control" placeholder="Introduzca los apellidos">
+                                    <input type="text" v-model="apellidos" class="form-control"
+                                           placeholder="Introduzca los apellidos">
                                 </div>
 
                                 <div class="col-md-3">
@@ -260,11 +256,90 @@
 
                         </form>
                     </div>
-                </div>    <!-- /.modal-content -->
-                <!-- /.modal-dialog -->
-                <!--Fin del modal-->
-                <!-- Inicio del modal Eliminar -->
-            </div><!-- Fin del modal Eliminar -->
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" tabindex="-1" :class="{'mostrar' : modalResumen}" role="dialog"
+             aria-labelledby="myModalLabel"
+             style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-success modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Ficha de la Referencia</h4>
+                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row align-content-center">
+                            <table class="table">
+                                <tr>
+                                    <th>Nombre:</th>
+                                    <td>{{nombre}}</td>
+                                    <th>Apellidos:</th>
+                                    <td>{{apellidos}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Télefono:</th>
+                                    <td>{{telefono}}</td>
+                                    <th>Contacto:</th>
+                                    <td>{{contacto}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dirección:</th>
+                                    <td>{{domicilio}}</td>
+                                    <th>Localidad:</th>
+                                    <td>{{localidad}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Provincia:</th>
+                                    <td>{{provincia}}</td>
+                                    <th>Código Postal:</th>
+                                    <td>{{codigoPostal}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Profesion</th>
+                                    <td>{{profesion}}</td>
+                                    <th>Email:</th>
+                                    <td>{{email}}</td>
+                                </tr>
+                                <tr>
+                                    <th>DNI/NIF/NIE</th>
+                                    <td>{{dni}}</td>
+                                    <th>Fec. Nacimiento: </th>
+                                    <td>{{fechaNacimiento}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nacionalidad:</th>
+                                    <td>{{nacionalidad}}</td>
+                                    <th>Profesión: </th>
+                                    <td>{{profesion}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Compañía Origen</th>
+                                    <td>{{compañia_origen}}</td>
+                                    <th>Intereses: </th>
+                                    <td>{{intereses}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Sexo: </th>
+                                    <td>{{sexo}}</td>
+                                    <th>Estado: </th>
+                                    <td v-if="activo" class="text-success">Activo</td>
+                                    <td v-else class="text-error">No Activo</td>
+                                </tr>
+                                <tr>
+                                    <th>Observaciones:</th>
+                                    <td colspan="3">{{observaciones}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 </template>
@@ -276,8 +351,9 @@
                 referencia_id: 0, nombre: '', apellidos: '', domicilio: '', localidad: '', codigoPostal: '',
                 provincia: '', email: '', sexo: '', dni: '', telefono: '', fechaNacimiento: '', nacionalidad: '',
                 intereses: '', compañia_origen: '', observaciones: '', contacto: '', profesion: '',
-                arrayReferencias: [],
+                arrayReferencias: [],activo:1,
                 modal: 0,
+                modalResumen: 0,
                 tituloModal: '',
                 tipoAccion: 0,
                 errorReferencia: 0,
@@ -333,6 +409,27 @@
                     .catch(function (error) {
                         console.log(error);
                     });
+            },
+            verResumen(data = []) {
+                this.modalResumen=1;
+                this.nombre = data['nombre'];
+                this.apellidos = data['apellidos'];
+                this.domicilio = data['domicilio'];
+                this.localidad = data['localidad'];
+                this.codigoPostal = data['codigoPostal'];
+                this.provincia = data['provincia'];
+                this.email = data['email'];
+                this.dni = data['dni'];
+                this.telefono = data['telefono'];
+                this.fechaNacimiento = data['fechaNacimiento'];
+                this.nacionalidad = data['nacionalidad'];
+                this.intereses = data['intereses'];
+                this.compañia_origen = data['compañia_origen'];
+                this.observaciones = data['observaciones'];
+                this.contacto = data['contacto'];
+                this.profesion = data['profesion'];
+                this.sexo = data['sexo'];
+                this.activo = data['activo'];
             },
             mostarTodos() {
                 this.listarReferencias(1, '', 'nombre');
@@ -522,6 +619,7 @@
                 return false;
             },
             cerrarModal() {
+                this.modalResumen=0;
                 this.modal = 0;
                 this.tituloModal = '';
                 this.nombre = '';
@@ -594,7 +692,7 @@
                                 this.contacto = data['contacto'];
                                 this.profesion = data['profesion'];
                                 this.sexo = data['sexo'];
-                                this.referencia_id=data['id'];
+                                this.referencia_id = data['id'];
                                 break;
                             }
                         }

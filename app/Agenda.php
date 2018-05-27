@@ -11,7 +11,7 @@ class Agenda extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = ['id','id_cliente', 'motivo','lugar','fecha','hora',
+    protected $fillable = ['id_cliente', 'motivo','lugar','fecha','hora',
         'color', 'acuerdos','observaciones'];
 
     public function roles()

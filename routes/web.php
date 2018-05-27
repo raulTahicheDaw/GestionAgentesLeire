@@ -19,8 +19,6 @@ Route::get('agenda', 'AgendaController@index');
 Route::get('agenda/recuperaCita', 'AgendaController@recuperaCita');
 Route::post('agenda/registrar', 'AgendaController@store');
 
-
-
 Route::get('cliente', 'ClienteController@index');
 Route::post('cliente/registrar', 'ClienteController@store');
 Route::put('cliente/actualizar', 'ClienteController@update');
@@ -40,3 +38,17 @@ Route::post('categoria/registrar', 'CategoriaController@store');
 Route::put('categoria/actualizar', 'CategoriaController@update');
 Route::put('categoria/desactivar', 'CategoriaController@desactivar');
 Route::put('categoria/activar', 'CategoriaController@activar');
+
+Route::get('ramo', 'RamoController@index');
+Route::get('ramo/selectramo', 'RamoController@listarRamos');
+Route::post('ramo/registrar', 'RamoController@store');
+Route::put('ramo/actualizar', 'RamoController@update');
+Route::put('ramo/desactivar', 'RamoController@desactivar');
+Route::put('ramo/activar', 'RamoController@activar');
+
+Route::get('producto', 'ProductoController@index');
+Route::get('producto/selectproducto', 'ProductoController@listarProductos');
+Route::post('producto/registrar', 'ProductoController@store');
+Route::put('producto/actualizar', 'ProductoController@update');
+Route::put('producto/desactivar', 'ProductoController@desactivar');
+Route::put('producto/activar', 'ProductoController@activar');

@@ -15,9 +15,10 @@ class CategoriaController extends Controller
         $criterio = $request->criterio;
 
         if ($buscar == '') {
-            $categorias = Categoria::orderBy('id', 'desc')->paginate(5);
+            $categorias = Categoria::orderBy('id', 'desc')->paginate(4);
         } else {
-            $categorias = Categoria::where($criterio, 'like', '%' . $buscar . '%')->orderBy('id', 'asc')->paginate(6);
+            $categorias = Categoria::where($criterio, 'like', '%' . $buscar . '%')
+                ->orderBy('id', 'asc')->paginate(4);
         }
         return [
             'pagination' => [

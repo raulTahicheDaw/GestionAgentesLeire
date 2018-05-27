@@ -16,9 +16,9 @@ class CreateProductosTable extends Migration
         Schema::create('productos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre');
-            $table->boolean('campaña');
-            $table->date('fecha_lanzamiento');
-            $table->date('fecha_vencimiento');
+            $table->boolean('campania');
+            $table->date('fecha_lanzamiento')->nullable();
+            $table->date('fecha_vencimiento')->nullable();
             $table->longText('coberturas')->nullable();
             $table->longText('observaciones')->nullable();
             $table->boolean('activo')->default(1);

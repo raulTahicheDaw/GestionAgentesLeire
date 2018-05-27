@@ -5,7 +5,6 @@
             <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
         </ol>
         <div class="container-fluid">
-            <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Listado de Clientes
@@ -55,28 +54,26 @@
                         </thead>
                         <tbody>
                         <tr v-for="cliente in arrayCliente" :key="cliente.id">
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm" @click="verResumen()">
+                            <td class="d-block">
+                                <button type="button" class="btn btn-primary btn-sm" @click="verResumen(cliente)">
                                     <i class="icon-magnifier-add"></i>
                                 </button>
                                 <button @click="abrirModal('cliente','actualizar', cliente)" type="button"
                                         class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
-                                </button> &nbsp;
-                                <template v-if="cliente.activo">
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                            @click="desactivarCliente(cliente.id)">
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </template>
-                                <template v-else>
-                                    <button type="button" class="btn btn-success btn-sm"
-                                            @click="activarCliente(cliente.id)">
-                                        <i class="icon-check"></i>
-                                    </button>
-                                </template>
-
-
+                                </button>
+                                <button v-if="cliente.activo" type="button" class="btn btn-danger btn-sm"
+                                        @click="desactivarCliente(cliente.id)">
+                                    <i class="icon-trash"></i>
+                                </button>
+                                <button v-else type="button" class="btn btn-success btn-sm"
+                                        @click="activarCliente(cliente.id)">
+                                    <i class="icon-check"></i>
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                        @click="abrirModalAddProductos(cliente.id)">
+                                    <i class="icon-paper-clip"></i>
+                                </button>
                             </td>
                             <td v-text="cliente.nombre"></td>
                             <td v-text="cliente.apellidos"></td>
@@ -119,7 +116,6 @@
                     </nav>
                 </div>
             </div>
-            <!-- Fin ejemplo de tabla Listado -->
         </div>
         <!--Inicio del modal agregar/actualizar-->
         <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel"
@@ -197,7 +193,7 @@
                                 <div class="col-md-3">
                                     <label class="form-control-label">Provincia</label>
 
-                                    <input type="text" v-model="provicia" class="form-control"
+                                    <input type="text" v-model="provincia" class="form-control"
                                            placeholder="Provincia">
                                 </div>
                             </div>
@@ -231,6 +227,7 @@
                                     <label class="form-control-label">Observac.</label>
                                     <textarea class="form-control" rows="5" v-model="observaciones"></textarea>
                                 </div>
+                                s
                                 <div class="col-md-3">
                                     <label class="form-control-label">Categoría</label>
                                     <select v-model="id_categoria" class="form-control">
@@ -263,11 +260,8 @@
 
                         </form>
                     </div>
-                </div>    <!-- /.modal-content -->
-                <!-- /.modal-dialog -->
-                <!--Fin del modal-->
-                <!-- Inicio del modal Eliminar -->
-            </div><!-- Fin del modal Eliminar -->
+                </div>
+            </div>
         </div>
         <!--Inicio modal Resumen Cliente-->
         <div class="modal fade" tabindex="-1" :class="{'mostrar' : modalResumen}" role="dialog"
@@ -276,23 +270,95 @@
             <div class="modal-dialog modal-success modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Ficha del Cliente</h4>
+                        <h4 class="modal-title">Ficha del Cliente -
+                            Categoría del Cliente: <i v-for="categoria in arrayCategorias"
+                                                      v-if="id_categoria==categoria.id"> {{categoria.nombre}} -></i>
+                            <span v-if="activo" class="text-info"> Activo</span>
+                            <span v-else class="text-error"> No Activo</span>
+                        </h4>
                         <button type="button" class="close" @click="cerrarResumen()" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="media border">
-                            <div class="row justify-content-between">
-                                <div class="col-3"><h4>Raúl González Moreno</h4></div>
-                                <div class="col-3">
-                                    <h5><i>78544062M </i></h5>
-                                </div>
-                                <div class="col-3">
-                                    <h5>620324500</h5>
-                                </div>
-                            </div>
+                        <div class="row align-content-center">
+                            <table class="table">
+                                <tr>
+                                    <th>Nombre:</th>
+                                    <td>{{nombre}}</td>
+                                    <th>Apellidos:</th>
+                                    <td>{{apellidos}}</td>
+                                </tr>
+                                <tr>
+                                    <th>DNI/CIF/NIE:</th>
+                                    <td>{{dni}}</td>
+                                    <th>Télefono:</th>
+                                    <td>{{telefono}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Contacto:</th>
+                                    <td>{{contacto}}</td>
+                                    <th>Fec. Nacimiento:</th>
+                                    <td>{{fechaNacimiento}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dirección:</th>
+                                    <td>{{domicilio}}</td>
+                                    <th>Localidad:</th>
+                                    <td>{{localidad}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Provincia:</th>
+                                    <td>{{provincia}}</td>
+                                    <th>Código Postal:</th>
+                                    <td>{{codigoPostal}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Profesion</th>
+                                    <td>{{profesion}}</td>
+                                    <th>Email:</th>
+                                    <td>{{email}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cuenta Bancaria:</th>
+                                    <td>{{cuentaBancaria}}</td>
+                                    <th>Sexo:</th>
+                                    <td>{{sexo}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Observaciones:</th>
+                                    <td colspan="3">{{observaciones}}
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Inicio modal Añadir Producto-->
+        <div class="modal fade" tabindex="-1" :class="{'mostrar' : modalAddProductos}" role="dialog" aria-labelledby="myModalLabel"
+             style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-primary modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Añadir Productos</h4>
+                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+
+                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                            <button type="button" class="btn btn-primary"
+                                    @click="addProductos()">Guardar
+                            </button>
+                        </div>
+
+                        </form>
                     </div>
                 </div>
             </div>
@@ -305,30 +371,46 @@
     export default {
         data() {
             return {
-                cliente_id: 0, nombre: '', apellidos: '', dni: '', email: '', telefono: '', fechaNacimiento: '',
-                sexo: 'Hombre', domicilio: '', localidad: '', codigoPostal: '', provicia: '', cuentaBancaria: '',
-                profesion: '', contacto: '', id_categoria: 1, observaciones: '',
+                cliente_id: 0,
+                nombre: "",
+                apellidos: "",
+                dni: "",
+                email: "",
+                telefono: "",
+                fechaNacimiento: "",
+                sexo: "Hombre",
+                domicilio: "",
+                localidad: "",
+                codigoPostal: "",
+                provincia: "",
+                cuentaBancaria: "",
+                profesion: "",
+                contacto: "",
+                id_categoria: 1,
+                observaciones: "",
                 arrayCliente: [],
                 arrayCategorias: [],
                 modal: 0,
                 modalResumen: 0,
-                tituloModal: '',
+                modalAddProductos:0,
+                tituloModal: "",
                 tipoAccion: 0,
                 errorCliente: 0,
                 errorMostrarMsgCliente: [],
                 errorFormatoDni: 0,
                 pagination: {
-                    'total': 0,
-                    'current_page': 0,
-                    'per_page': 0,
-                    'last_page': 0,
-                    'from': 0,
-                    'to': 0,
+                    total: 0,
+                    current_page: 0,
+                    per_page: 0,
+                    last_page: 0,
+                    from: 0,
+                    to: 0
                 },
                 offset: 3,
-                criterio: 'nombre',
-                buscar: ''
-            }
+                criterio: "nombre",
+                buscar: "",
+                activo: '1',
+            };
         },
         computed: {
             isActive: function () {
@@ -337,13 +419,13 @@
             //Calcula los elementos de la paginación
             pagesNumbers: function () {
                 if (!this.pagination.to) {
-                    return []
+                    return [];
                 }
                 var from = this.pagination.current_page - this.offset;
                 if (from < 1) {
                     from = 1;
                 }
-                var to = from + (this.offset * 2);
+                var to = from + this.offset * 2;
                 if (to >= this.pagination.last_page) {
                     to = this.pagination.last_page;
                 }
@@ -358,28 +440,33 @@
         methods: {
             listarCategoria() {
                 let me = this;
-                axios.get('/categoria/selectcategoria').then(function (response) {
-                    me.arrayCategorias = response.data.categorias;
-                })
+                axios
+                    .get("/categoria/selectcategoria")
+                    .then(function (response) {
+                        me.arrayCategorias = response.data.categorias;
+                    })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
             listarCliente(page, buscar, criterio) {
                 let me = this;
-                var url = '/cliente?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
-                axios.get(url).then(function (response) {
-                    var respuesta = response.data;
-                    me.arrayCliente = respuesta.clientes.data;
-                    me.pagination = respuesta.pagination;
-                })
+                var url =
+                    "/cliente?page=" + page + "&buscar=" + buscar + "&criterio=" + criterio;
+                axios
+                    .get(url)
+                    .then(function (response) {
+                        var respuesta = response.data;
+                        me.arrayCliente = respuesta.clientes.data;
+                        me.pagination = respuesta.pagination;
+                    })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
             mostarTodos() {
-                this.listarCliente(1, '', 'nombre');
-                this.buscar = '';
+                this.listarCliente(1, "", "nombre");
+                this.buscar = "";
             },
             cambiarPagina(page, buscar, criterio) {
                 let me = this;
@@ -392,27 +479,29 @@
                     return;
                 }
                 let me = this;
-                axios.post('/cliente/registrar', {
-                    'nombre': this.nombre,
-                    'apellidos': this.apellidos,
-                    'dni': this.dni,
-                    'email': this.email,
-                    'telefono': this.telefono,
-                    'fechaNacimiento': this.fechaNacimiento,
-                    'sexo': this.sexo,
-                    'domicilio': this.domicilio,
-                    'codigoPostal': this.codigoPostal,
-                    'provincia': this.provicia,
-                    'cuentaBancaria': this.cuentaBancaria,
-                    'contacto': this.contacto,
-                    'id_categoria': this.id_categoria,
-                    'observaciones': this.observaciones,
-                    'localidad': this.localidad,
-                    'profesion': this.profesion
-                }).then(function (response) {
-                    me.cerrarModal();
-                    me.listarCliente(1, '', 'nombre');
-                })
+                axios
+                    .post("/cliente/registrar", {
+                        nombre: this.nombre,
+                        apellidos: this.apellidos,
+                        dni: this.dni,
+                        email: this.email,
+                        telefono: this.telefono,
+                        fechaNacimiento: this.fechaNacimiento,
+                        sexo: this.sexo,
+                        domicilio: this.domicilio,
+                        codigoPostal: this.codigoPostal,
+                        provincia: this.provincia,
+                        cuentaBancaria: this.cuentaBancaria,
+                        contacto: this.contacto,
+                        id_categoria: this.id_categoria,
+                        observaciones: this.observaciones,
+                        localidad: this.localidad,
+                        profesion: this.profesion
+                    })
+                    .then(function (response) {
+                        me.cerrarModal();
+                        me.listarCliente(1, "", "nombre");
+                    })
                     .catch(function (error) {
                         console.log(error);
                     });
@@ -422,122 +511,126 @@
                     return;
                 }
                 let me = this;
-                axios.put('/cliente/actualizar', {
-                    'nombre': this.nombre,
-                    'apellidos': this.apellidos,
-                    'dni': this.dni,
-                    'email': this.email,
-                    'telefono': this.telefono,
-                    'fechaNacimiento': this.fechaNacimiento,
-                    'sexo': this.sexo,
-                    'domicilio': this.domicilio,
-                    'codigoPostal': this.codigoPostal,
-                    'provincia': this.provicia,
-                    'cuentaBancaria': this.cuentaBancaria,
-                    'contacto': this.contacto,
-                    'id_categoria': this.id_categoria,
-                    'observaciones': this.observaciones,
-                    'localidad': this.localidad,
-                    'profesion': this.profesion,
-                    'id': this.cliente_id
-                }).then(function (response) {
-                    me.cerrarModal();
-                    me.listarCliente(1, '', 'nombre');
-                })
+                axios
+                    .put("/cliente/actualizar", {
+                        nombre: this.nombre,
+                        apellidos: this.apellidos,
+                        dni: this.dni,
+                        email: this.email,
+                        telefono: this.telefono,
+                        fechaNacimiento: this.fechaNacimiento,
+                        sexo: this.sexo,
+                        domicilio: this.domicilio,
+                        codigoPostal: this.codigoPostal,
+                        provincia: this.provincia,
+                        cuentaBancaria: this.cuentaBancaria,
+                        contacto: this.contacto,
+                        id_categoria: this.id_categoria,
+                        observaciones: this.observaciones,
+                        localidad: this.localidad,
+                        profesion: this.profesion,
+                        id: this.cliente_id
+                    })
+                    .then(function (response) {
+                        me.cerrarModal();
+                        me.listarCliente(1, "", "nombre");
+                    })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
             desactivarCliente(id) {
                 const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: true,
+                    confirmButtonClass: "btn btn-success",
+                    cancelButtonClass: "btn btn-danger",
+                    buttonsStyling: true
                 });
                 swalWithBootstrapButtons({
-                    title: '¿Está seguro de desactivar este Cliente?',
-                    type: 'warning',
+                    title: "¿Está seguro de desactivar este Cliente?",
+                    type: "warning",
                     showCancelButton: true,
-                    confirmButtonText: 'Aceptar',
-                    cancelButtonText: 'Cancelar',
-                }).then((result) => {
+                    confirmButtonText: "Aceptar",
+                    cancelButtonText: "Cancelar"
+                }).then(result => {
                     if (result.value) {
                         let me = this;
-                        axios.put('/cliente/desactivar', {
-                            'id': id
-                        }).then(function (response) {
-                            me.listarCliente(1, '', 'nombre');
-                            swalWithBootstrapButtons(
-                                'Desactivado!',
-                                'El Cliente ha sido desactivado con éxito.',
-                                'success'
-                            )
-                        })
+                        axios
+                            .put("/cliente/desactivar", {
+                                id: id
+                            })
+                            .then(function (response) {
+                                me.listarCliente(1, "", "nombre");
+                                swalWithBootstrapButtons(
+                                    "Desactivado!",
+                                    "El Cliente ha sido desactivado con éxito.",
+                                    "success"
+                                );
+                            })
                             .catch(function (error) {
                                 console.log(error);
                             });
-
                     } else if (
                         // Read more about handling dismissals
                         result.dismiss === swal.DismissReason.cancel
                     ) {
                         swalWithBootstrapButtons(
-                            'Cancelado',
-                            'No se ha desactivado el Cliente.',
-                            'error'
-                        )
+                            "Cancelado",
+                            "No se ha desactivado el Cliente.",
+                            "error"
+                        );
                     }
-                })
+                });
             },
             activarCliente(id) {
                 const swalWithBootstrapButtons = swal.mixin({
-                    confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: true,
+                    confirmButtonClass: "btn btn-success",
+                    cancelButtonClass: "btn btn-danger",
+                    buttonsStyling: true
                 });
                 swalWithBootstrapButtons({
-                    title: '¿Está seguro de activar este Cliente?',
-                    type: 'warning',
+                    title: "¿Está seguro de activar este Cliente?",
+                    type: "warning",
                     showCancelButton: true,
-                    confirmButtonText: 'Aceptar',
-                    cancelButtonText: 'Cancelar',
-                }).then((result) => {
+                    confirmButtonText: "Aceptar",
+                    cancelButtonText: "Cancelar"
+                }).then(result => {
                     if (result.value) {
                         let me = this;
-                        axios.put('/cliente/activar', {
-                            'id': id
-                        }).then(function (response) {
-                            me.listarCliente(1, '', 'nombre');
-                            swalWithBootstrapButtons(
-                                'Activado!',
-                                'El Cliente ha sido activado con éxito.',
-                                'success'
-                            )
-                        })
+                        axios
+                            .put("/cliente/activar", {
+                                id: id
+                            })
+                            .then(function (response) {
+                                me.listarCliente(1, "", "nombre");
+                                swalWithBootstrapButtons(
+                                    "Activado!",
+                                    "El Cliente ha sido activado con éxito.",
+                                    "success"
+                                );
+                            })
                             .catch(function (error) {
                                 console.log(error);
                             });
-
                     } else if (
                         // Read more about handling dismissals
                         result.dismiss === swal.DismissReason.cancel
                     ) {
                         swalWithBootstrapButtons(
-                            'Cancelado',
-                            'No se ha activado el Cliente.',
-                            'error'
-                        )
+                            "Cancelado",
+                            "No se ha activado el Cliente.",
+                            "error"
+                        );
                     }
-                })
+                });
             },
             validarCliente() {
                 this.errorCliente = 0;
                 this.errorMostrarMsgCliente = [];
-                if (!this.nombre) this.errorMostrarMsgCliente.push('Nombre');
-                if (!this.apellidos) this.errorMostrarMsgCliente.push('Apellidos');
-                if (!this.dni) this.errorMostrarMsgCliente.push('DNI');
-                if (!this.telefono) this.errorMostrarMsgCliente.push('Teléfono');
-                if (!this.id_categoria) this.errorMostrarMsgCliente.push('Categoría');
+                if (!this.nombre) this.errorMostrarMsgCliente.push("Nombre");
+                if (!this.apellidos) this.errorMostrarMsgCliente.push("Apellidos");
+                if (!this.dni) this.errorMostrarMsgCliente.push("DNI");
+                if (!this.telefono) this.errorMostrarMsgCliente.push("Teléfono");
+                if (!this.id_categoria) this.errorMostrarMsgCliente.push("Categoría");
                 if (!this.validarDni(this.dni)) {
                     this.errorFormatoDni = 1;
                     this.errorCliente = 1;
@@ -546,7 +639,7 @@
                 return this.errorCliente;
             },
             validarDni(value) {
-                let validChars = 'TRWAGMYFPDXBNJZSQVHLCKET';
+                let validChars = "TRWAGMYFPDXBNJZSQVHLCKET";
                 let nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
                 let nieRexp = /^[XYZ]{1}[0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
                 let str = value.toString().toUpperCase();
@@ -554,9 +647,9 @@
                 if (!nifRexp.test(str) && !nieRexp.test(str)) return false;
 
                 let nie = str
-                    .replace(/^[X]/, '0')
-                    .replace(/^[Y]/, '1')
-                    .replace(/^[Z]/, '2');
+                    .replace(/^[X]/, "0")
+                    .replace(/^[Y]/, "1")
+                    .replace(/^[Z]/, "2");
 
                 let letter = str.substr(-1);
                 let charIndex = parseInt(nie.substr(0, 8)) % 23;
@@ -566,26 +659,44 @@
             },
             cerrarModal() {
                 this.modal = 0;
-                this.tituloModal = '';
-                this.nombre = '';
-                this.apellidos = '';
-                this.dni = '';
-                this.email = '';
-                this.telefono = '';
-                this.fechaNacimiento = '';
-                this.sexo = '';
-                this.domicilio = '';
-                this.codigoPostal = '';
-                this.localidad = '';
-                this.provicia = '';
-                this.cuentaBancaria = '';
-                this.contacto = '';
-                this.id_categoria = '';
-                this.observaciones = '';
-                this.profesion = '';
+                this.tituloModal = "";
+                this.nombre = "";
+                this.apellidos = "";
+                this.dni = "";
+                this.email = "";
+                this.telefono = "";
+                this.fechaNacimiento = "";
+                this.sexo = "";
+                this.domicilio = "";
+                this.codigoPostal = "";
+                this.localidad = "";
+                this.provincia = "";
+                this.cuentaBancaria = "";
+                this.contacto = "";
+                this.id_categoria = "";
+                this.observaciones = "";
+                this.profesion = "";
             },
-            verResumen() {
+            verResumen(data = []) {
                 this.modalResumen = 1;
+                this.nombre = data["nombre"];
+                this.apellidos = data["apellidos"];
+                this.dni = data["dni"];
+                this.email = data["email"];
+                this.telefono = data["telefono"];
+                this.fechaNacimiento = data["fechaNacimiento"];
+                this.sexo = data["sexo"];
+                this.domicilio = data["domicilio"];
+                this.localidad = data["localidad"];
+                this.codigoPostal = data["codigoPostal"];
+                this.provincia = data["provincia"];
+                this.cuentaBancaria = data["cuentaBancaria"];
+                this.profesion = data["profesion"];
+                this.contacto = data["contacto"];
+                this.id_categoria = data["id_categoria"];
+                this.observaciones = data["observaciones"];
+                this.cliente_id = data["id"];
+                this.activo = data["activo"];
             },
             cerrarResumen() {
                 this.modalResumen = 0;
@@ -597,50 +708,50 @@
                 switch (modelo) {
                     case "cliente": {
                         switch (accion) {
-                            case 'registrar': {
+                            case "registrar": {
                                 this.modal = 1;
-                                this.nombre = '';
-                                this.apellidos = '';
-                                this.dni = '';
-                                this.email = '';
-                                this.telefono = '';
-                                this.fechaNacimiento = '';
-                                this.domicilio = '';
-                                this.codigoPostal = '';
-                                this.provicia = '';
-                                this.cuentaBancaria = '';
-                                this.contacto = '';
-                                this.observaciones = '';
-                                this.profesion = '';
-                                this.localidad = '';
-                                this.tituloModal = 'Registrar Nuevo Cliente';
+                                this.nombre = "";
+                                this.apellidos = "";
+                                this.dni = "";
+                                this.email = "";
+                                this.telefono = "";
+                                this.fechaNacimiento = "";
+                                this.domicilio = "";
+                                this.codigoPostal = "";
+                                this.provincia = "";
+                                this.cuentaBancaria = "";
+                                this.contacto = "";
+                                this.observaciones = "";
+                                this.profesion = "";
+                                this.localidad = "";
+                                this.tituloModal = "Registrar Nuevo Cliente";
                                 this.tipoAccion = 1;
                                 this.sexo = "Hombre";
                                 this.id_categoria = 1;
                                 break;
                             }
-                            case 'actualizar': {
+                            case "actualizar": {
                                 //console.log(data);
                                 this.modal = 1;
                                 this.tituloModal = "Actualizar Cliente";
                                 this.tipoAccion = 2;
-                                this.nombre = data['nombre'];
-                                this.apellidos = data['apellidos'];
-                                this.dni = data['dni'];
-                                this.email = data['email'];
-                                this.telefono = data['telefono'];
-                                this.fechaNacimiento = data['fechaNacimiento'];
-                                this.sexo = data['sexo'];
-                                this.domicilio = data['domicilio'];
-                                this.localidad = data['localidad'];
-                                this.codigoPostal = data['codigoPostal'];
-                                this.provicia = data['provicia'];
-                                this.cuentaBancaria = data['cuentaBancaria'];
-                                this.profesion = data['profesion'];
-                                this.contacto = data['contacto'];
-                                this.id_categoria = data['id_categoria'];
-                                this.observaciones = data['observaciones'];
-                                this.cliente_id = data['id'];
+                                this.nombre = data["nombre"];
+                                this.apellidos = data["apellidos"];
+                                this.dni = data["dni"];
+                                this.email = data["email"];
+                                this.telefono = data["telefono"];
+                                this.fechaNacimiento = data["fechaNacimiento"];
+                                this.sexo = data["sexo"];
+                                this.domicilio = data["domicilio"];
+                                this.localidad = data["localidad"];
+                                this.codigoPostal = data["codigoPostal"];
+                                this.provincia = data["provincia"];
+                                this.cuentaBancaria = data["cuentaBancaria"];
+                                this.profesion = data["profesion"];
+                                this.contacto = data["contacto"];
+                                this.id_categoria = data["id_categoria"];
+                                this.observaciones = data["observaciones"];
+                                this.cliente_id = data["id"];
                                 break;
                             }
                         }
@@ -650,9 +761,10 @@
             }
         },
         mounted() {
+            this.listarCategoria();
             this.listarCliente(1, this.buscar, this.criterio);
         }
-    }
+    };
 </script>
 
 <style>

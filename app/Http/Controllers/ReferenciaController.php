@@ -14,10 +14,10 @@ class ReferenciaController extends Controller
         $criterio = $request->criterio;
 
         if ($buscar == '') {
-            $referencias = Referencia::orderBy('nombre', 'asc')->paginate(7);
+            $referencias = Referencia::orderBy('nombre', 'asc')->paginate(4);
         } else {
             $referencias = Referencia::where('referencia.'.$criterio, 'like', '%' . $buscar . '%')
-                ->orderBy('nombre', 'asc')->paginate(7);
+                ->orderBy('nombre', 'asc')->paginate(4);
 
         }
         return [

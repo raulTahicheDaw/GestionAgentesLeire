@@ -32,13 +32,13 @@
         <calendario-component></calendario-component>
     </template>
     <template v-if="menu==9">
-        <h1>Contenido de menu 9</h1>
+        <producto-component></producto-component>
     </template>
     <template v-if="menu==10">
         <categoria-component></categoria-component>
     </template>
     <template v-if="menu==11">
-        <h1>Contenido de menu 11</h1>
+        <ramo-component></ramo-component>
     </template>
     <template v-if="menu==12">
         <h1>Contenido de menu 12</h1>

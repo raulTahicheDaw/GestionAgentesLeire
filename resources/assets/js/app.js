@@ -19,6 +19,8 @@ Vue.component('cliente-component', require('./components/Clientes.vue'));
 Vue.component('categoria-component', require('./components/Categoria.vue'));
 Vue.component('referencia-component', require('./components/Referencia.vue'));
 Vue.component('calendario-component', require('./components/Calendario.vue'));
+Vue.component('ramo-component', require('./components/Ramo.vue'));
+Vue.component('producto-component', require('./components/Producto.vue'));
 
 const app = new Vue({
     el: '#app',
