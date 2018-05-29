@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Cliente;
-
 class ClienteController extends Controller
 {
     /**
@@ -71,6 +70,7 @@ class ClienteController extends Controller
         $cliente->activo = '1';
         $cliente->observaciones = $request->observaciones;
         $cliente->save();
+        return redirect()->action('CarteraController@crearCartera', $cliente->id);//Creo la cartera del cliente
     }
 
     /**

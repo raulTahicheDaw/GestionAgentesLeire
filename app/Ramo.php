@@ -8,8 +8,8 @@ class Ramo extends Model
 {
     protected $fillable = ['nombre','descripcion','activo'];
 
-    public function producto()
+    public function productos()
     {
-        return $this->hasMany('App\Producto');
+        return $this->hasMany('App\Producto','id_producto');
     }
 }

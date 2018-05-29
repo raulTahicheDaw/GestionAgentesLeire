@@ -14,8 +14,8 @@ class Agenda extends Model
     protected $fillable = ['id_cliente', 'motivo','lugar','fecha','hora',
         'color', 'acuerdos','observaciones'];
 
-    public function roles()
+    public function clientes()
     {
-        return $this->belongsToMany('App\Cliente');
+        return $this->belongsTo('App\Cliente','id_cliente');
     }
 }

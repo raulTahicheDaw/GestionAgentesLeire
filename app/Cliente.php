@@ -10,11 +10,16 @@ class Cliente extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['nombre', 'apellidos','dni','email','telefono','fechaNacimiento','sexo','domicilio','localidad',
         'codigoPostal','provincia','cuentaBancaria','profesion','contacto','activo','id_categoria','observaciones'];
-    public function categoria(){
-        return $this->belongsTo('App\Categoria');
+
+    public function categorias(){
+        return $this->belongsTo('App\Categoria','id_categoria');
     }
-    public function agenda()
+    public function agendas()
     {
-        return $this->belongsToMany('App\Agenda');
+        return $this->hasMany('App\Agenda','cliente_id');
+    }
+    public function carteras()
+    {
+        return $this->hasOne('\App\Cartera','cliente_id');
     }
 }

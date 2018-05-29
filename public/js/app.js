@@ -48433,37 +48433,84 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            cliente_id: 0,
-            nombre: "",
-            apellidos: "",
-            dni: "",
-            email: "",
-            telefono: "",
-            fechaNacimiento: "",
-            sexo: "Hombre",
-            domicilio: "",
-            localidad: "",
-            codigoPostal: "",
-            provincia: "",
-            cuentaBancaria: "",
-            profesion: "",
-            contacto: "",
-            id_categoria: 1,
-            observaciones: "",
-            arrayCliente: [],
-            arrayCategorias: [],
-            modal: 0,
-            modalResumen: 0,
-            modalAddProductos: 0,
-            tituloModal: "",
-            tipoAccion: 0,
-            errorCliente: 0,
-            errorMostrarMsgCliente: [],
-            errorFormatoDni: 0,
+            cliente_id: 0, nombre: "", apellidos: "", dni: "", email: "", telefono: "", fechaNacimiento: "",
+            sexo: "Hombre", domicilio: "", localidad: "", codigoPostal: "", provincia: "", cuentaBancaria: "",
+            profesion: "", contacto: "", id_categoria: 1, observaciones: "",
+            arrayCliente: [], arrayCategorias: [], arrayProductos: [], arrayProductosAgregados: [],
+            modal: 0, modalResumen: 0, modalAddProductos: 0,
+            tituloModal: "", tipoAccion: 0,
+            errorCliente: 0, errorMostrarMsgCliente: [], errorFormatoDni: 0,
             pagination: {
                 total: 0,
                 current_page: 0,
@@ -48473,9 +48520,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 to: 0
             },
             offset: 3,
-            criterio: "nombre",
-            buscar: "",
-            activo: '1'
+            criterio: "nombre", buscar: "", activo: '1',
+            id_producto: "", fechaEfecto: '', fechaVencimiento: '', formaPago: '', numeroPoliza: '', rFisico: 0, observacionesProductos: ''
         };
     },
 
@@ -48505,10 +48551,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
+        addProductos: function addProductos(producto) {},
         listarCategoria: function listarCategoria() {
             var me = this;
             axios.get("/categoria/selectcategoria").then(function (response) {
                 me.arrayCategorias = response.data.categorias;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        listarProductos: function listarProductos() {
+            var me = this;
+            axios.get("/producto/selectproducto").then(function (response) {
+                me.arrayProductos = response.data.productos;
             }).catch(function (error) {
                 console.log(error);
             });
@@ -48534,6 +48589,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             me.pagination.current_page = page;
             me.listarCliente(page, buscar, criterio);
         },
+        crearCartera: function crearCartera() {
+            var me = this;
+            axios.post("/cartera/registrar", {
+                id_cliente: me.id_cliente
+            }).then(function (response) {
+                console.log('Cartera creada con éxito');
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
         registrarCliente: function registrarCliente() {
             if (this.validarCliente()) {
                 return;
@@ -48557,6 +48622,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 localidad: this.localidad,
                 profesion: this.profesion
             }).then(function (response) {
+                me.crearCartera();
                 me.cerrarModal();
                 me.listarCliente(1, "", "nombre");
             }).catch(function (error) {
@@ -48690,6 +48756,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         cerrarModal: function cerrarModal() {
             this.modal = 0;
+            this.modalAddProductos = 0;
+            this.modalResumen = 0;
             this.tituloModal = "";
             this.nombre = "";
             this.apellidos = "";
@@ -48731,8 +48799,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.cliente_id = data["id"];
             this.activo = data["activo"];
         },
-        cerrarResumen: function cerrarResumen() {
-            this.modalResumen = 0;
+        abrirModalAddProductos: function abrirModalAddProductos(data) {
+            this.modalAddProductos = 1;
+            this.nombre = data["nombre"];
+            this.apellidos = data["apellidos"];
+            this.dni = data["dni"];
+            this.email = data["email"];
+            this.telefono = data["telefono"];
+            this.fechaNacimiento = data["fechaNacimiento"];
+            this.sexo = data["sexo"];
+            this.domicilio = data["domicilio"];
+            this.localidad = data["localidad"];
+            this.codigoPostal = data["codigoPostal"];
+            this.provincia = data["provincia"];
+            this.cuentaBancaria = data["cuentaBancaria"];
+            this.profesion = data["profesion"];
+            this.contacto = data["contacto"];
+            this.id_categoria = data["id_categoria"];
+            this.observaciones = data["observaciones"];
+            this.cliente_id = data["id"];
         },
         abrirModal: function abrirModal(modelo, accion) {
             var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
@@ -48799,6 +48884,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
+        this.listarProductos();
         this.listarCategoria();
         this.listarCliente(1, this.buscar, this.criterio);
     }
@@ -49026,7 +49112,7 @@ var render = function() {
                           attrs: { type: "button" },
                           on: {
                             click: function($event) {
-                              _vm.abrirModalAddProductos(cliente.id)
+                              _vm.abrirModalAddProductos(cliente)
                             }
                           }
                         },
@@ -49765,9 +49851,7 @@ var render = function() {
                           }
                         })
                       ]),
-                      _vm._v(
-                        "\n                            s\n                            "
-                      ),
+                      _vm._v(" "),
                       _c("div", { staticClass: "col-md-3" }, [
                         _c("label", { staticClass: "form-control-label" }, [
                           _vm._v("Categoría")
@@ -49978,7 +50062,7 @@ var render = function() {
                     attrs: { type: "button", "aria-label": "Close" },
                     on: {
                       click: function($event) {
-                        _vm.cerrarResumen()
+                        _vm.cerrarModal()
                       }
                     }
                   },
@@ -50106,7 +50190,8 @@ var render = function() {
             _c("div", { staticClass: "modal-content" }, [
               _c("div", { staticClass: "modal-header" }, [
                 _c("h4", { staticClass: "modal-title" }, [
-                  _vm._v("Añadir Productos")
+                  _c("h1", [_vm._v("Cliente: ")]),
+                  _vm._v(_vm._s(_vm.nombre) + " " + _vm._s(_vm.apellidos))
                 ]),
                 _vm._v(" "),
                 _c(
@@ -50140,6 +50225,312 @@ var render = function() {
                     }
                   },
                   [
+                    _c(
+                      "div",
+                      { staticClass: "form-group row align-items-end" },
+                      [
+                        _c("div", { staticClass: "col-4" }, [
+                          _c("label", { staticClass: "form-control-label" }, [
+                            _vm._v("Producto")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.id_producto,
+                                  expression: "id_producto"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.id_producto = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "option",
+                                { attrs: { value: "", disabled: "" } },
+                                [_vm._v("Seleccione un producto")]
+                              ),
+                              _vm._v(" "),
+                              _vm._l(_vm.arrayProductos, function(producto) {
+                                return _c("option", {
+                                  key: producto.id,
+                                  domProps: {
+                                    value: producto.id,
+                                    textContent: _vm._s(producto.nombre)
+                                  }
+                                })
+                              })
+                            ],
+                            2
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-4" }, [
+                          _c("label", { staticClass: "form-control-label" }, [
+                            _vm._v("Efecto")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.fechaEfecto,
+                                expression: "fechaEfecto"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "date" },
+                            domProps: { value: _vm.fechaEfecto },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.fechaEfecto = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-4" }, [
+                          _c("label", { staticClass: "form-control-label" }, [
+                            _vm._v("Vencimiento")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.fechaVencimiento,
+                                expression: "fechaVencimiento"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "date" },
+                            domProps: { value: _vm.fechaVencimiento },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.fechaVencimiento = $event.target.value
+                              }
+                            }
+                          })
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group row align-items-end" },
+                      [
+                        _c("div", { staticClass: "col-4" }, [
+                          _c("label", { staticClass: "form-control-label" }, [
+                            _vm._v("F.Pago")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.formaPago,
+                                  expression: "formaPago"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.formaPago = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                }
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "efectivo" } }, [
+                                _vm._v("Efectivo")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "banco" } }, [
+                                _vm._v("Banco")
+                              ])
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-4" }, [
+                          _c("label", { staticClass: "form-control-label" }, [
+                            _vm._v("Primer recibo físico?")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.rFisico,
+                                expression: "rFisico"
+                              }
+                            ],
+                            attrs: { type: "radio", value: "1" },
+                            domProps: { checked: _vm._q(_vm.rFisico, "1") },
+                            on: {
+                              change: function($event) {
+                                _vm.rFisico = "1"
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("label", [_vm._v(" Sí ")]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.rFisico,
+                                expression: "rFisico"
+                              }
+                            ],
+                            attrs: { type: "radio", value: "0" },
+                            domProps: { checked: _vm._q(_vm.rFisico, "0") },
+                            on: {
+                              change: function($event) {
+                                _vm.rFisico = "0"
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("label", [_vm._v(" No ")])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-4" }, [
+                          _c("label", { staticClass: "form-control-label" }, [
+                            _vm._v("N. Póliza")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.numeroPoliza,
+                                expression: "numeroPoliza"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "text" },
+                            domProps: { value: _vm.numeroPoliza },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.numeroPoliza = $event.target.value
+                              }
+                            }
+                          })
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group row align-items-end" },
+                      [
+                        _c("div", { staticClass: "col-12" }, [
+                          _c("label", { staticClass: "form-control-label" }, [
+                            _vm._v("Observaciones")
+                          ]),
+                          _vm._v(" "),
+                          _c("textarea", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.observacionesProductos,
+                                expression: "observacionesProductos"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { rows: "2" },
+                            domProps: { value: _vm.observacionesProductos },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.observacionesProductos = $event.target.value
+                              }
+                            }
+                          })
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group row " }, [
+                      _c(
+                        "div",
+                        { staticClass: "col-auto justify-content-end" },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  _vm.addProductos()
+                                }
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "icon-plus" }),
+                              _vm._v(
+                                " Añadir\n                                "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(2),
+                    _vm._v(" "),
                     _c("div", { staticClass: "modal-footer" }, [
                       _c(
                         "button",
@@ -50166,7 +50557,7 @@ var render = function() {
                             }
                           }
                         },
-                        [_vm._v("Guardar\n                        ")]
+                        [_vm._v("Guardar\n                            ")]
                       )
                     ])
                   ]
@@ -50220,6 +50611,40 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Estado")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col" }, [
+      _c(
+        "table",
+        { staticClass: "table table-bordered table-striped table-sm" },
+        [
+          _c("thead", [
+            _c("tr", [
+              _c("th", [_vm._v("Producto")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("Fecha efecto")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("Fecha vencimiento")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("Forma de pago")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("Número póliza")]),
+              _vm._v(" "),
+              _c("th", [
+                _vm._v("1"),
+                _c("sup", [_vm._v("er")]),
+                _vm._v(" recibo físico")
+              ]),
+              _vm._v(" "),
+              _c("th", [_vm._v("Observaciones")])
+            ])
+          ])
+        ]
+      )
     ])
   }
 ]

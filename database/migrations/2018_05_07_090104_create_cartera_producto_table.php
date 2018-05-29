@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCarteraxproductosTable extends Migration
+class CreateCartera_ProductoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCarteraxproductosTable extends Migration
      */
     public function up()
     {
-        Schema::create('carteraxproductos', function (Blueprint $table) {
+        Schema::create('cartera_producto', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_cartera')->unsigned();
             $table->integer('id_producto')->unsigned();
@@ -23,7 +23,6 @@ class CreateCarteraxproductosTable extends Migration
             $table->string('numero_poliza')->unique();
             $table->boolean('primer_recibo_fisico');
             $table->longText('observaciones');
-            $table->timestamps();
             $table->foreign('id_cartera')
                 ->references('id')->on('carteras')
                 ->onDelete('restrict')->onUpdate('cascade');

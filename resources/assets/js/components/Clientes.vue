@@ -71,7 +71,7 @@
                                     <i class="icon-check"></i>
                                 </button>
                                 <button type="button" class="btn btn-secondary btn-sm"
-                                        @click="abrirModalAddProductos(cliente.id)">
+                                        @click="abrirModalAddProductos(cliente)">
                                     <i class="icon-paper-clip"></i>
                                 </button>
                             </td>
@@ -227,7 +227,6 @@
                                     <label class="form-control-label">Observac.</label>
                                     <textarea class="form-control" rows="5" v-model="observaciones"></textarea>
                                 </div>
-                                s
                                 <div class="col-md-3">
                                     <label class="form-control-label">Categoría</label>
                                     <select v-model="id_categoria" class="form-control">
@@ -276,7 +275,7 @@
                             <span v-if="activo" class="text-info"> Activo</span>
                             <span v-else class="text-error"> No Activo</span>
                         </h4>
-                        <button type="button" class="close" @click="cerrarResumen()" aria-label="Close">
+                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -337,26 +336,94 @@
             </div>
         </div>
         <!--Inicio modal Añadir Producto-->
-        <div class="modal fade" tabindex="-1" :class="{'mostrar' : modalAddProductos}" role="dialog" aria-labelledby="myModalLabel"
+        <div class="modal fade" tabindex="-1" :class="{'mostrar' : modalAddProductos}" role="dialog"
+             aria-labelledby="myModalLabel"
              style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Añadir Productos</h4>
+                        <h4 class="modal-title"><h1>Cliente: </h1>{{nombre}} {{apellidos}}</h4>
                         <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-
-
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                            <button type="button" class="btn btn-primary"
-                                    @click="addProductos()">Guardar
-                            </button>
-                        </div>
+                            <div class="form-group row align-items-end">
+                                <div class="col-4">
+                                    <label class="form-control-label">Producto</label>
+                                    <select v-model="id_producto" class="form-control">
+                                        <option value="" disabled>Seleccione un producto</option>
+                                        <option v-for="producto in arrayProductos" :key="producto.id"
+                                                :value="producto.id"
+                                                v-text="producto.nombre">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-control-label">Efecto</label>
+                                    <input class="form-control" v-model="fechaEfecto" type="date">
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-control-label">Vencimiento</label>
+                                    <input class="form-control" v-model="fechaVencimiento" type="date">
+                                </div>
+                            </div>
+                            <div class="form-group row align-items-end">
+                                <div class="col-4">
+                                    <label class="form-control-label">F.Pago</label>
+                                    <select class="form-control" v-model="formaPago">
+                                        <option value="efectivo">Efectivo</option>
+                                        <option value="banco">Banco</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-control-label">Primer recibo físico?</label>
+                                    <input type="radio" value=1 v-model="rFisico">
+                                    <label> Sí </label>
+                                    <input type="radio" value=0 v-model="rFisico">
+                                    <label> No </label>
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-control-label">N. Póliza</label>
+                                    <input type="text" v-model="numeroPoliza" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row align-items-end">
+                                <div class="col-12">
+                                    <label class="form-control-label">Observaciones</label>
+                                    <textarea rows="2" v-model="observacionesProductos" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <div class="col-auto justify-content-end">
+                                    <button type="button" class="btn btn-success btn-sm" @click="addProductos()">
+                                        <i class="icon-plus"></i> Añadir
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <table class="table table-bordered table-striped table-sm">
+                                    <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Fecha efecto</th>
+                                        <th>Fecha vencimiento</th>
+                                        <th>Forma de pago</th>
+                                        <th>Número póliza</th>
+                                        <th>1<sup>er</sup> recibo físico</th>
+                                        <th>Observaciones</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                                <button type="button" class="btn btn-primary"
+                                        @click="addProductos()">Guardar
+                                </button>
+                            </div>
 
                         </form>
                     </div>
@@ -371,33 +438,13 @@
     export default {
         data() {
             return {
-                cliente_id: 0,
-                nombre: "",
-                apellidos: "",
-                dni: "",
-                email: "",
-                telefono: "",
-                fechaNacimiento: "",
-                sexo: "Hombre",
-                domicilio: "",
-                localidad: "",
-                codigoPostal: "",
-                provincia: "",
-                cuentaBancaria: "",
-                profesion: "",
-                contacto: "",
-                id_categoria: 1,
-                observaciones: "",
-                arrayCliente: [],
-                arrayCategorias: [],
-                modal: 0,
-                modalResumen: 0,
-                modalAddProductos:0,
-                tituloModal: "",
-                tipoAccion: 0,
-                errorCliente: 0,
-                errorMostrarMsgCliente: [],
-                errorFormatoDni: 0,
+                cliente_id: 0, nombre: "", apellidos: "", dni: "", email: "", telefono: "", fechaNacimiento: "",
+                sexo: "Hombre", domicilio: "", localidad: "", codigoPostal: "", provincia: "", cuentaBancaria: "",
+                profesion: "", contacto: "", id_categoria: 1, observaciones: "",
+                arrayCliente: [], arrayCategorias: [], arrayProductos: [], arrayProductosAgregados: [],
+                modal: 0, modalResumen: 0, modalAddProductos: 0,
+                tituloModal: "", tipoAccion: 0,
+                errorCliente: 0, errorMostrarMsgCliente: [], errorFormatoDni: 0,
                 pagination: {
                     total: 0,
                     current_page: 0,
@@ -407,9 +454,8 @@
                     to: 0
                 },
                 offset: 3,
-                criterio: "nombre",
-                buscar: "",
-                activo: '1',
+                criterio: "nombre", buscar: "", activo: '1',
+                id_producto: "", fechaEfecto: '', fechaVencimiento:'', formaPago: '', numeroPoliza:'',rFisico: 0, observacionesProductos:''
             };
         },
         computed: {
@@ -438,12 +484,26 @@
             }
         },
         methods: {
+            addProductos(producto){
+
+            },
             listarCategoria() {
                 let me = this;
                 axios
                     .get("/categoria/selectcategoria")
                     .then(function (response) {
                         me.arrayCategorias = response.data.categorias;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            listarProductos() {
+                let me = this;
+                axios
+                    .get("/producto/selectproducto")
+                    .then(function (response) {
+                        me.arrayProductos = response.data.productos;
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -474,6 +534,19 @@
                 me.pagination.current_page = page;
                 me.listarCliente(page, buscar, criterio);
             },
+            crearCartera(){
+                let me = this;
+                axios
+                    .post("/cartera/registrar", {
+                       id_cliente : me.id_cliente
+                    })
+                    .then(function (response) {
+                        console.log('Cartera creada con éxito');
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
             registrarCliente() {
                 if (this.validarCliente()) {
                     return;
@@ -499,6 +572,7 @@
                         profesion: this.profesion
                     })
                     .then(function (response) {
+                        me.crearCartera();
                         me.cerrarModal();
                         me.listarCliente(1, "", "nombre");
                     })
@@ -659,6 +733,8 @@
             },
             cerrarModal() {
                 this.modal = 0;
+                this.modalAddProductos = 0;
+                this.modalResumen = 0;
                 this.tituloModal = "";
                 this.nombre = "";
                 this.apellidos = "";
@@ -698,8 +774,25 @@
                 this.cliente_id = data["id"];
                 this.activo = data["activo"];
             },
-            cerrarResumen() {
-                this.modalResumen = 0;
+            abrirModalAddProductos(data) {
+                this.modalAddProductos = 1;
+                this.nombre = data["nombre"];
+                this.apellidos = data["apellidos"];
+                this.dni = data["dni"];
+                this.email = data["email"];
+                this.telefono = data["telefono"];
+                this.fechaNacimiento = data["fechaNacimiento"];
+                this.sexo = data["sexo"];
+                this.domicilio = data["domicilio"];
+                this.localidad = data["localidad"];
+                this.codigoPostal = data["codigoPostal"];
+                this.provincia = data["provincia"];
+                this.cuentaBancaria = data["cuentaBancaria"];
+                this.profesion = data["profesion"];
+                this.contacto = data["contacto"];
+                this.id_categoria = data["id_categoria"];
+                this.observaciones = data["observaciones"];
+                this.cliente_id = data["id"];
             },
             abrirModal(modelo, accion, data = []) {
                 this.errorMostrarMsgCliente = [];
@@ -761,6 +854,7 @@
             }
         },
         mounted() {
+            this.listarProductos();
             this.listarCategoria();
             this.listarCliente(1, this.buscar, this.criterio);
         }
