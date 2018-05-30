@@ -51,26 +51,27 @@ class ClienteController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
 
-        $cliente = new Cliente();
-        $cliente->id_categoria = $request->id_categoria;
-        $cliente->nombre = $request->nombre;
-        $cliente->apellidos = $request->apellidos;
-        $cliente->dni = $request->dni;
-        $cliente->email = $request->email;
-        $cliente->telefono = $request->telefono;
-        $cliente->fechaNacimiento = $request->fechaNacimiento;
-        $cliente->sexo = $request->sexo;
-        $cliente->domicilio = $request->domicilio;
-        $cliente->localidad = $request->localidad;
-        $cliente->codigoPostal = $request->codigoPostal;
-        $cliente->provincia = $request->provincia;
-        $cliente->cuentaBancaria = $request->cuentaBancaria;
-        $cliente->profesion = $request->profesion;
-        $cliente->contacto = $request->contacto;
-        $cliente->activo = '1';
-        $cliente->observaciones = $request->observaciones;
-        $cliente->save();
-        return redirect()->action('CarteraController@crearCartera', $cliente->id);//Creo la cartera del cliente
+        $cliente = Cliente::create([
+            'id_categoria'=>$request->id_categoria,
+            'nombre'=>$request->nombre,
+            'apellidos' => $request->apellidos,
+            'dni' => $request->dni,
+            'email' => $request->email,
+            'telefono' => $request->telefono,
+            'fechaNacimiento' => $request->fechaNacimiento,
+            'sexo' => $request->sexo,
+            'domicilio' => $request->domicilio,
+            'localidad' => $request->localidad,
+            'codigoPostal' => $request->codigoPostal,
+            'provincia' => $request->provincia,
+            'cuentaBancaria' => $request->cuentaBancaria,
+            'profesion' => $request->profesion,
+            'contacto' => $request->contacto,
+            'activo' => '1',
+            'observaciones' => $request->observaciones
+            ]);
+
+        return redirect()->action('CarteraController@crearCartera', $cliente);//Creo la cartera del cliente
     }
 
     /**

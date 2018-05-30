@@ -20,9 +20,10 @@ class CarteraController extends Controller
         return $cartera;
     }
 
-    public function crearCartera($id_cliente)
+    public function crearCartera($cliente)
     {
         $cartera = new Cartera();
+        $cartera->id_cliente = $cliente->id;
         $cartera->save();
     }
 }
