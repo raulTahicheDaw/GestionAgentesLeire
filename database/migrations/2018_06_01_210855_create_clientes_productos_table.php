@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCartera_ProductoTable extends Migration
+class CreateClientesProductosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateCartera_ProductoTable extends Migration
      */
     public function up()
     {
-        Schema::create('cartera_producto', function (Blueprint $table) {
+        Schema::create('clientes_productos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_cartera')->unsigned();
+            $table->integer('id_cliente')->unsigned();
             $table->integer('id_producto')->unsigned();
             $table->date('fecha_efecto');
             $table->date('vencimiento');
@@ -23,8 +23,8 @@ class CreateCartera_ProductoTable extends Migration
             $table->string('numero_poliza')->unique();
             $table->boolean('primer_recibo_fisico');
             $table->longText('observaciones');
-            $table->foreign('id_cartera')
-                ->references('id')->on('carteras')
+            $table->foreign('id_cliente')
+                ->references('id')->on('clientes')
                 ->onDelete('restrict')->onUpdate('cascade');
             $table->foreign('id_producto')
                 ->references('id')->on('productos')
@@ -39,6 +39,6 @@ class CreateCartera_ProductoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carteraxproductos');
+        Schema::dropIfExists('clientes_productos');
     }
 }

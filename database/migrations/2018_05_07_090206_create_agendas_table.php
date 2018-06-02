@@ -20,8 +20,8 @@ class CreateAgendasTable extends Migration
             $table->string('lugar',150);
             $table->date('fecha');
             $table->dateTime('hora',5);
-            $table->longText('acuerdos')->nulable();
-            $table->longText('observaciones')->nulable();
+            $table->longText('acuerdos')->nullable();
+            $table->longText('observaciones')->nullable();
             $table->timestamps();
             $table->foreign('id_cliente')
                 ->references('id')->on('clientes')

@@ -5,7 +5,7 @@
             <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
         </ol>
         <div class="container-fluid">
-            <!-- Ejemplo de tabla Listado -->
+            <!-- Listado -->
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Listado de Productos
@@ -82,7 +82,7 @@
                             <td v-text="producto.fecha_vencimiento"></td>
                             <td v-text="producto.coberturas"></td>
                             <td v-text="producto.nombre_ramo"></td>
-                            <td v-text="producto.obervaciones"></td>
+                            <td v-text="producto.observaciones"></td>
                             <td>
                                 <div v-if="producto.activo">
                                     <span class="badge badge-success">Activo</span>
@@ -174,7 +174,7 @@
                             <div class="form-group row">
                                 <div class="col-12">
                                     <label class="form-control-label">Observaciones</label>
-                                    <textarea class="form-control" v-model="obervaciones"></textarea>
+                                    <textarea class="form-control" v-model="observaciones"></textarea>
                                 </div>
                             </div>
                             <div v-show="errorProducto" class="form-group row div-error">
@@ -212,7 +212,7 @@
                 fecha_lanzamiento: "",
                 fecha_vencimiento: "",
                 coberturas: "",
-                obervaciones: "",
+                observaciones: "",
                 activo: 1,
                 id_ramo: "",
                 arrayProductos: [],
@@ -454,6 +454,7 @@
                 this.id_ramo = 1;
             },
             abrirModal(modelo, accion, data = []) {
+                this.listarRamos();
                 this.errorMostrarMsgProducto = [];
                 this.errorProducto = 0;
                 switch (modelo) {
@@ -472,7 +473,7 @@
                                 break;
                             }
                             case "actualizar": {
-                                //console.log(data);
+                                this.listarRamos();
                                 this.modal = 1;
                                 this.tituloModal = "Actualizar Producto";
                                 this.tipoAccion = 2;
@@ -481,9 +482,9 @@
                                 this.fecha_lanzamiento = data["fecha_lanzamiento"];
                                 this.fecha_vencimiento = data["fecha_vencimiento"];
                                 this.coberturas = data["coberturas"];
-                                this.obervaciones = data["observaciones"];
+                                this.observaciones = data["observaciones"];
                                 this.producto_id = data["id"];
-                                this.ramo = data["ramo"];
+                                this.id_ramo = data["id_ramo"];
                                 break;
                             }
                         }

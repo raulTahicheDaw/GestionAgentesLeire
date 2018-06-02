@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Couchbase\ClassicAuthenticator;
 use Illuminate\Http\Request;
 use App\Cliente;
+use App\Cartera;
+use Illuminate\Support\Facades\DB;
+
 class ClienteController extends Controller
 {
     /**
@@ -20,9 +24,9 @@ class ClienteController extends Controller
         if ($buscar == '') {
             $clientes = Cliente::join('categorias', 'clientes.id_categoria', '=', 'categorias.id')
                 ->select('clientes.id', 'clientes.nombre', 'clientes.apellidos', 'clientes.dni', 'clientes.email',
-                         'clientes.telefono', 'clientes.fechaNacimiento', 'clientes.sexo', 'clientes.domicilio', 'clientes.localidad',
-                         'clientes.codigoPostal', 'clientes.provincia', 'clientes.cuentaBancaria', 'clientes.profesion', 'clientes.contacto',
-                         'clientes.activo', 'clientes.observaciones', 'clientes.id_categoria', 'categorias.nombre as nombre_categoria')
+                    'clientes.telefono', 'clientes.fechaNacimiento', 'clientes.sexo', 'clientes.domicilio', 'clientes.localidad',
+                    'clientes.codigoPostal', 'clientes.provincia', 'clientes.cuentaBancaria', 'clientes.profesion', 'clientes.contacto',
+                    'clientes.activo', 'clientes.observaciones', 'clientes.id_categoria', 'categorias.nombre as nombre_categoria')
                 ->orderBy('nombre', 'asc')->paginate(4);
         } else {
             $clientes = Cliente::join('categorias', 'clientes.id_categoria', '=', 'categorias.id')
@@ -30,18 +34,18 @@ class ClienteController extends Controller
                     'clientes.telefono', 'clientes.fechaNacimiento', 'clientes.sexo', 'clientes.domicilio', 'clientes.localidad',
                     'clientes.codigoPostal', 'clientes.provincia', 'clientes.cuentaBancaria', 'clientes.profesion', 'clientes.contacto',
                     'clientes.activo', 'clientes.observaciones', 'clientes.id_categoria', 'categorias.nombre as nombre_categoria')
-                ->where('clientes.'.$criterio, 'like', '%' . $buscar . '%')
+                ->where('clientes.' . $criterio, 'like', '%' . $buscar . '%')
                 ->orderBy('nombre', 'asc')->paginate(4);
 
         }
         return [
             'pagination' => [
-                'total'         => $clientes->total(),
-                'current_page'  => $clientes->currentPage(),
-                'per_page'      => $clientes->perPage(),
-                'last_page'     => $clientes->lastPage(),
-                'from'          => $clientes->firstItem(),
-                'to'            => $clientes->lastItem()
+                'total' => $clientes->total(),
+                'current_page' => $clientes->currentPage(),
+                'per_page' => $clientes->perPage(),
+                'last_page' => $clientes->lastPage(),
+                'from' => $clientes->firstItem(),
+                'to' => $clientes->lastItem()
             ],
             'clientes' => $clientes
         ];
@@ -50,28 +54,25 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-
-        $cliente = Cliente::create([
-            'id_categoria'=>$request->id_categoria,
-            'nombre'=>$request->nombre,
-            'apellidos' => $request->apellidos,
-            'dni' => $request->dni,
-            'email' => $request->email,
-            'telefono' => $request->telefono,
-            'fechaNacimiento' => $request->fechaNacimiento,
-            'sexo' => $request->sexo,
-            'domicilio' => $request->domicilio,
-            'localidad' => $request->localidad,
-            'codigoPostal' => $request->codigoPostal,
-            'provincia' => $request->provincia,
-            'cuentaBancaria' => $request->cuentaBancaria,
-            'profesion' => $request->profesion,
-            'contacto' => $request->contacto,
-            'activo' => '1',
-            'observaciones' => $request->observaciones
+            $cliente = Cliente::create([
+                'id_categoria' => $request->id_categoria,
+                'nombre' => $request->nombre,
+                'apellidos' => $request->apellidos,
+                'dni' => $request->dni,
+                'email' => $request->email,
+                'telefono' => $request->telefono,
+                'fechaNacimiento' => $request->fechaNacimiento,
+                'sexo' => $request->sexo,
+                'domicilio' => $request->domicilio,
+                'localidad' => $request->localidad,
+                'codigoPostal' => $request->codigoPostal,
+                'provincia' => $request->provincia,
+                'cuentaBancaria' => $request->cuentaBancaria,
+                'profesion' => $request->profesion,
+                'contacto' => $request->contacto,
+                'activo' => '1',
+                'observaciones' => $request->observaciones
             ]);
-
-        return redirect()->action('CarteraController@crearCartera', $cliente);//Creo la cartera del cliente
     }
 
     /**
@@ -126,9 +127,9 @@ class ClienteController extends Controller
     public function listarClientes(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-        $clientes = Cliente::select('id','nombre')
-            ->orderBy('nombre','asc')
+        $clientes = Cliente::select('id', 'nombre', 'apellidos')
+            ->orderBy('nombre', 'asc')
             ->get();
-        return ['clientes' =>$clientes];
+        return ['clientes' => $clientes];
     }
 }

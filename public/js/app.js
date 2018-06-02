@@ -48064,6 +48064,23 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -48521,7 +48538,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
             offset: 3,
             criterio: "nombre", buscar: "", activo: '1',
-            id_producto: "", fechaEfecto: '', fechaVencimiento: '', formaPago: '', numeroPoliza: '', rFisico: 0, observacionesProductos: ''
+            id_producto: "", fechaEfecto: '', fechaVencimiento: '', formaPago: '', numeroPoliza: '', rFisico: 0,
+            observacionesProductos: '',
+            arrayProductosClientes: []
         };
     },
 
@@ -48551,7 +48570,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
-        addProductos: function addProductos(producto) {},
+        addProductos: function addProductos() {
+            var me = this;
+            axios.put("/clientesproductos/addproducto", _defineProperty({
+                id_cliente: me.id_cliente,
+                id_producto: me.id_producto,
+                fechaEfecto: me.fechaEfecto,
+                fechaVencimiento: me.fechaVencimiento,
+                formaPago: me.formaPago,
+                numeroPoliza: me.numeroPoliza,
+                rFisico: me.rFisico,
+                observacionesProducto: me.observacionesProductos
+            }, "id_cliente", me.cliente_id)).then(function (response) {
+                me.cerrarModal();
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
         listarCategoria: function listarCategoria() {
             var me = this;
             axios.get("/categoria/selectcategoria").then(function (response) {
@@ -48564,6 +48599,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var me = this;
             axios.get("/producto/selectproducto").then(function (response) {
                 me.arrayProductos = response.data.productos;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        listarProductosCliente: function listarProductosCliente() {
+            var me = this;
+            var url = "clientesproductos/listarproductos/" + me.cliente_id;
+            axios.get(url).then(function (response) {
+                me.arrayProductosClientes = response.data;
             }).catch(function (error) {
                 console.log(error);
             });
@@ -48589,16 +48633,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             me.pagination.current_page = page;
             me.listarCliente(page, buscar, criterio);
         },
-        crearCartera: function crearCartera() {
-            var me = this;
-            axios.post("/cartera/registrar", {
-                id_cliente: me.id_cliente
-            }).then(function (response) {
-                console.log('Cartera creada con éxito');
-            }).catch(function (error) {
-                console.log(error);
-            });
-        },
         registrarCliente: function registrarCliente() {
             if (this.validarCliente()) {
                 return;
@@ -48622,7 +48656,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 localidad: this.localidad,
                 profesion: this.profesion
             }).then(function (response) {
-                me.crearCartera();
                 me.cerrarModal();
                 me.listarCliente(1, "", "nombre");
             }).catch(function (error) {
@@ -48775,6 +48808,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.id_categoria = "";
             this.observaciones = "";
             this.profesion = "";
+            this.cliente_id = "";
         },
         verResumen: function verResumen() {
             var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -48798,6 +48832,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.observaciones = data["observaciones"];
             this.cliente_id = data["id"];
             this.activo = data["activo"];
+            this.listarProductosCliente();
         },
         abrirModalAddProductos: function abrirModalAddProductos(data) {
             this.modalAddProductos = 1;
@@ -48818,6 +48853,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.id_categoria = data["id_categoria"];
             this.observaciones = data["observaciones"];
             this.cliente_id = data["id"];
+            this.listarProductosCliente();
         },
         abrirModal: function abrirModal(modelo, accion) {
             var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
@@ -50529,7 +50565,71 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    _vm._m(2),
+                    _c("div", { staticClass: "col" }, [
+                      _c("h5", [_vm._v("Cartera de productos contratados")]),
+                      _vm._v(" "),
+                      _c(
+                        "table",
+                        {
+                          staticClass:
+                            "table table-bordered table-striped table-sm"
+                        },
+                        [
+                          _vm._m(2),
+                          _vm._v(" "),
+                          _c(
+                            "tbody",
+                            _vm._l(_vm.arrayProductosClientes, function(
+                              producto
+                            ) {
+                              return _c("tr", { key: producto.id }, [
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(
+                                      producto.nombre_producto
+                                    )
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(producto.fecha_efecto)
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(producto.vencimiento)
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(producto.forma_pago)
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(producto.numero_poliza)
+                                  }
+                                }),
+                                _vm._v(" "),
+                                producto.primer_recibo_fisico
+                                  ? _c("td", [_vm._v("Sí")])
+                                  : _c("td", [_vm._v("No")]),
+                                _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(producto.observaciones)
+                                  }
+                                })
+                              ])
+                            })
+                          )
+                        ]
+                      )
+                    ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-footer" }, [
                       _c(
@@ -50617,34 +50717,26 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col" }, [
-      _c(
-        "table",
-        { staticClass: "table table-bordered table-striped table-sm" },
-        [
-          _c("thead", [
-            _c("tr", [
-              _c("th", [_vm._v("Producto")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Fecha efecto")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Fecha vencimiento")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Forma de pago")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Número póliza")]),
-              _vm._v(" "),
-              _c("th", [
-                _vm._v("1"),
-                _c("sup", [_vm._v("er")]),
-                _vm._v(" recibo físico")
-              ]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Observaciones")])
-            ])
-          ])
-        ]
-      )
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Producto")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Fecha efecto")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Fecha vencimiento")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Forma de pago")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Número póliza")]),
+        _vm._v(" "),
+        _c("th", [
+          _vm._v("1"),
+          _c("sup", [_vm._v("er")]),
+          _vm._v(" recibo físico")
+        ]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Observaciones")])
+      ])
     ])
   }
 ]
@@ -54253,13 +54345,14 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
                     'id': id
                 }
             }).then(function (response) {
-                me.lugar = response.data[0].lugar;
-                me.cliente = response.data[0].nombre;
-                me.fecha = response.data[0].fecha.substr(0, 10).replace(/^(\d{4})-(\d{2})-(\d{2})$/g, '$3/$2/$1');
-                me.hora = response.data[0].fecha.substr(11, 5);
-                me.acuerdos = response.data[0].acuerdos;
-                me.observaciones = response.data[0].observaciones;
-                me.motivo = response.data[0].motivo;
+                me.lugar = response.data.lugar;
+                me.cliente = response.data.nombre;
+                me.id_cliente = response.data.id_cliente;
+                me.fecha = response.data.fecha.substr(0, 10).replace(/^(\d{4})-(\d{2})-(\d{2})$/g, '$3/$2/$1');
+                me.hora = response.data.hora;
+                me.acuerdos = response.data.acuerdos;
+                me.observaciones = response.data.observaciones;
+                me.motivo = response.data.motivo;
             }).catch(function (error) {
                 console.log(error);
             });
@@ -54299,10 +54392,10 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
                 'id_cliente': me.id_cliente,
                 'motivo': me.motivo,
                 'lugar': me.lugar,
-                'color': me.color,
                 'fecha': fechaMontada,
                 'acuerdos': me.acuerdos,
-                'observaciones': me.observaciones
+                'observaciones': me.observaciones,
+                'hora': me.hora
 
             }).then(function (response) {
                 me.cerrarModal();
@@ -55993,7 +56086,7 @@ var render = function() {
                 key: cliente.id,
                 domProps: {
                   value: cliente.id,
-                  textContent: _vm._s(cliente.nombre)
+                  textContent: _vm._s(cliente.nombre + " " + cliente.apellidos)
                 }
               })
             })
@@ -56419,7 +56512,9 @@ var render = function() {
                           key: cliente.id,
                           domProps: {
                             value: cliente.id,
-                            textContent: _vm._s(cliente.nombre)
+                            textContent: _vm._s(
+                              cliente.nombre + " " + cliente.apellidos
+                            )
                           }
                         })
                       })
@@ -57947,7 +58042,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             fecha_lanzamiento: "",
             fecha_vencimiento: "",
             coberturas: "",
-            obervaciones: "",
+            observaciones: "",
             activo: 1,
             id_ramo: "",
             arrayProductos: [],
@@ -58153,6 +58248,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         abrirModal: function abrirModal(modelo, accion) {
             var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
+            this.listarRamos();
             this.errorMostrarMsgProducto = [];
             this.errorProducto = 0;
             switch (modelo) {
@@ -58173,7 +58269,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                                 }
                             case "actualizar":
                                 {
-                                    //console.log(data);
+                                    this.listarRamos();
                                     this.modal = 1;
                                     this.tituloModal = "Actualizar Producto";
                                     this.tipoAccion = 2;
@@ -58182,9 +58278,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                                     this.fecha_lanzamiento = data["fecha_lanzamiento"];
                                     this.fecha_vencimiento = data["fecha_vencimiento"];
                                     this.coberturas = data["coberturas"];
-                                    this.obervaciones = data["observaciones"];
+                                    this.observaciones = data["observaciones"];
                                     this.producto_id = data["id"];
-                                    this.ramo = data["ramo"];
+                                    this.id_ramo = data["id_ramo"];
                                     break;
                                 }
                         }
@@ -58439,7 +58535,7 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(producto.obervaciones) }
+                      domProps: { textContent: _vm._s(producto.observaciones) }
                     }),
                     _vm._v(" "),
                     _c("td", [
@@ -58849,18 +58945,18 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.obervaciones,
-                              expression: "obervaciones"
+                              value: _vm.observaciones,
+                              expression: "observaciones"
                             }
                           ],
                           staticClass: "form-control",
-                          domProps: { value: _vm.obervaciones },
+                          domProps: { value: _vm.observaciones },
                           on: {
                             input: function($event) {
                               if ($event.target.composing) {
                                 return
                               }
-                              _vm.obervaciones = $event.target.value
+                              _vm.observaciones = $event.target.value
                             }
                           }
                         })

@@ -403,6 +403,7 @@
                                 </div>
                             </div>
                             <div class="col">
+                                <h5>Cartera de productos contratados</h5>
                                 <table class="table table-bordered table-striped table-sm">
                                     <thead>
                                     <tr>
@@ -415,6 +416,20 @@
                                         <th>Observaciones</th>
                                     </tr>
                                     </thead>
+                                    <tbody>
+
+                                    <tr v-for="producto in arrayProductosClientes" :key="producto.id">
+                                        <td v-text="producto.nombre_producto"></td>
+                                        <td v-text="producto.fecha_efecto"></td>
+                                        <td v-text="producto.vencimiento"></td>
+                                        <td v-text="producto.forma_pago"></td>
+                                        <td v-text="producto.numero_poliza"></td>
+                                        <td v-if="producto.primer_recibo_fisico">Sí</td>
+                                        <td v-else>No</td>
+                                        <td v-text="producto.observaciones"></td>
+
+                                    </tr>
+                                    </tbody>
                                 </table>
                             </div>
 
@@ -455,7 +470,9 @@
                 },
                 offset: 3,
                 criterio: "nombre", buscar: "", activo: '1',
-                id_producto: "", fechaEfecto: '', fechaVencimiento:'', formaPago: '', numeroPoliza:'',rFisico: 0, observacionesProductos:''
+                id_producto: "", fechaEfecto: '', fechaVencimiento:'', formaPago: '', numeroPoliza:'',rFisico: 0,
+                observacionesProductos:'',
+                arrayProductosClientes:[]
             };
         },
         computed: {
@@ -484,8 +501,26 @@
             }
         },
         methods: {
-            addProductos(producto){
-
+            addProductos(){
+                let me = this;
+                axios
+                    .put("/clientesproductos/addproducto", {
+                        id_cliente: me.id_cliente,
+                        id_producto: me.id_producto,
+                        fechaEfecto: me.fechaEfecto,
+                        fechaVencimiento: me.fechaVencimiento,
+                        formaPago: me.formaPago,
+                        numeroPoliza: me.numeroPoliza,
+                        rFisico: me.rFisico,
+                        observacionesProducto: me.observacionesProductos,
+                        id_cliente: me.cliente_id
+                    })
+                    .then(function (response) {
+                        me.cerrarModal();
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             listarCategoria() {
                 let me = this;
@@ -504,6 +539,19 @@
                     .get("/producto/selectproducto")
                     .then(function (response) {
                         me.arrayProductos = response.data.productos;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            listarProductosCliente(){
+                let me = this;
+                var url =
+                    "clientesproductos/listarproductos/" + me.cliente_id;
+                axios
+                    .get(url)
+                    .then(function (response) {
+                        me.arrayProductosClientes = response.data;
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -534,19 +582,6 @@
                 me.pagination.current_page = page;
                 me.listarCliente(page, buscar, criterio);
             },
-            crearCartera(){
-                let me = this;
-                axios
-                    .post("/cartera/registrar", {
-                       id_cliente : me.id_cliente
-                    })
-                    .then(function (response) {
-                        console.log('Cartera creada con éxito');
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
             registrarCliente() {
                 if (this.validarCliente()) {
                     return;
@@ -572,7 +607,6 @@
                         profesion: this.profesion
                     })
                     .then(function (response) {
-                        me.crearCartera();
                         me.cerrarModal();
                         me.listarCliente(1, "", "nombre");
                     })
@@ -752,6 +786,7 @@
                 this.id_categoria = "";
                 this.observaciones = "";
                 this.profesion = "";
+                this.cliente_id = "";
             },
             verResumen(data = []) {
                 this.modalResumen = 1;
@@ -773,6 +808,8 @@
                 this.observaciones = data["observaciones"];
                 this.cliente_id = data["id"];
                 this.activo = data["activo"];
+                this.listarProductosCliente();
+
             },
             abrirModalAddProductos(data) {
                 this.modalAddProductos = 1;
@@ -793,6 +830,7 @@
                 this.id_categoria = data["id_categoria"];
                 this.observaciones = data["observaciones"];
                 this.cliente_id = data["id"];
+                this.listarProductosCliente();
             },
             abrirModal(modelo, accion, data = []) {
                 this.errorMostrarMsgCliente = [];

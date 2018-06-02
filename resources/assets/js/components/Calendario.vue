@@ -71,7 +71,7 @@
                     <label class="label">Cliente</label>
                     <select v-model="id_cliente" class="form-control">
                         <option v-for="cliente in arrayClientes" :key="cliente.id" :value="cliente.id"
-                                v-text="cliente.nombre">
+                                v-text="cliente.nombre + ' ' + cliente.apellidos">
                         </option>
                     </select>
                 </div>
@@ -180,7 +180,7 @@
                                 <label class="label">Cliente</label>
                                 <select v-model="id_cliente" class="form-control" v-bind:disabled="activo">
                                     <option v-for="cliente in arrayClientes" :key="cliente.id" :value="cliente.id"
-                                            v-text="cliente.nombre">
+                                            v-text="cliente.nombre + ' ' + cliente.apellidos">
                                     </option>
                                 </select>
                             </div>
@@ -313,13 +313,14 @@
                     }
                 })
                     .then(function (response) {
-                        me.lugar = response.data[0].lugar;
-                        me.cliente = response.data[0].nombre;
-                        me.fecha = response.data[0].fecha.substr(0, 10).replace(/^(\d{4})-(\d{2})-(\d{2})$/g, '$3/$2/$1');
-                        me.hora = response.data[0].fecha.substr(11, 5);
-                        me.acuerdos = response.data[0].acuerdos;
-                        me.observaciones = response.data[0].observaciones;
-                        me.motivo = response.data[0].motivo;
+                        me.lugar = response.data.lugar;
+                        me.cliente = response.data.nombre;
+                        me.id_cliente = response.data.id_cliente;
+                        me.fecha = response.data.fecha.substr(0, 10).replace(/^(\d{4})-(\d{2})-(\d{2})$/g, '$3/$2/$1');
+                        me.hora = response.data.hora;
+                        me.acuerdos = response.data.acuerdos;
+                        me.observaciones = response.data.observaciones;
+                        me.motivo = response.data.motivo;
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -362,10 +363,10 @@
                     'id_cliente': me.id_cliente,
                     'motivo': me.motivo,
                     'lugar': me.lugar,
-                    'color': me.color,
                     'fecha': fechaMontada,
                     'acuerdos': me.acuerdos,
-                    'observaciones': me.observaciones
+                    'observaciones': me.observaciones,
+                    'hora': me.hora
 
                 }).then(function (response) {
                     me.cerrarModal();

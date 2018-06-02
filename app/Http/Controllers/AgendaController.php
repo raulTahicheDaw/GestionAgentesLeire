@@ -23,10 +23,12 @@ class AgendaController extends Controller
         $arrayResultado = [];
         $data = Agenda::all();
         foreach ($data as $cita) {
-            $citaMontada = array('id' => $cita->id, 'title' => $this->recuperaNombre($cita->id_cliente), 'startDate' => $cita->fecha);
+            $title = $cita->hora . "-" . $this->recuperaNombre($cita->id_cliente);
+            $citaMontada = array('id' => $cita->id, 'title' => $title, 'startDate' => $cita->fecha);
             $arrayResultado[] = $citaMontada;
         }
         return $arrayResultado;
+
     }
 
     public function store(Request $request)
@@ -36,24 +38,18 @@ class AgendaController extends Controller
         $cita->id_cliente = $request->id_cliente;
         $cita->motivo = $request->motivo;
         $cita->lugar = $request->lugar;
-        $cita->color = $request->color;
         $cita->fecha = $request->fecha;
         $cita->acuerdos = $request->acuerdos;
         $cita->observaciones = $request->observaciones;
+        $cita->hora = $request->hora;
         $cita->save();
     }
 
     public function recuperaCita(Request $request)
     {
-        $cita = Agenda::where('id', $request->id)->get();
-        foreach ($cita as $citas){
-            $citas['nombre'] = $this->recuperaNombre($citas->id_cliente);
-        }
+        $cita = Agenda::where('id', $request->id)->first();
+        $cita['nombre'] = $this->recuperaNombre($cita->id_cliente);
         return $cita;
     }
 
-    public function addEvento(Request $request)
-    {
-
-    }
 }
