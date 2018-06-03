@@ -796,6 +796,7 @@
                 this.observaciones = "";
                 this.profesion = "";
                 this.cliente_id = "";
+                app.menu=2;
             },
             verResumen(data = []) {
                 this.modalResumen = 1;

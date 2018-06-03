@@ -11,19 +11,19 @@
         <cliente-component></cliente-component>
     </template>
     <template v-if="menu==2">
-        <h1>Contenido de menu 2</h1>
+        <nuevocliente-component></nuevocliente-component>
     </template>
     <template v-if="menu==3">
         <referencia-component></referencia-component>
     </template>
     <template v-if="menu==4">
-        <h1>Contenido de menu 4</h1>
+        <nuevareferencia-component></nuevareferencia-component>
     </template>
     <template v-if="menu==5">
         <vencimientos-component></vencimientos-component>
     </template>
     <template v-if="menu==6">
-        <h1>Contenido de menu 6</h1>
+        <citashoy-component></citashoy-component>
     </template>
     <template v-if="menu==7">
         <citasdia-component></citasdia-component>
@@ -41,10 +41,14 @@
         <ramo-component></ramo-component>
     </template>
     <template v-if="menu==12">
-        <h1>Contenido de menu 12</h1>
+        <vencimientosmesactual-component></vencimientosmesactual-component>
     </template>
     <template v-if="menu==13">
+        <h1>Contenido de menu 12</h1>
+    </template>
+    <template v-if="menu==14">
         <h1>Contenido de menu 13</h1>
+
     </template>
 
 @endsection

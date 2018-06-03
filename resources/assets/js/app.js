@@ -23,12 +23,15 @@ Vue.component('ramo-component', require('./components/Ramo.vue'));
 Vue.component('citasdia-component', require('./components/CitasDia.vue'));
 Vue.component('producto-component', require('./components/Producto.vue'));
 Vue.component('vencimientos-component', require('./components/Vencimientos.vue'));
+Vue.component('nuevocliente-component', require('./components/NuevoCliente.vue'));
+Vue.component('nuevareferencia-component', require('./components/NuevaReferencia.vue'));
+Vue.component('citashoy-component', require('./components/CitasHoy.vue'));
+Vue.component('vencimientosmesactual-component', require('./components/VencimientosMesActual.vue'));
 
 
 const app = new Vue({
     el: '#app',
     data:{
         menu: 0,
-        nuevoUsuario: 0,
-    }
+    },
 });

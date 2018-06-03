@@ -40,11 +40,11 @@
                     </li>
                 </ul>
             </li>
-            <li @click="menu=12" class="nav-item">
+            <li @click="menu=13" class="nav-item">
                 <a class="nav-link" href="#"><i class="icon-question"></i> Ayuda <span
                             class="badge badge-danger">PDF</span></a>
             </li>
-            <li @click="menu=13" class="nav-item">
+            <li @click="menu=14" class="nav-item">
                 <a class="nav-link" href="#"><i class="icon-info"></i> Acerca de...<span
                             class="badge badge-info">SGASL</span></a>
             </li>

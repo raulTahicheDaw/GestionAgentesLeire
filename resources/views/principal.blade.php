@@ -25,17 +25,17 @@
         </button>
         <ul class="nav navbar-nav d-md-down-none">
             <li class="nav-item px-3">
-                <a class="nav-link" @click="menu=1; nuevoUsuario=1" href="#"><i
+                <a class="nav-link" @click="menu=2" href="#"><i
                             class="icon-user-follow"></i> Nuevo Cliente</a>
             </li>
             <li class="nav-item px-3">
-                <a class="nav-link" href="#"><i class="icon-user-following"></i> Nueva Referencia</a>
+                <a class="nav-link" @click="menu=4" href="#"><i class="icon-user-following"></i> Nueva Referencia</a>
             </li>
             <li class="nav-item px-3">
-                <a class="nav-link" href="#"><i class="icon-event"></i> Citas Hoy</a>
+                <a class="nav-link" @click="menu=6" href="#"><i class="icon-event"></i> Citas Hoy</a>
             </li>
             <li class="nav-item px-3">
-                <a class="nav-link" href="#"><i class="icon-notebook"></i> Vencimientos Mes Actual</a>
+                <a class="nav-link" @click="menu=12" href="#"><i class="icon-notebook"></i> Vencimientos Mes Actual</a>
             </li>
         </ul>
         <ul class="nav navbar-nav ml-auto">
