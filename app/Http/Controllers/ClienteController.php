@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\PDF;
 use Couchbase\ClassicAuthenticator;
 use Illuminate\Http\Request;
 use App\Cliente;
@@ -27,7 +28,7 @@ class ClienteController extends Controller
                     'clientes.telefono', 'clientes.fechaNacimiento', 'clientes.sexo', 'clientes.domicilio', 'clientes.localidad',
                     'clientes.codigoPostal', 'clientes.provincia', 'clientes.cuentaBancaria', 'clientes.profesion', 'clientes.contacto',
                     'clientes.activo', 'clientes.observaciones', 'clientes.id_categoria', 'categorias.nombre as nombre_categoria')
-                ->orderBy('nombre', 'asc')->paginate(4);
+                ->orderBy('apellidos', 'asc')->paginate(4);
         } else {
             $clientes = Cliente::join('categorias', 'clientes.id_categoria', '=', 'categorias.id')
                 ->select('clientes.id', 'clientes.nombre', 'clientes.apellidos', 'clientes.dni', 'clientes.email',
@@ -35,7 +36,7 @@ class ClienteController extends Controller
                     'clientes.codigoPostal', 'clientes.provincia', 'clientes.cuentaBancaria', 'clientes.profesion', 'clientes.contacto',
                     'clientes.activo', 'clientes.observaciones', 'clientes.id_categoria', 'categorias.nombre as nombre_categoria')
                 ->where('clientes.' . $criterio, 'like', '%' . $buscar . '%')
-                ->orderBy('nombre', 'asc')->paginate(4);
+                ->orderBy('apellidos', 'asc')->paginate(4);
 
         }
         return [
@@ -54,25 +55,25 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-            $cliente = Cliente::create([
-                'id_categoria' => $request->id_categoria,
-                'nombre' => $request->nombre,
-                'apellidos' => $request->apellidos,
-                'dni' => $request->dni,
-                'email' => $request->email,
-                'telefono' => $request->telefono,
-                'fechaNacimiento' => $request->fechaNacimiento,
-                'sexo' => $request->sexo,
-                'domicilio' => $request->domicilio,
-                'localidad' => $request->localidad,
-                'codigoPostal' => $request->codigoPostal,
-                'provincia' => $request->provincia,
-                'cuentaBancaria' => $request->cuentaBancaria,
-                'profesion' => $request->profesion,
-                'contacto' => $request->contacto,
-                'activo' => '1',
-                'observaciones' => $request->observaciones
-            ]);
+        $cliente = Cliente::create([
+            'id_categoria' => $request->id_categoria,
+            'nombre' => $request->nombre,
+            'apellidos' => $request->apellidos,
+            'dni' => $request->dni,
+            'email' => $request->email,
+            'telefono' => $request->telefono,
+            'fechaNacimiento' => $request->fechaNacimiento,
+            'sexo' => $request->sexo,
+            'domicilio' => $request->domicilio,
+            'localidad' => $request->localidad,
+            'codigoPostal' => $request->codigoPostal,
+            'provincia' => $request->provincia,
+            'cuentaBancaria' => $request->cuentaBancaria,
+            'profesion' => $request->profesion,
+            'contacto' => $request->contacto,
+            'activo' => '1',
+            'observaciones' => $request->observaciones
+        ]);
     }
 
     /**
@@ -132,4 +133,20 @@ class ClienteController extends Controller
             ->get();
         return ['clientes' => $clientes];
     }
+
+    public function listarPdf()
+    {
+        $clientes = Cliente::join('categorias', 'clientes.id_categoria', '=', 'categorias.id')
+            ->select('clientes.id', 'clientes.nombre', 'clientes.apellidos', 'clientes.dni', 'clientes.email',
+                'clientes.telefono', 'clientes.fechaNacimiento', 'clientes.sexo', 'clientes.domicilio', 'clientes.localidad',
+                'clientes.codigoPostal', 'clientes.provincia', 'clientes.cuentaBancaria', 'clientes.profesion', 'clientes.contacto',
+                'clientes.activo', 'clientes.observaciones', 'clientes.id_categoria', 'categorias.nombre as nombre_categoria')
+            ->orderBy('apellidos', 'asc')->get();
+
+        $cont = Cliente::count(); //Cantidad e clientes
+
+        $pdf = \PDF::loadView('pdf.clientespdf', ['clientes' => $clientes, 'cont' => $cont]);
+        return $pdf->download('clientes.pdf');
+    }
+
 }

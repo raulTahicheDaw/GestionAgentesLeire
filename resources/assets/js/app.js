@@ -20,11 +20,15 @@ Vue.component('categoria-component', require('./components/Categoria.vue'));
 Vue.component('referencia-component', require('./components/Referencia.vue'));
 Vue.component('calendario-component', require('./components/Calendario.vue'));
 Vue.component('ramo-component', require('./components/Ramo.vue'));
+Vue.component('citasdia-component', require('./components/CitasDia.vue'));
 Vue.component('producto-component', require('./components/Producto.vue'));
+Vue.component('vencimientos-component', require('./components/Vencimientos.vue'));
+
 
 const app = new Vue({
     el: '#app',
     data:{
-        menu: 0
+        menu: 0,
+        nuevoUsuario: 0,
     }
 });

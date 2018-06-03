@@ -4,47 +4,24 @@
             <li @click="menu=0" class="nav-title">
                 <a class="nav-link" href="#">Inicio</a>
             </li>
-            <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-user"></i> Clientes</a>
-                <ul class="nav-dropdown-items">
-                    <li @click="menu=1" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-people"></i> Listado Clientes </a>
-                    </li>
-                    <li @click="menu=2" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-docs"></i> Informes de Clientes </a>
-                    </li>
-                </ul>
+            <li @click="menu=1" class="nav-item">
+                <a class="nav-link" href="#"><i class="icon-user"></i>Clientes</a>
             </li>
-            <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-user"></i> Referencias</a>
-                <ul class="nav-dropdown-items">
-                    <li @click="menu=3" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-people"></i> Listado Referencias</a>
-                    </li>
-                    <li @click="menu=4" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-user-follow"></i> Informes de Referencias</a>
-                    </li>
-                </ul>
+            <li @click="menu=3" class="nav-item">
+                <a class="nav-link" href="#"><i class="icon-phone"></i>Referencias</a>
             </li>
+
             <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-event"></i> Vencimientos</a>
-                <ul class="nav-dropdown-items">
-                    <li @click="menu=5" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-calendar"></i> Mes </a>
-                    </li>
-                    <li @click="menu=6" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-book-open"></i> Rango</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-people"></i> Agenda</a>
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-people"></i>Agenda</a>
                 <ul class="nav-dropdown-items">
                     <li @click="menu=7" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-clock"></i> Citas Hoy</a>
+                        <a class="nav-link" href="#"><i class="icon-clock"></i>Citas por dia</a>
                     </li>
                     <li @click="menu=8" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-calendar"></i> Calendario</a>
+                        <a class="nav-link" href="#"><i class="icon-calendar"></i>Calendario</a>
+                    </li>
+                    <li @click="menu=5" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-notebook"></i>Vencimientos</a>
                     </li>
                 </ul>
             </li>

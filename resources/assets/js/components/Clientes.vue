@@ -29,12 +29,13 @@
                                 </button>
                                 <button style="margin-left: 10px;" type="submit" @click="mostarTodos()"
                                         class="btn btn-primary">
-                                    <i class="fa fa-align-justify"></i>Mostrar todos
+                                    <i class="fa fa-align-justify"></i> Mostrar todos
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <table class="table table-bordered table-striped table-sm">
+                    <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
                             <th>Opciones</th>
@@ -97,6 +98,11 @@
                         </tr>
                         </tbody>
                     </table>
+                    </div>
+                    <button @click="cargarPdf()" type="button" class="btn btn-info">
+                        <i class="icon-doc"></i>&nbsp;Listado Pdf
+                    </button>
+
                     <nav>
                         <ul class="pagination">
                             <li class="page-item" v-if="pagination.current_page >1 ">
@@ -501,6 +507,9 @@
             }
         },
         methods: {
+            cargarPdf(){
+                window.open('/cliente/listarpdf','blank');
+            },
             addProductos(){
                 let me = this;
                 axios

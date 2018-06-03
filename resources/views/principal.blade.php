@@ -25,7 +25,7 @@
         </button>
         <ul class="nav navbar-nav d-md-down-none">
             <li class="nav-item px-3">
-                <a class="nav-link" href="#"><i
+                <a class="nav-link" @click="menu=1; nuevoUsuario=1" href="#"><i
                             class="icon-user-follow"></i> Nuevo Cliente</a>
             </li>
             <li class="nav-item px-3">

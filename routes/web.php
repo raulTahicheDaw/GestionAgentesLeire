@@ -14,10 +14,14 @@
 Route::get('/', function () {
     return view('contenido/contenido');
 });
+Route::get('nuevocliente',function (){
+    return view('nuevocliente');
+});
 
 Route::get('agenda', 'AgendaController@index');
 Route::get('agenda/recuperaCita', 'AgendaController@recuperaCita');
 Route::post('agenda/registrar', 'AgendaController@store');
+Route::get('agenda/citasdia/{fecha}','AgendaController@citasHoy');
 
 Route::get('cliente', 'ClienteController@index');
 Route::post('cliente/registrar', 'ClienteController@store');
@@ -25,12 +29,15 @@ Route::put('cliente/actualizar', 'ClienteController@update');
 Route::put('cliente/desactivar', 'ClienteController@desactivar');
 Route::put('cliente/activar', 'ClienteController@activar');
 Route::get('cliente/selectcliente', 'ClienteController@listarClientes');
+Route::get('cliente/listarpdf', 'ClienteController@listarpdf')->name('clientespdf');
 
 Route::get('referencia', 'ReferenciaController@index');
 Route::post('referencia/registrar', 'ReferenciaController@store');
 Route::put('referencia/actualizar', 'ReferenciaController@update');
 Route::put('referencia/desactivar', 'ReferenciaController@desactivar');
 Route::put('referencia/activar', 'ReferenciaController@activar');
+Route::get('referencia/listarpdf', 'ReferenciaController@listarpdf')->name('clientespdf');
+
 
 Route::get('categoria', 'CategoriaController@index');
 Route::get('categoria/selectcategoria', 'CategoriaController@listarCategorias');
@@ -55,3 +62,4 @@ Route::put('producto/activar', 'ProductoController@activar');
 
 Route::put('clientesproductos/addproducto', 'Clientes_ProductosController@addProducto');
 Route::get('clientesproductos/listarproductos/{id_cliente}','Clientes_ProductosController@listarProductosClientes');
+Route::get('vencimiento/{desde}/{hasta}','Clientes_ProductosController@listarVencimientos');

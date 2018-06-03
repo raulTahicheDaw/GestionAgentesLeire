@@ -108,4 +108,11 @@ class ReferenciaController extends Controller
         $referencia->activo = '1';
         $referencia->save();
     }
+
+    public function listarpdf(){
+        $referencias = Referencia::orderBy('apellidos', 'asc')->get();
+        $cont = Referencia::count();
+        $pdf = \PDF::loadView('pdf.referenciaspdf', ['referencias' => $referencias, 'cont' => $cont]);
+        return $pdf->download('referencias.pdf');
+    }
 }

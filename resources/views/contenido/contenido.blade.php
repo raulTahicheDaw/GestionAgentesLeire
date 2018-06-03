@@ -20,13 +20,13 @@
         <h1>Contenido de menu 4</h1>
     </template>
     <template v-if="menu==5">
-        <h1>Contenido de menu 5</h1>
+        <vencimientos-component></vencimientos-component>
     </template>
     <template v-if="menu==6">
         <h1>Contenido de menu 6</h1>
     </template>
     <template v-if="menu==7">
-        <h1>Contenido de menu 7</h1>
+        <citasdia-component></citasdia-component>
     </template>
     <template v-if="menu==8">
         <calendario-component></calendario-component>

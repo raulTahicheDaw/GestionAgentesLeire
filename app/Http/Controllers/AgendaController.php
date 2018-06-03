@@ -52,4 +52,14 @@ class AgendaController extends Controller
         return $cita;
     }
 
+    public function citasHoy($fecha)
+    {
+        $citasDia = Agenda::where('fecha',$fecha)->select('id','hora','id_cliente','motivo','lugar','observaciones')
+            ->orderBy('hora','asc')->get();
+        foreach ($citasDia as $c){
+            $c['nombre'] = $this->recuperaNombre($c->id_cliente);
+        }
+        return $citasDia;
+    }
+
 }

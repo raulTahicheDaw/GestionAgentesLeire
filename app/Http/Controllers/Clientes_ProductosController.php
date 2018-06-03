@@ -34,4 +34,9 @@ class Clientes_ProductosController extends Controller
         }
         return $productos;
     }
+
+    public function listarVencimientos($desde,$hasta){
+        $vencimientos = Clientes_Productos::whereBetween('vencimiento',array($desde, $hasta))->get();
+        return $vencimientos;
+    }
 }

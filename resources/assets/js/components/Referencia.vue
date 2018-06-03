@@ -34,7 +34,8 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-bordered table-striped table-sm">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-sm">
                         <thead>
                         <tr>
                             <th>Opciones</th>
@@ -92,6 +93,10 @@
                         </tr>
                         </tbody>
                     </table>
+                    </div>
+                    <button @click="cargarPdf()" type="button" class="btn btn-info">
+                        <i class="icon-doc"></i>&nbsp;Listado Pdf
+                    </button>
                     <nav>
                         <ul class="pagination">
                             <li class="page-item" v-if="pagination.current_page >1 ">
@@ -398,6 +403,9 @@
             }
         },
         methods: {
+            cargarPdf(){
+                window.open('/referencia/listarpdf','blank');
+            },
             listarReferencias(page, buscar, criterio) {
                 let me = this;
                 var url = '/referencia?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
