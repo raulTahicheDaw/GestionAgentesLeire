@@ -48527,8 +48527,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -59943,7 +59941,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.modal-content[data-v-7fae510c] {\n    width: 100% !important;\n    position: absolute !important;\n}\n.mostrar[data-v-7fae510c] {\n    display: list-item !important;\n    opacity: 1 !important;\n    position: absolute !important;\n    background-color: #3c29297a !important;\n}\n.div-error[data-v-7fae510c] {\n    display: flex;\n    justify-content: center;\n}\n.text-error[data-v-7fae510c] {\n    color: red !important;\n    font-weight: bold;\n}\n", ""]);
+exports.push([module.i, "\n.div-error[data-v-7fae510c] {\n    display: flex;\n    justify-content: center;\n}\n.text-error[data-v-7fae510c] {\n    color: red !important;\n    font-weight: bold;\n}\n", ""]);
 
 // exports
 
@@ -60079,9 +60077,139 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    name: "NuevoCliente"
+    name: "NuevoCliente",
+    data: function data() {
+        return {
+            cliente_id: 0, nombre: "", apellidos: "", dni: "", email: "", telefono: "", fechaNacimiento: "",
+            sexo: "Hombre", domicilio: "", localidad: "", codigoPostal: "", provincia: "", cuentaBancaria: "",
+            profesion: "", contacto: "", id_categoria: 1, observaciones: "",
+            errorCliente: 0, errorMostrarMsgCliente: [], errorFormatoDni: 0,
+            arrayCategorias: []
+        };
+    },
+
+    methods: {
+        listarCategoria: function listarCategoria() {
+            var me = this;
+            axios.get("/categoria/selectcategoria").then(function (response) {
+                me.arrayCategorias = response.data.categorias;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        limpiar: function limpiar() {
+            this.cliente_id = 0;
+            this.nombre = '';
+            this.apellidos = '';
+            this.dni = '';
+            this.email = '';
+            this.telefono = '';
+            this.fechaNacimiento = '';
+            this.sexo = 'Hombre';
+            this.domicilio = '';
+            this.localidad = '';
+            this.codigoPostal = '';
+            this.provincia = '';
+            this.cuentaBancaria = '';
+            this.profesion = '';
+            this.contacto = '';
+            this.id_categoria = 1;
+            this.observaciones = '';
+            this.errorCliente = 0;
+            this.errorMostrarMsgCliente = [];
+            this.errorFormatoDni = 0;
+        },
+        registrarCliente: function registrarCliente() {
+            if (this.validarCliente()) {
+                return;
+            }
+            var me = this;
+            axios.post("/cliente/registrar", {
+                nombre: this.nombre,
+                apellidos: this.apellidos,
+                dni: this.dni,
+                email: this.email,
+                telefono: this.telefono,
+                fechaNacimiento: this.fechaNacimiento,
+                sexo: this.sexo,
+                domicilio: this.domicilio,
+                codigoPostal: this.codigoPostal,
+                provincia: this.provincia,
+                cuentaBancaria: this.cuentaBancaria,
+                contacto: this.contacto,
+                id_categoria: this.id_categoria,
+                observaciones: this.observaciones,
+                localidad: this.localidad,
+                profesion: this.profesion
+            }).then(function (response) {
+                me.limpiar();
+                swal({
+                    type: 'succes',
+                    title: 'Creado',
+                    text: 'Cliente creado con éxito'
+                });
+            }).catch(function (error) {
+                swal({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'No se ha podido crear el cliente'
+                });
+                console.log(error);
+            });
+        },
+        validarCliente: function validarCliente() {
+            this.errorCliente = 0;
+            this.errorMostrarMsgCliente = [];
+            if (!this.nombre) this.errorMostrarMsgCliente.push("Nombre");
+            if (!this.apellidos) this.errorMostrarMsgCliente.push("Apellidos");
+            if (!this.dni) this.errorMostrarMsgCliente.push("DNI");
+            if (!this.telefono) this.errorMostrarMsgCliente.push("Teléfono");
+            if (!this.id_categoria) this.errorMostrarMsgCliente.push("Categoría");
+            if (!this.validarDni(this.dni)) {
+                this.errorFormatoDni = 1;
+                this.errorCliente = 1;
+            }
+            if (this.errorMostrarMsgCliente.length > 0) this.errorCliente = 1;
+            return this.errorCliente;
+        },
+        validarDni: function validarDni(value) {
+            var validChars = "TRWAGMYFPDXBNJZSQVHLCKET";
+            var nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+            var nieRexp = /^[XYZ]{1}[0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+            var str = value.toString().toUpperCase();
+
+            if (!nifRexp.test(str) && !nieRexp.test(str)) return false;
+
+            var nie = str.replace(/^[X]/, "0").replace(/^[Y]/, "1").replace(/^[Z]/, "2");
+
+            var letter = str.substr(-1);
+            var charIndex = parseInt(nie.substr(0, 8)) % 23;
+
+            if (validChars.charAt(charIndex) === letter) return true;
+            return false;
+        }
+    },
+    mounted: function mounted() {
+        this.listarCategoria();
+    }
 });
 
 /***/ }),
@@ -60113,7 +60241,18 @@ var render = function() {
             [
               _c("div", { staticClass: "form-group row" }, [
                 _c("div", { staticClass: "col-md-4" }, [
-                  _vm._m(2),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-control-label",
+                      class: {
+                        "text-error": _vm.errorMostrarMsgCliente.includes(
+                          "Nombre"
+                        )
+                      }
+                    },
+                    [_vm._v("Nombre"), _c("sup", [_vm._v("*")])]
+                  ),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -60125,6 +60264,11 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.errorMostrarMsgCliente.includes(
+                        "Nombre"
+                      )
+                    },
                     attrs: {
                       type: "text",
                       placeholder: "Introduzca el nombre"
@@ -60142,7 +60286,18 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-md-5" }, [
-                  _vm._m(3),
+                  _c(
+                    "label",
+                    {
+                      staticClass: " form-control-label",
+                      class: {
+                        "text-error": _vm.errorMostrarMsgCliente.includes(
+                          "Apellidos"
+                        )
+                      }
+                    },
+                    [_vm._v("Apellidos"), _c("sup", [_vm._v("*")])]
+                  ),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -60154,6 +60309,11 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.errorMostrarMsgCliente.includes(
+                        "Apellidos"
+                      )
+                    },
                     attrs: {
                       type: "text",
                       placeholder: "Introduzca los apellidos"
@@ -60171,7 +60331,16 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-md-3" }, [
-                  _vm._m(4),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-control-label",
+                      class: {
+                        "text-error": _vm.errorMostrarMsgCliente.includes("DNI")
+                      }
+                    },
+                    [_vm._v("DNI/NIE"), _c("sup", [_vm._v("*")])]
+                  ),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -60183,6 +60352,9 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.errorMostrarMsgCliente.includes("DNI")
+                    },
                     attrs: {
                       type: "text",
                       pattern:
@@ -60204,7 +60376,18 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "form-group row" }, [
                 _c("div", { staticClass: "col-md-4" }, [
-                  _vm._m(5),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-control-label",
+                      class: {
+                        "text-error": _vm.errorMostrarMsgCliente.includes(
+                          "Teléfono"
+                        )
+                      }
+                    },
+                    [_vm._v("Teléfono"), _c("sup", [_vm._v("*")])]
+                  ),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -60216,6 +60399,11 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.errorMostrarMsgCliente.includes(
+                        "Teléfono"
+                      )
+                    },
                     attrs: { type: "text", placeholder: "Introduzca teléfono" },
                     domProps: { value: _vm.telefono },
                     on: {
@@ -60617,6 +60805,58 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.errorCliente,
+                      expression: "errorCliente"
+                    }
+                  ],
+                  staticClass: "form-group row div-error"
+                },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "text-center text-error" },
+                    [
+                      _c("p", [
+                        _vm._v(
+                          "Los siguientes campos no pueden estar vacíos o son incorrectos:"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.errorMostrarMsgCliente, function(error) {
+                        return _c("span", {
+                          key: error,
+                          domProps: { textContent: _vm._s(error + ", ") }
+                        })
+                      })
+                    ],
+                    2
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.errorFormatoDni,
+                      expression: "errorFormatoDni"
+                    }
+                  ],
+                  staticClass: "text-error text-center"
+                },
+                [_c("p", [_vm._v("DNI/NIE (12345678A o X1234567A)")])]
+              ),
+              _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
                 _c(
                   "button",
@@ -60625,11 +60865,11 @@ var render = function() {
                     attrs: { type: "button" },
                     on: {
                       click: function($event) {
-                        _vm.cerrarModal()
+                        _vm.limpiar()
                       }
                     }
                   },
-                  [_vm._v("Cerrar")]
+                  [_vm._v("Reset")]
                 ),
                 _vm._v(" "),
                 _c(
@@ -60671,42 +60911,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "card-header" }, [
       _c("i", { staticClass: "icon-plus" }),
       _vm._v(" Nuevo Cliente\n            ")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "form-control-label" }, [
-      _vm._v("Nombre"),
-      _c("sup", [_vm._v("*")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: " form-control-label" }, [
-      _vm._v("Apellidos"),
-      _c("sup", [_vm._v("*")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "form-control-label" }, [
-      _vm._v("DNI/NIE"),
-      _c("sup", [_vm._v("*")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "form-control-label" }, [
-      _vm._v("Teléfono"),
-      _c("sup", [_vm._v("*")])
     ])
   }
 ]

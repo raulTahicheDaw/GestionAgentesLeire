@@ -147,7 +147,6 @@
                                 <div class="col-md-5">
                                     <label class=" form-control-label"
                                            :class="{'text-error' : errorMostrarMsgCliente.includes('Apellidos')}">Apellidos<sup>*</sup></label>
-
                                     <input type="text" v-model="apellidos" class="form-control"
                                            :class="{'is-invalid' : errorMostrarMsgCliente.includes('Apellidos')}"
                                            placeholder="Introduzca los apellidos">
@@ -155,7 +154,6 @@
                                 <div class="col-md-3">
                                     <label class="form-control-label"
                                            :class="{'text-error' : errorMostrarMsgCliente.includes('DNI')}">DNI/NIE<sup>*</sup></label>
-
                                     <input type="text" v-model="dni" class="form-control"
                                            pattern="(([X-Zx-z]{1})([-]?)(\d{7})([-]?)([A-Za-z]{1}))|((\d{8})([-]?)([A-Za-z]{1}))"
                                            :class="{'is-invalid' : errorMostrarMsgCliente.includes('DNI')}"
