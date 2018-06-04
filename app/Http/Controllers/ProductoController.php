@@ -107,4 +107,17 @@ class ProductoController extends Controller
         $producto->activo = '1';
         $producto->save();
     }
+
+    public function listarPdf()
+    {
+        $productos = Producto::join('ramos', 'productos.id_ramo', '=', 'ramos.id')
+            ->select('productos.id', 'productos.nombre', 'productos.campania', 'productos.fecha_lanzamiento', 'productos.fecha_vencimiento',
+                'productos.coberturas', 'productos.observaciones','productos.activo', 'productos.id_ramo', 'ramos.nombre as nombre_ramo')
+            ->orderBy('nombre', 'asc')->get();
+
+        $cont = Producto::count(); //Cantidad e clientes
+
+        $pdf = \PDF::loadView('pdf.productospdf', ['productos' => $productos, 'cont' => $cont]);
+        return $pdf->download('productos.pdf');
+    }
 }

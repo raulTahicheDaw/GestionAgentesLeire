@@ -27,6 +27,7 @@ Vue.component('nuevocliente-component', require('./components/NuevoCliente.vue')
 Vue.component('nuevareferencia-component', require('./components/NuevaReferencia.vue'));
 Vue.component('citashoy-component', require('./components/CitasHoy.vue'));
 Vue.component('vencimientosmesactual-component', require('./components/VencimientosMesActual.vue'));
+Vue.component('informes-component', require('./components/Informes.vue'));
 
 
 const app = new Vue({
@@ -34,4 +35,16 @@ const app = new Vue({
     data:{
         menu: 0,
     },
+    methods:{
+        cargarPdfClientes() {
+            window.open('/cliente/listarpdf', 'blank');
+        },
+        cargarPdfReferencias(){
+            window.open('/referencia/listarpdf', 'blank');
+
+        },
+        cargarPdfProductos(){
+            window.open('/producto/listarpdf', 'blank');
+        }
+    }
 });

@@ -13,8 +13,10 @@
                     <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                         <div class="form-group row">
                             <div class="col-md-4">
-                                <label class="form-control-label">Nombre<sup>*</sup></label>
+                                <label class="form-control-label"
+                                       :class="{'text-error' : errorMostrarMsgReferencia.includes('Nombre')}">Nombre<sup>*</sup></label>
                                 <input type="text" v-model="nombre" class="form-control"
+                                       :class="{'is-invalid' : errorMostrarMsgReferencia.includes('Nombre')}"
                                        placeholder="Introduzca el nombre">
                             </div>
                             <div class="col-md-5">
@@ -24,16 +26,20 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-control-label">DNI/NIE</label>
+                                <label class="form-control-label"
+                                       :class="{'text-error' : errorMostrarMsgReferencia.includes('DNI')}">DNI/NIE</label>
                                 <input type="text" v-model="dni" class="form-control"
                                        pattern="(([X-Zx-z]{1})([-]?)(\d{7})([-]?)([A-Za-z]{1}))|((\d{8})([-]?)([A-Za-z]{1}))"
+                                       :class="{'is-invalid' : errorMostrarMsgReferencia.includes('DNI')}"
                                        placeholder="Introduzca el DNI/CIF">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-4">
-                                <label class="form-control-label">Teléfono<sup>*</sup></label>
+                                <label class="form-control-label"
+                                       :class="{'text-error' : errorMostrarMsgReferencia.includes('Teléfono')}">Teléfono<sup>*</sup></label>
                                 <input type="text" v-model="telefono" class="form-control"
+                                       :class="{'is-invalid' : errorMostrarMsgReferencia.includes('Teléfono')}"
                                        placeholder="Introduzca teléfono">
                             </div>
                             <div class="col-md-5">
@@ -111,6 +117,16 @@
                                 <textarea class="form-control" rows="3" v-model="observaciones"></textarea>
                             </div>
                         </div>
+                        <div v-show="errorReferencia" class="form-group row div-error">
+                            <div class="text-center text-error">
+                                <p>Los siguientes campos no pueden estar vacíos o son incorrectos:</p>
+                                <span v-for="error in errorMostrarMsgReferencia" :key="error"
+                                      v-text="error + ', '"> </span>
+                            </div>
+                        </div>
+                        <div v-show="errorFormatoDni" class="text-error text-center">
+                            <p>DNI/NIE (12345678A o X1234567A)</p>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
                             <button type="button" class="btn btn-primary"
@@ -127,10 +143,128 @@
 
 <script>
     export default {
-        name: "NuevaReferencia"
+        name: "NuevaReferencia",
+        data(){
+            return{
+                referencia_id: 0, nombre: '', apellidos: '', domicilio: '', localidad: '', codigoPostal: '',
+                provincia: '', email: '', sexo: 'Hombre', dni: '', telefono: '', fechaNacimiento: '', nacionalidad: '',
+                intereses: '', compañia_origen: '', observaciones: '', contacto: '', profesion: '', activo: 1,
+                errorReferencia: 0,
+                errorMostrarMsgReferencia: [],
+                errorFormatoDni: 0,
+            }
+        },
+        methods:{
+            registrarReferencia() {
+                if (this.validarReferencia()) {
+                    return;
+                }
+                let me = this;
+                axios.post('/referencia/registrar', {
+                    'nombre': this.nombre,
+                    'apellidos': this.apellidos,
+                    'domicilio': this.domicilio,
+                    'localidad': this.localidad,
+                    'codigoPostal': this.codigoPostal,
+                    'provincia': this.provincia,
+                    'email': this.email,
+                    'dni': this.dni,
+                    'telefono': this.telefono,
+                    'fechaNacimiento': this.fechaNacimiento,
+                    'sexo': this.sexo,
+                    'nacionalidad': this.nacionalidad,
+                    'intereses': this.intereses,
+                    'compañia_origen': this.compañia_origen,
+                    'contacto': this.contacto,
+                    'observaciones': this.observaciones,
+                    'profesion': this.profesion,
+
+                }).then(function (response) {
+                    me.limpiar();
+                    swal({
+                        type: 'success',
+                        title: 'Creado',
+                        text: 'Referencia creada con éxito',
+                    })
+                })
+                    .catch(function (error) {
+                        swal({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'No se ha podido crear la referencia',
+                        });
+                        console.log(error);
+                    });
+            },
+            validarReferencia() {
+                this.errorReferencia = 0;
+                this.errorMostrarMsgReferencia = [];
+                if (!this.nombre) this.errorMostrarMsgReferencia.push('Nombre');
+                if (!this.telefono) this.errorMostrarMsgReferencia.push('Teléfono');
+                if (this.dni && !this.validarDni(this.dni)) {
+                    this.errorFormatoDni = 1;
+                    this.errorReferencia = 1;
+                }
+                if (this.errorMostrarMsgReferencia.length > 0) this.errorReferencia = 1;
+                return this.errorReferencia;
+            },
+            validarDni(value) {
+                let validChars = 'TRWAGMYFPDXBNJZSQVHLCKET';
+                let nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+                let nieRexp = /^[XYZ]{1}[0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+                let str = value.toString().toUpperCase();
+
+                if (!nifRexp.test(str) && !nieRexp.test(str)) return false;
+
+                let nie = str
+                    .replace(/^[X]/, '0')
+                    .replace(/^[Y]/, '1')
+                    .replace(/^[Z]/, '2');
+
+                let letter = str.substr(-1);
+                let charIndex = parseInt(nie.substr(0, 8)) % 23;
+
+                if (validChars.charAt(charIndex) === letter) return true;
+                return false;
+            },
+            limpiar(){
+                this.referencia_id = 0;
+                this.nombre='';
+                this.apellidos='';
+                this.domicilio='';
+                this.localidad='';
+                this.codigoPostal='';
+                this.provincia='';
+                this.email='';
+                this.sexo='Hombre';
+                this.dni='';
+                this.telefono='';
+                this.fechaNacimiento='';
+                this.nacionalidad='';
+                this.intereses='';
+                this.compañia_origen='';
+                this.observaciones='';
+                this.contacto='';
+                this.profesion='';
+                this.errorReferencia=0;
+                this.errorMostrarMsgReferencia=[];
+                this.errorFormatoDni=0;
+            }
+        },
+        mounted(){
+            this.limpiar();
+        }
     }
 </script>
 
 <style scoped>
+    .div-error {
+        display: flex;
+        justify-content: center;
+    }
 
+    .text-error {
+        color: red !important;
+        font-weight: bold;
+    }
 </style>

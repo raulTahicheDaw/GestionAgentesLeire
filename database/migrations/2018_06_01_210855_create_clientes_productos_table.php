@@ -20,9 +20,9 @@ class CreateClientesProductosTable extends Migration
             $table->date('fecha_efecto');
             $table->date('vencimiento');
             $table->string('forma_pago');
-            $table->string('numero_poliza')->unique();
+            $table->string('numero_poliza')->nullable();
             $table->boolean('primer_recibo_fisico');
-            $table->longText('observaciones');
+            $table->longText('observaciones')->nullable();
             $table->foreign('id_cliente')
                 ->references('id')->on('clientes')
                 ->onDelete('restrict')->onUpdate('cascade');

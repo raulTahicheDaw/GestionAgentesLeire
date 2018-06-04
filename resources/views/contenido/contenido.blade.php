@@ -48,7 +48,9 @@
     </template>
     <template v-if="menu==14">
         <h1>Contenido de menu 13</h1>
-
+    </template>
+    <template v-if="menu==15">
+       <informes-component></informes-component>
     </template>
 
 @endsection

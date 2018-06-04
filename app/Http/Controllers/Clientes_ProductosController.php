@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Clientes_Productos;
 use App\Producto;
 use Illuminate\Http\Request;
+use App\Cliente;
+use Illuminate\Support\Facades\DB;
 
 class Clientes_ProductosController extends Controller
 {
@@ -34,9 +36,28 @@ class Clientes_ProductosController extends Controller
         }
         return $productos;
     }
+    private function obtieneNombreCliente($id_cliente){
+        $cliente = Cliente::find($id_cliente);
+        return $cliente->nombre;
+    }
+
 
     public function listarVencimientos($desde,$hasta){
         $vencimientos = Clientes_Productos::whereBetween('vencimiento',array($desde, $hasta))->get();
+        foreach ($vencimientos as $vencimiento) {
+            $nombreCliente = $this->obtieneNombreCliente($vencimiento->id_cliente);
+            $nombreProducto = $this->recuperaNombreProducto($vencimiento->id_producto);
+            $vencimiento['nombreCliente']=$nombreCliente;
+            $vencimiento['nombreProducto']= $nombreProducto;
+        }
         return $vencimientos;
+    }
+
+    public function informes(){
+        $productos = DB::table('clientes_productos')
+            ->select('id_producto', DB::raw('count(*) as total'))
+            ->groupBy('id_producto')
+            ->get();
+        return $productos;
     }
 }

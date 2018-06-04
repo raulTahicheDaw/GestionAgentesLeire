@@ -4309,12 +4309,24 @@ Vue.component('nuevocliente-component', __webpack_require__(101));
 Vue.component('nuevareferencia-component', __webpack_require__(106));
 Vue.component('citashoy-component', __webpack_require__(111));
 Vue.component('vencimientosmesactual-component', __webpack_require__(116));
+Vue.component('informes-component', __webpack_require__(121));
 
 var app = new Vue({
-  el: '#app',
-  data: {
-    menu: 0
-  }
+    el: '#app',
+    data: {
+        menu: 0
+    },
+    methods: {
+        cargarPdfClientes: function cargarPdfClientes() {
+            window.open('/cliente/listarpdf', 'blank');
+        },
+        cargarPdfReferencias: function cargarPdfReferencias() {
+            window.open('/referencia/listarpdf', 'blank');
+        },
+        cargarPdfProductos: function cargarPdfProductos() {
+            window.open('/producto/listarpdf', 'blank');
+        }
+    }
 });
 
 /***/ }),
@@ -59269,7 +59281,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "col-6" }, [
                         _c("label", { staticClass: "form-control-label" }, [
-                          _vm._v("Fecha vencimiento")
+                          _vm._v("Fecha fin de Campaña")
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -59780,11 +59792,15 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(vencimiento.id_producto) }
+                      domProps: {
+                        textContent: _vm._s(vencimiento.nombreProducto)
+                      }
                     }),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(vencimiento.id_cliente) }
+                      domProps: {
+                        textContent: _vm._s(vencimiento.nombreCliente)
+                      }
                     }),
                     _vm._v(" "),
                     _c("td", {
@@ -60162,7 +60178,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 me.limpiar();
                 swal({
-                    type: 'succes',
+                    type: 'success',
                     title: 'Creado',
                     text: 'Cliente creado con éxito'
                 });
@@ -60208,7 +60224,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        this.listarCategoria();
+        this.limpiar();
     }
 });
 
@@ -61009,7 +61025,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n.div-error[data-v-2a783014] {\n    display: flex;\n    justify-content: center;\n}\n.text-error[data-v-2a783014] {\n    color: red !important;\n    font-weight: bold;\n}\n", ""]);
 
 // exports
 
@@ -61147,9 +61163,132 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    name: "NuevaReferencia"
+    name: "NuevaReferencia",
+    data: function data() {
+        return {
+            referencia_id: 0, nombre: '', apellidos: '', domicilio: '', localidad: '', codigoPostal: '',
+            provincia: '', email: '', sexo: 'Hombre', dni: '', telefono: '', fechaNacimiento: '', nacionalidad: '',
+            intereses: '', compañia_origen: '', observaciones: '', contacto: '', profesion: '', activo: 1,
+            errorReferencia: 0,
+            errorMostrarMsgReferencia: [],
+            errorFormatoDni: 0
+        };
+    },
+
+    methods: {
+        registrarReferencia: function registrarReferencia() {
+            if (this.validarReferencia()) {
+                return;
+            }
+            var me = this;
+            axios.post('/referencia/registrar', {
+                'nombre': this.nombre,
+                'apellidos': this.apellidos,
+                'domicilio': this.domicilio,
+                'localidad': this.localidad,
+                'codigoPostal': this.codigoPostal,
+                'provincia': this.provincia,
+                'email': this.email,
+                'dni': this.dni,
+                'telefono': this.telefono,
+                'fechaNacimiento': this.fechaNacimiento,
+                'sexo': this.sexo,
+                'nacionalidad': this.nacionalidad,
+                'intereses': this.intereses,
+                'compañia_origen': this.compañia_origen,
+                'contacto': this.contacto,
+                'observaciones': this.observaciones,
+                'profesion': this.profesion
+
+            }).then(function (response) {
+                me.limpiar();
+                swal({
+                    type: 'success',
+                    title: 'Creado',
+                    text: 'Referencia creada con éxito'
+                });
+            }).catch(function (error) {
+                swal({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'No se ha podido crear la referencia'
+                });
+                console.log(error);
+            });
+        },
+        validarReferencia: function validarReferencia() {
+            this.errorReferencia = 0;
+            this.errorMostrarMsgReferencia = [];
+            if (!this.nombre) this.errorMostrarMsgReferencia.push('Nombre');
+            if (!this.telefono) this.errorMostrarMsgReferencia.push('Teléfono');
+            if (this.dni && !this.validarDni(this.dni)) {
+                this.errorFormatoDni = 1;
+                this.errorReferencia = 1;
+            }
+            if (this.errorMostrarMsgReferencia.length > 0) this.errorReferencia = 1;
+            return this.errorReferencia;
+        },
+        validarDni: function validarDni(value) {
+            var validChars = 'TRWAGMYFPDXBNJZSQVHLCKET';
+            var nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+            var nieRexp = /^[XYZ]{1}[0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+            var str = value.toString().toUpperCase();
+
+            if (!nifRexp.test(str) && !nieRexp.test(str)) return false;
+
+            var nie = str.replace(/^[X]/, '0').replace(/^[Y]/, '1').replace(/^[Z]/, '2');
+
+            var letter = str.substr(-1);
+            var charIndex = parseInt(nie.substr(0, 8)) % 23;
+
+            if (validChars.charAt(charIndex) === letter) return true;
+            return false;
+        },
+        limpiar: function limpiar() {
+            this.referencia_id = 0;
+            this.nombre = '';
+            this.apellidos = '';
+            this.domicilio = '';
+            this.localidad = '';
+            this.codigoPostal = '';
+            this.provincia = '';
+            this.email = '';
+            this.sexo = 'Hombre';
+            this.dni = '';
+            this.telefono = '';
+            this.fechaNacimiento = '';
+            this.nacionalidad = '';
+            this.intereses = '';
+            this.compañia_origen = '';
+            this.observaciones = '';
+            this.contacto = '';
+            this.profesion = '';
+            this.errorReferencia = 0;
+            this.errorMostrarMsgReferencia = [];
+            this.errorFormatoDni = 0;
+        }
+    },
+    mounted: function mounted() {
+        this.limpiar();
+    }
 });
 
 /***/ }),
@@ -61181,7 +61320,18 @@ var render = function() {
             [
               _c("div", { staticClass: "form-group row" }, [
                 _c("div", { staticClass: "col-md-4" }, [
-                  _vm._m(2),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-control-label",
+                      class: {
+                        "text-error": _vm.errorMostrarMsgReferencia.includes(
+                          "Nombre"
+                        )
+                      }
+                    },
+                    [_vm._v("Nombre"), _c("sup", [_vm._v("*")])]
+                  ),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -61193,6 +61343,11 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.errorMostrarMsgReferencia.includes(
+                        "Nombre"
+                      )
+                    },
                     attrs: {
                       type: "text",
                       placeholder: "Introduzca el nombre"
@@ -61241,9 +61396,18 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-md-3" }, [
-                  _c("label", { staticClass: "form-control-label" }, [
-                    _vm._v("DNI/NIE")
-                  ]),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-control-label",
+                      class: {
+                        "text-error": _vm.errorMostrarMsgReferencia.includes(
+                          "DNI"
+                        )
+                      }
+                    },
+                    [_vm._v("DNI/NIE")]
+                  ),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -61255,6 +61419,11 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.errorMostrarMsgReferencia.includes(
+                        "DNI"
+                      )
+                    },
                     attrs: {
                       type: "text",
                       pattern:
@@ -61276,7 +61445,18 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "form-group row" }, [
                 _c("div", { staticClass: "col-md-4" }, [
-                  _vm._m(3),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-control-label",
+                      class: {
+                        "text-error": _vm.errorMostrarMsgReferencia.includes(
+                          "Teléfono"
+                        )
+                      }
+                    },
+                    [_vm._v("Teléfono"), _c("sup", [_vm._v("*")])]
+                  ),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -61288,6 +61468,11 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.errorMostrarMsgReferencia.includes(
+                        "Teléfono"
+                      )
+                    },
                     attrs: { type: "text", placeholder: "Introduzca teléfono" },
                     domProps: { value: _vm.telefono },
                     on: {
@@ -61697,6 +61882,58 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.errorReferencia,
+                      expression: "errorReferencia"
+                    }
+                  ],
+                  staticClass: "form-group row div-error"
+                },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "text-center text-error" },
+                    [
+                      _c("p", [
+                        _vm._v(
+                          "Los siguientes campos no pueden estar vacíos o son incorrectos:"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.errorMostrarMsgReferencia, function(error) {
+                        return _c("span", {
+                          key: error,
+                          domProps: { textContent: _vm._s(error + ", ") }
+                        })
+                      })
+                    ],
+                    2
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.errorFormatoDni,
+                      expression: "errorFormatoDni"
+                    }
+                  ],
+                  staticClass: "text-error text-center"
+                },
+                [_c("p", [_vm._v("DNI/NIE (12345678A o X1234567A)")])]
+              ),
+              _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
                 _c(
                   "button",
@@ -61751,24 +61988,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "card-header" }, [
       _c("i", { staticClass: "icon-plus" }),
       _vm._v(" Nueva Referencia\n            ")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "form-control-label" }, [
-      _vm._v("Nombre"),
-      _c("sup", [_vm._v("*")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "form-control-label" }, [
-      _vm._v("Teléfono"),
-      _c("sup", [_vm._v("*")])
     ])
   }
 ]
@@ -62166,7 +62385,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -62239,10 +62458,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var f = new Date();
             var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
             this.mesActual = meses[f.getMonth()] + " de " + f.getFullYear();
+            var inicio = new Date(f.getFullYear(), f.getMonth(), 1);
+            var fin = new Date(f.getFullYear(), f.getMonth() + 1, 0);
+            var dd = inicio.getDate();
+            var mm = inicio.getMonth() + 1;
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            this.desde = inicio.getFullYear() + '-' + mm + '-' + dd;
+            dd = fin.getDate();
+            mm = fin.getMonth() + 1;
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            this.hasta = fin.getFullYear() + '-' + mm + '-' + dd;
         },
         verVencimientos: function verVencimientos() {
-            var url = "vencimiento/" + this.desde + "/" + this.hasta;
             var me = this;
+            var url = "vencimiento/" + this.desde + "/" + this.hasta;
             axios.get(url).then(function (response) {
                 me.arrayVencimientos = response.data;
             }).catch(function (error) {
@@ -62252,6 +62491,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {
         this.obtieneMes();
+        this.verVencimientos();
     }
 });
 
@@ -62296,11 +62536,15 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(vencimiento.id_producto) }
+                      domProps: {
+                        textContent: _vm._s(vencimiento.nombreProducto)
+                      }
                     }),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(vencimiento.id_cliente) }
+                      domProps: {
+                        textContent: _vm._s(vencimiento.nombreCliente)
+                      }
                     }),
                     _vm._v(" "),
                     _c("td", {
@@ -62368,6 +62612,158 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-153c2fb4", module.exports)
+  }
+}
+
+/***/ }),
+/* 121 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(122)
+}
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(124)
+/* template */
+var __vue_template__ = __webpack_require__(125)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-25b88b8e"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/Informes.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-25b88b8e", Component.options)
+  } else {
+    hotAPI.reload("data-v-25b88b8e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 122 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(123);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(1)("640b46ec", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-25b88b8e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Informes.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-25b88b8e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Informes.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 124 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "Informes",
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        informes: function informes() {
+            var me = this;
+            axios.get("/clientesproductos/informes").then(function (response) {
+                console.log(response.data);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    },
+    mounted: function mounted() {
+        this.informes();
+    }
+});
+
+/***/ }),
+/* 125 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "main" }, [_c("h1", [_vm._v("Informes")])])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-25b88b8e", module.exports)
   }
 }
 

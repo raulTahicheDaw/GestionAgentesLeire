@@ -38,8 +38,8 @@
                         <tbody>
                         <tr v-for="vencimiento in arrayVencimientos" :key="vencimiento.id">
                             <td v-text="vencimiento.vencimiento"></td>
-                            <td v-text="vencimiento.id_producto"></td>
-                            <td v-text="vencimiento.id_cliente"></td>
+                            <td v-text="vencimiento.nombreProducto"></td>
+                            <td v-text="vencimiento.nombreCliente"></td>
                             <td v-text="vencimiento.numero_poliza"></td>
                             <td v-text="vencimiento.fecha_efecto"></td>
                             <td v-text="vencimiento.observaciones"></td>

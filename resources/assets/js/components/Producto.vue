@@ -161,7 +161,7 @@
                                     <input type="date" class="form-control" v-model="fecha_lanzamiento">
                                 </div>
                                 <div class="col-6">
-                                    <label class="form-control-label">Fecha vencimiento</label>
+                                    <label class="form-control-label">Fecha fin de Campaña</label>
                                     <input type="date" class="form-control" v-model="fecha_vencimiento">
                                 </div>
                             </div>

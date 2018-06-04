@@ -36,7 +36,7 @@ Route::post('referencia/registrar', 'ReferenciaController@store');
 Route::put('referencia/actualizar', 'ReferenciaController@update');
 Route::put('referencia/desactivar', 'ReferenciaController@desactivar');
 Route::put('referencia/activar', 'ReferenciaController@activar');
-Route::get('referencia/listarpdf', 'ReferenciaController@listarpdf')->name('clientespdf');
+Route::get('referencia/listarpdf', 'ReferenciaController@listarpdf')->name('referenciapdf');
 
 
 Route::get('categoria', 'CategoriaController@index');
@@ -59,7 +59,9 @@ Route::post('producto/registrar', 'ProductoController@store');
 Route::put('producto/actualizar', 'ProductoController@update');
 Route::put('producto/desactivar', 'ProductoController@desactivar');
 Route::put('producto/activar', 'ProductoController@activar');
+Route::get('producto/listarpdf', 'ProductoController@listarpdf')->name('productopdf');
 
 Route::put('clientesproductos/addproducto', 'Clientes_ProductosController@addProducto');
 Route::get('clientesproductos/listarproductos/{id_cliente}','Clientes_ProductosController@listarProductosClientes');
 Route::get('vencimiento/{desde}/{hasta}','Clientes_ProductosController@listarVencimientos');
+Route::get('clientesproductos/informes','Clientes_ProductosController@informes');

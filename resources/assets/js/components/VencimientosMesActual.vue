@@ -28,8 +28,8 @@
                         <tbody>
                         <tr v-for="vencimiento in arrayVencimientos" :key="vencimiento.id">
                             <td v-text="vencimiento.vencimiento"></td>
-                            <td v-text="vencimiento.id_producto"></td>
-                            <td v-text="vencimiento.id_cliente"></td>
+                            <td v-text="vencimiento.nombreProducto"></td>
+                            <td v-text="vencimiento.nombreCliente"></td>
                             <td v-text="vencimiento.numero_poliza"></td>
                             <td v-text="vencimiento.fecha_efecto"></td>
                             <td v-text="vencimiento.observaciones"></td>
@@ -59,10 +59,31 @@
                 let f = new Date();
                 var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
                 this.mesActual = meses[f.getMonth()] + " de " + f.getFullYear();
+                let inicio = new Date(f.getFullYear(), f.getMonth(), 1);
+                let fin = new Date(f.getFullYear(), f.getMonth() + 1, 0);
+                let dd = inicio.getDate();
+                let mm = inicio.getMonth()+1;
+                if(dd<10){
+                    dd='0'+dd;
+                }
+                if(mm<10){
+                    mm='0'+mm;
+                }
+                this.desde = inicio.getFullYear()+'-'+mm+'-'+dd;
+                dd = fin.getDate();
+                mm = fin.getMonth()+1;
+                if(dd<10){
+                    dd='0'+dd;
+                }
+                if(mm<10){
+                    mm='0'+mm;
+                }
+                this.hasta = fin.getFullYear()+'-'+mm+'-'+dd;
+
             },
             verVencimientos(){
+                let me = this;
                 let url = "vencimiento/" + this.desde + "/" + this.hasta;
-                let me = this
                 axios
                     .get(url)
                     .then(function (response) {
@@ -75,6 +96,7 @@
         },
         mounted(){
             this.obtieneMes();
+            this.verVencimientos();
         }
     }
 </script>

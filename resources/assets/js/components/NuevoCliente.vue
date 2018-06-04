@@ -212,13 +212,12 @@
                     .then(function (response) {
                         me.limpiar();
                         swal({
-                            type: 'succes',
+                            type: 'success',
                             title: 'Creado',
                             text: 'Cliente creado con éxito',
                         })
                     })
                     .catch(function (error) {
-                        if(error.code)
                         swal({
                             type: 'error',
                             title: 'Oops...',
@@ -264,7 +263,7 @@
 
         },
         mounted(){
-            this.listarCategoria();
+            this.limpiar();
         }
     }
 </script>
