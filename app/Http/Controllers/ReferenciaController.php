@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Referencia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReferenciaController extends Controller
 {
@@ -115,4 +116,22 @@ class ReferenciaController extends Controller
         $pdf = \PDF::loadView('pdf.referenciaspdf', ['referencias' => $referencias, 'cont' => $cont]);
         return $pdf->download('referencias.pdf');
     }
+
+    public function informeReferencias(){
+        $referencias = DB::table("referencias")
+            ->select(DB::raw("MONTH(created_at) as mes"),DB::raw("(COUNT(id)) as total"))
+            ->groupBy(DB::raw("MONTH(created_at)"))
+            ->get();
+        return $referencias;
+    }
+
+    public function informeReferenciasMeses($desde,$hasta){
+        $referencias = DB::table("referencias")
+            ->whereBetween('created_at',array($desde,$hasta))
+            ->select(DB::raw("MONTH(created_at) as mes"),DB::raw("(COUNT(id)) as total"))
+            ->groupBy(DB::raw("MONTH(created_at)"))
+            ->get();
+        return $referencias;
+    }
+
 }

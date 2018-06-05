@@ -41,6 +41,8 @@ Route::put('referencia/actualizar', 'ReferenciaController@update');
 Route::put('referencia/desactivar', 'ReferenciaController@desactivar');
 Route::put('referencia/activar', 'ReferenciaController@activar');
 Route::get('referencia/listarpdf', 'ReferenciaController@listarpdf')->name('referenciapdf');
+Route::get('referencia/informereferencia', 'ReferenciaController@informeReferencias');
+Route::get('referencia/informereferencia/{desde}/{hasta}', 'ReferenciaController@informeReferenciasMeses');
 
 
 Route::get('categoria', 'CategoriaController@index');

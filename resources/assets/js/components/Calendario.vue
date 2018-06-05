@@ -1,105 +1,6 @@
 <template>
     <div id="main">
-        <div class="calendar-controls" id="addCitas">
-            <div v-if="message" class="notification is-success">{{ message }}</div>
-            <div class="box">
-                <h4 class="title is-5">Calendario de citas</h4>
-                <div class="field">
-                    <label class="label">Ver por: </label>
-                    <div class="control">
-                        <div class="select">
-                            <select v-model="displayPeriodUom" class="form-control-sm">
-                                <option value="month">Mes</option>
-                                <option value="week">Semana</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label class="label">Número de meses a ver</label>
-                    <div class="control">
-                        <div class="select">
-                            <select v-model="displayPeriodCount" class="form-control">
-                                <option :value="1">1</option>
-                                <option :value="2">2</option>
-                                <option :value="3">3</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="field">
-                    <div class="control">
-                        <label class="label">Hora</label>
-                        <select v-model="hora" class="form-control">
-                            <option value="08:00">08:00</option>
-                            <option value="08:30">08:30</option>
-                            <option value="09:00">09:00</option>
-                            <option value="09:30">09:30</option>
-                            <option value="10:00">10:00</option>
-                            <option value="10:30">10:30</option>
-                            <option value="11:00">11:00</option>
-                            <option value="11:30">11:30</option>
-                            <option value="12:00">12:00</option>
-                            <option value="12:30">12:30</option>
-                            <option value="13:00">13:00</option>
-                            <option value="13:30">13:30</option>
-                            <option value="14:00">14:00</option>
-                            <option value="14:30">14:30</option>
-                            <option value="15:00">15:00</option>
-                            <option value="15:30">15:30</option>
-                            <option value="16:00">16:00</option>
-                            <option value="16:30">16:30</option>
-                            <option value="17:00">17:00</option>
-                            <option value="17:30">17:30</option>
-                            <option value="18:00">18:00</option>
-                            <option value="18:30">18:30</option>
-                            <option value="19:00">19:00</option>
-                            <option value="19:30">19:30</option>
-                            <option value="20:00">20:00</option>
-                            <option value="20:30">20:30</option>
-                            <option value="21:00">21:00</option>
-                            <option value="21:30">21:30</option>
-                            <option value="22:00">22:00</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Cliente</label>
-                    <select v-model="id_cliente" class="form-control">
-                        <option v-for="cliente in arrayClientes" :key="cliente.id" :value="cliente.id"
-                                v-text="cliente.nombre + ' ' + cliente.apellidos">
-                        </option>
-                    </select>
-                </div>
-                <div class="field">
-                    <div class="control">
-                        <label class="label">Lugar</label>
-                        <input v-model="lugar" class="input form-control" type="text" >
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="control">
-                        <label class="label">Motivo</label>
-                        <input v-model="motivo" class="input form-control" type="text">
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label class="label">Fecha Inicio</label>
-                    <div class="control">
-                        <input v-model="newEventStartDate" class="input form-control" type="date">
-                    </div>
-                </div>
-                <button class="btn btn-primary mb-2" @click="clickTestAddEvent">Añadir cita al calendario
-                </button>
-            </div>
-        </div>
-
-        <div class="calendar-parent">
+          <div class="calendar-parent">
             <calendar-view
                     :events="events"
                     :show-date="showDate"
@@ -223,6 +124,97 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" tabindex="-1" :class="{'mostrar' : modalNueva}" role="dialog" aria-labelledby="myModalLabel"
+             style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-primary modal-md" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Nueva Cita</h4>
+                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                            <div class="form-group row">
+                                <div class="col-6">
+                                    <label class="Dia" >Dia</label>
+                                    <div class="alert alert-primary" role="alert"><h6>{{fechaSel}}</h6></div>
+                                </div>
+                                <div class="col-6">
+                                    <label class="label">Hora</label>
+                                    <select v-model="hora" class="form-control col-auto">
+                                        <option value="08:00">08:00</option>
+                                        <option value="08:30">08:30</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="09:30">09:30</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="10:30">10:30</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="11:30">11:30</option>
+                                        <option value="12:00">12:00</option>
+                                        <option value="12:30">12:30</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="13:30">13:30</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="14:30">14:30</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="15:30">15:30</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="16:30">16:30</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="17:30">17:30</option>
+                                        <option value="18:00">18:00</option>
+                                        <option value="18:30">18:30</option>
+                                        <option value="19:00">19:00</option>
+                                        <option value="19:30">19:30</option>
+                                        <option value="20:00">20:00</option>
+                                        <option value="20:30">20:30</option>
+                                        <option value="21:00">21:00</option>
+                                        <option value="21:30">21:30</option>
+                                        <option value="22:00">22:00</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-6">
+                                    <label class="label">Cliente</label>
+                                    <select v-model="id_cliente" class="form-control">
+                                        <option v-for="cliente in arrayClientes" :key="cliente.id" :value="cliente.id"
+                                                v-text="cliente.nombre + ' ' + cliente.apellidos">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <div class="control">
+                                        <label class="label">Lugar</label>
+                                        <input v-model="lugar" class="input form-control" type="text" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <label class="label">Motivo</label>
+                                    <textarea v-model="motivo" rows="3" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                                <button type="button" class="btn btn-primary"
+                                        @click="clickTestAddEvent()">Guardar
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>    <!-- /.modal-content -->
+                <!-- /.modal-dialog -->
+                <!--Fin del modal-->
+                <!-- Inicio del modal Eliminar -->
+            </div><!-- Fin del modal Eliminar -->
+        </div>
+
     </div>
 
 </template>
@@ -263,7 +255,9 @@
                 useHolidayTheme: true,
                 events: [],
                 modal: 0,
+                modalNueva:0,
                 fecha: '',
+                fechaSel:'',
                 lugar: '',
                 id_cliente: '',
                 acuerdos: '',
@@ -332,7 +326,8 @@
                 return new Date(t.getFullYear(), t.getMonth(), d, h || 0, m || 0);
             },
             onClickDay(d) {
-                this.message = `You clicked: ${d.toLocaleDateString()}`
+                this.modalNueva = 1;
+                this.fechaSel = d.toLocaleDateString();
             },
             onClickEvent(e) {
                 this.recuperaEvento(e.id);
@@ -386,6 +381,7 @@
             },
             cerrarModal() {
                 this.modal = 0;
+                this.modalNueva = 0;
                 this.fecha = '';
                 this.lugar = '';
                 this.cliente = '';
