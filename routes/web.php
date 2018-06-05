@@ -30,6 +30,10 @@ Route::put('cliente/desactivar', 'ClienteController@desactivar');
 Route::put('cliente/activar', 'ClienteController@activar');
 Route::get('cliente/selectcliente', 'ClienteController@listarClientes');
 Route::get('cliente/listarpdf', 'ClienteController@listarpdf')->name('clientespdf');
+Route::get('cliente/informecliente', 'ClienteController@informeClientes');
+Route::get('cliente/informecliente/{desde}/{hasta}', 'ClienteController@informeClientesMeses');
+
+
 
 Route::get('referencia', 'ReferenciaController@index');
 Route::post('referencia/registrar', 'ReferenciaController@store');
@@ -65,3 +69,5 @@ Route::put('clientesproductos/addproducto', 'Clientes_ProductosController@addPro
 Route::get('clientesproductos/listarproductos/{id_cliente}','Clientes_ProductosController@listarProductosClientes');
 Route::get('vencimiento/{desde}/{hasta}','Clientes_ProductosController@listarVencimientos');
 Route::get('clientesproductos/informes','Clientes_ProductosController@informes');
+Route::get('clientesproductos/informes/{desde}/{hasta}','Clientes_ProductosController@informesFecha');
+

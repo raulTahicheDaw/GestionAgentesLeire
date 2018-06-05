@@ -15,6 +15,7 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+
 Vue.component('cliente-component', require('./components/Clientes.vue'));
 Vue.component('categoria-component', require('./components/Categoria.vue'));
 Vue.component('referencia-component', require('./components/Referencia.vue'));
@@ -28,7 +29,6 @@ Vue.component('nuevareferencia-component', require('./components/NuevaReferencia
 Vue.component('citashoy-component', require('./components/CitasHoy.vue'));
 Vue.component('vencimientosmesactual-component', require('./components/VencimientosMesActual.vue'));
 Vue.component('informes-component', require('./components/Informes.vue'));
-
 
 const app = new Vue({
     el: '#app',

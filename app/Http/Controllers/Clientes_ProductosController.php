@@ -58,6 +58,20 @@ class Clientes_ProductosController extends Controller
             ->select('id_producto', DB::raw('count(*) as total'))
             ->groupBy('id_producto')
             ->get();
+        foreach ($productos as $p){
+            $p->nombre=$this->recuperaNombreProducto($p->id_producto);
+        }
+        return $productos;
+    }
+    public function informesFecha($desde,$hasta){
+        $productos = DB::table('clientes_productos')
+            ->select('id_producto', DB::raw('count(*) as total'))
+            ->whereBetween('fecha_efecto',array($desde, $hasta))
+            ->groupBy('id_producto')
+            ->get();
+        foreach ($productos as $p){
+            $p->nombre=$this->recuperaNombreProducto($p->id_producto);
+        }
         return $productos;
     }
 }

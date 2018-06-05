@@ -149,4 +149,21 @@ class ClienteController extends Controller
         return $pdf->download('clientes.pdf');
     }
 
+    public function informeClientes(){
+        $clientes = DB::table("clientes")
+            ->select(DB::raw("MONTH(created_at) as mes"),DB::raw("(COUNT(id)) as total"))
+            ->groupBy(DB::raw("MONTH(created_at)"))
+            ->get();
+        return $clientes;
+    }
+
+    public function informeClientesMeses($desde,$hasta){
+        $clientes = DB::table("clientes")
+            ->whereBetween('created_at',array($desde,$hasta))
+            ->select(DB::raw("MONTH(created_at) as mes"),DB::raw("(COUNT(id)) as total"))
+            ->groupBy(DB::raw("MONTH(created_at)"))
+            ->get();
+        return $clientes;
+    }
+
 }
