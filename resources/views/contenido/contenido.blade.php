@@ -52,5 +52,10 @@
     <template v-if="menu==15">
        <informes-component></informes-component>
     </template>
-
+    <template v-if="menu==16">
+        <rol-component></rol-component>
+    </template>
+    <template v-if="menu==17">
+        <user-component></user-component>
+    </template>
 @endsection

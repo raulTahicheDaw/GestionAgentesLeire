@@ -29,6 +29,8 @@ Vue.component('nuevareferencia-component', require('./components/NuevaReferencia
 Vue.component('citashoy-component', require('./components/CitasHoy.vue'));
 Vue.component('vencimientosmesactual-component', require('./components/VencimientosMesActual.vue'));
 Vue.component('informes-component', require('./components/Informes.vue'));
+Vue.component('rol-component', require('./components/Rol'));
+Vue.component('user-component', require('./components/User'));
 
 const app = new Vue({
     el: '#app',

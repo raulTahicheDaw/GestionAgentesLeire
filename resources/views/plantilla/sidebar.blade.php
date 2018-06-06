@@ -28,7 +28,7 @@
                 <a class="nav-link" href="#"><i class="icon-phone"></i>Informes gráficos</a>
             </li>
             <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-settings"></i>
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-printer"></i>
                     Informes PDF</a>
                 <ul class="nav-dropdown-items">
                     <li @click="cargarPdfClientes()" class="nav-item">
@@ -56,6 +56,20 @@
                         <a class="nav-link" href="#"><i class="icon-options"></i> Ramos</a>
                     </li>
                 </ul>
+            </li>
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-user"></i>
+                    Acesso</a>
+                <ul class="nav-dropdown-items">
+                    <li @click="menu=16" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-briefcase"></i> Roles</a>
+                    </li>
+                    <li @click="menu=17" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-list"></i> Usuarios</a>
+                    </li>
+
+                </ul>
+
             </li>
             <li @click="menu=13" class="nav-item">
                 <a class="nav-link" href="#"><i class="icon-question"></i> Ayuda <span

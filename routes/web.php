@@ -18,6 +18,12 @@ Route::get('nuevocliente',function (){
     return view('nuevocliente');
 });
 
+Route::get('user', 'UserController@index');
+Route::post('user/registrar', 'UserController@store');
+Route::put('user/actualizar', 'UserController@update');
+Route::put('user/desactivar', 'UserController@desactivar');
+Route::put('user/activar', 'UserController@activar');
+
 Route::get('agenda', 'AgendaController@index');
 Route::get('agenda/recuperaCita', 'AgendaController@recuperaCita');
 Route::post('agenda/registrar', 'AgendaController@store');
@@ -75,3 +81,5 @@ Route::get('vencimiento/{desde}/{hasta}','Clientes_ProductosController@listarVen
 Route::get('clientesproductos/informes','Clientes_ProductosController@informes');
 Route::get('clientesproductos/informes/{desde}/{hasta}','Clientes_ProductosController@informesFecha');
 
+Route::get('/rol','RolController@index');
+Route::get('/rol/selectrol','RolController@selectRol');
