@@ -62,4 +62,9 @@ class AgendaController extends Controller
         return $citasDia;
     }
 
+    public function eliminar(Request $request){
+        if (!$request->ajax()) return redirect('/');
+        $cita = Agenda::findOrFail($request->id);
+        $cita->delete();
+    }
 }

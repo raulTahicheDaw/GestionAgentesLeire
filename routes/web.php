@@ -22,6 +22,8 @@ Route::get('agenda', 'AgendaController@index');
 Route::get('agenda/recuperaCita', 'AgendaController@recuperaCita');
 Route::post('agenda/registrar', 'AgendaController@store');
 Route::get('agenda/citasdia/{fecha}','AgendaController@citasHoy');
+Route::put('agenda/borrar','AgendaController@eliminar');
+
 
 Route::get('cliente', 'ClienteController@index');
 Route::post('cliente/registrar', 'ClienteController@store');

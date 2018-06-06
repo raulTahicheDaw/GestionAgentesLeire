@@ -1,6 +1,6 @@
 <template>
     <div id="main">
-          <div class="calendar-parent">
+        <div class="calendar-parent">
             <calendar-view
                     :events="events"
                     :show-date="showDate"
@@ -85,7 +85,12 @@
                                     </option>
                                 </select>
                             </div>
-
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-control-label">Motivo</div>
+                                <input type="text" class="form-control" v-model="motivo" v-bind:disabled="activo">
+                            </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-6">
@@ -105,7 +110,8 @@
                             <button type="button" class="btn btn-info"><i
                                     class="icon-check"></i>
                             </button>
-                            <button type="button" class="btn btn-danger"><i class="icon-trash"></i>
+                            <button type="button" class="btn btn-danger"
+                                    @click="eliminarCita()"><i class="icon-trash"></i>
                             </button>
                         </div>
                         <div class="col-auto">
@@ -267,7 +273,8 @@
                 hora: '08:00',
                 resumen: '',
                 activo: true,
-                arrayClientes: []
+                arrayClientes: [],
+                id_cita:''
 
 
             }
@@ -289,13 +296,59 @@
         },
 
         methods: {
-
+            eliminarCita(){
+                let me = this;
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: "btn btn-success",
+                    cancelButtonClass: "btn btn-danger",
+                    buttonsStyling: true
+                });
+                swalWithBootstrapButtons({
+                    title: "¿Eliminar esta cita?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Aceptar",
+                    cancelButtonText: "Cancelar"
+                }).then(result => {
+                    if (result.value) {
+                        axios
+                            .put("/agenda/borrar", {
+                                id: me.id_cita
+                            })
+                            .then(function (response) {
+                                me.cerrarModal();
+                                me.listarEventos();
+                                me.listarClientes();
+                                me.newEventStartDate = this.isoYearMonthDay(me.today());
+                                me.newEventEndDate = this.isoYearMonthDay(me.today());
+                                swalWithBootstrapButtons(
+                                    "Eliminada!",
+                                    "La cita se ha elinado correctamente",
+                                    "success"
+                                );
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                    } else if (
+                        // Read more about handling dismissals
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons(
+                            "Cancelado",
+                            "No se ha eliminado la cita",
+                            "error"
+                        );
+                    }
+                });
+            },
             listarEventos() {
                 let me = this;
                 axios.get('/agenda').then(function (response) {
                     me.events = response.data;
                 })
                     .catch(function (error) {
+                        console.log('Eventos');
                         console.log(error);
                     });
             },
@@ -328,13 +381,12 @@
             onClickDay(d) {
                 this.modalNueva = 1;
                 this.fechaSel = d.toLocaleDateString();
+                this.newEventStartDate = d.toLocaleDateString();
             },
             onClickEvent(e) {
+                this.id_cita = e.id;
                 this.recuperaEvento(e.id);
                 this.modal = 1;
-
-                this.message = `You clicked: ${e.id}`;
-
             },
             setShowDate(d) {
                 this.message = `Changing calendar view to ${d.toLocaleDateString()}`;
@@ -350,9 +402,9 @@
             },
             clickTestAddEvent() {
                 let me = this;
-                let fechaAux = this.newEventStartDate.split('-');
+                let fechaAux = this.newEventStartDate.split('/');
                 let hora = this.hora.split(':');
-                let fechaMontada = new Date(fechaAux[0], fechaAux[1] - 1, fechaAux[2], hora[0], hora[1],0,0).toISOString().slice(0, 19).replace('T', ' ');
+                let fechaMontada = new Date(fechaAux[2], fechaAux[1] - 1, fechaAux[0], hora[0], hora[1],0,0).toISOString().slice(0, 19).replace('T', ' ');
 
                 axios.post('/agenda/registrar', {
                     'id_cliente': me.id_cliente,
@@ -398,6 +450,7 @@
                     me.arrayClientes = response.data.clientes;
                 })
                     .catch(function (error) {
+                        console.log('Clientes');
                         console.log(error);
                     });
             }

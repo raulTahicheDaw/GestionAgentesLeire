@@ -73035,6 +73035,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -73084,7 +73090,8 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
             hora: '08:00',
             resumen: '',
             activo: true,
-            arrayClientes: []
+            arrayClientes: [],
+            id_cita: ''
 
         };
     },
@@ -73106,11 +73113,46 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
     },
 
     methods: {
+        eliminarCita: function eliminarCita() {
+            var me = this;
+            var swalWithBootstrapButtons = swal.mixin({
+                confirmButtonClass: "btn btn-success",
+                cancelButtonClass: "btn btn-danger",
+                buttonsStyling: true
+            });
+            swalWithBootstrapButtons({
+                title: "¿Eliminar esta cita?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Aceptar",
+                cancelButtonText: "Cancelar"
+            }).then(function (result) {
+                if (result.value) {
+                    axios.put("/agenda/borrar", {
+                        id: me.id_cita
+                    }).then(function (response) {
+                        me.cerrarModal();
+                        me.listarEventos();
+                        me.listarClientes();
+                        me.newEventStartDate = this.isoYearMonthDay(me.today());
+                        me.newEventEndDate = this.isoYearMonthDay(me.today());
+                        swalWithBootstrapButtons("Eliminada!", "La cita se ha elinado correctamente", "success");
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                } else if (
+                // Read more about handling dismissals
+                result.dismiss === swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons("Cancelado", "No se ha eliminado la cita", "error");
+                }
+            });
+        },
         listarEventos: function listarEventos() {
             var me = this;
             axios.get('/agenda').then(function (response) {
                 me.events = response.data;
             }).catch(function (error) {
+                console.log('Eventos');
                 console.log(error);
             });
         },
@@ -73140,12 +73182,12 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
         onClickDay: function onClickDay(d) {
             this.modalNueva = 1;
             this.fechaSel = d.toLocaleDateString();
+            this.newEventStartDate = d.toLocaleDateString();
         },
         onClickEvent: function onClickEvent(e) {
+            this.id_cita = e.id;
             this.recuperaEvento(e.id);
             this.modal = 1;
-
-            this.message = "You clicked: " + e.id;
         },
         setShowDate: function setShowDate(d) {
             this.message = "Changing calendar view to " + d.toLocaleDateString();
@@ -73161,9 +73203,9 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
         },
         clickTestAddEvent: function clickTestAddEvent() {
             var me = this;
-            var fechaAux = this.newEventStartDate.split('-');
+            var fechaAux = this.newEventStartDate.split('/');
             var hora = this.hora.split(':');
-            var fechaMontada = new Date(fechaAux[0], fechaAux[1] - 1, fechaAux[2], hora[0], hora[1], 0, 0).toISOString().slice(0, 19).replace('T', ' ');
+            var fechaMontada = new Date(fechaAux[2], fechaAux[1] - 1, fechaAux[0], hora[0], hora[1], 0, 0).toISOString().slice(0, 19).replace('T', ' ');
 
             axios.post('/agenda/registrar', {
                 'id_cliente': me.id_cliente,
@@ -73205,6 +73247,7 @@ require("../../vue-simple-calendar/static/css/holidays-us.css")
             axios.get('/cliente/selectcliente').then(function (response) {
                 me.arrayClientes = response.data.clientes;
             }).catch(function (error) {
+                console.log('Clientes');
                 console.log(error);
             });
         }
@@ -74964,6 +75007,36 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group row" }, [
+                  _c("div", { staticClass: "col" }, [
+                    _c("div", { staticClass: "form-control-label" }, [
+                      _vm._v("Motivo")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.motivo,
+                          expression: "motivo"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", disabled: _vm.activo },
+                      domProps: { value: _vm.motivo },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.motivo = $event.target.value
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
                   _c("div", { staticClass: "col-md-6" }, [
                     _c("label", { staticClass: "form-control-label" }, [
                       _vm._v("Acuerdos")
@@ -75026,7 +75099,23 @@ var render = function() {
                 "div",
                 { staticClass: "modal-footer row justify-content-between" },
                 [
-                  _vm._m(0),
+                  _c("div", { staticClass: "col-auto" }, [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.eliminarCita()
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "icon-trash" })]
+                    )
+                  ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-auto" }, [
                     !_vm.activo
@@ -75460,17 +75549,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-auto" }, [
-      _c("button", { staticClass: "btn btn-info", attrs: { type: "button" } }, [
-        _c("i", { staticClass: "icon-check" })
-      ]),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-danger", attrs: { type: "button" } },
-        [_c("i", { staticClass: "icon-trash" })]
-      )
-    ])
+    return _c(
+      "button",
+      { staticClass: "btn btn-info", attrs: { type: "button" } },
+      [_c("i", { staticClass: "icon-check" })]
+    )
   }
 ]
 render._withStripped = true
