@@ -13,13 +13,12 @@ class AgendasSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        for ($i=0; $i < 10; $i++) {
+        for ($i=0; $i < 20; $i++) {
             \DB::table('agendas')->insert(array(
-                'id_cliente' => $faker->numberBetween($min = 1,$max = 150),
-                'motivo' => $faker->optional()->text($maxNbChars = 50),
+                'id_cliente' => $faker->numberBetween($min = 1,$max = 50),
+                'motivo' => $faker->text($maxNbChars = 50),
                 'lugar' => $faker->streetAddress,
                 'fecha' => $faker->dateTimeThisMonth,
-                'color' => $faker->randomElement($array = array ('red','blue','yellow')),
                 'acuerdos' => $faker->optional()->text($maxNbChars = 100),
                 'observaciones' => $faker->optional()->text($maxNbChars = 50),
                 'created_at' => date('Y-m-d H:m:s'),

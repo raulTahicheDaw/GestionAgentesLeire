@@ -13,7 +13,7 @@ class ReferenciasSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        for ($i=0; $i < 50; $i++) {
+        for ($i=0; $i < 30; $i++) {
             \DB::table('referencias')->insert(array(
                 'nombre' => $faker->name($gender = null),
                 'apellidos' => $faker->lastName,

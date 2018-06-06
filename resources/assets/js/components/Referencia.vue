@@ -94,9 +94,7 @@
                         </tbody>
                     </table>
                     </div>
-                    <button @click="cargarPdf()" type="button" class="btn btn-info">
-                        <i class="icon-doc"></i>&nbsp;Listado Pdf
-                    </button>
+
                     <nav>
                         <ul class="pagination">
                             <li class="page-item" v-if="pagination.current_page >1 ">

@@ -17,7 +17,7 @@ class ClientesSeeder extends Seeder
             \DB::table('clientes')->insert(array(
                 'nombre' => $faker->name($gender = null),
                 'apellidos' => $faker->lastName,
-                'dni'  => $faker->randomDigitNotNull,
+                'dni'  => $faker->unique($reset = true)->numberBetween($min = 31000000, $max = 79000000),
                 'email'  => $faker->email,
                 'telefono'=>$faker->randomNumber($nbDigits = NULL, $strict = false),
                 'fechaNacimiento'=>$faker->dateTimeThisCentury($max = 'now', $timezone = null),
