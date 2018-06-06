@@ -114,6 +114,7 @@
                 </div>
             </div>
         </div>
+
         <!--Inicio del modal agregar/actualizar-->
         <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel"
              style="display: none;" aria-hidden="true">

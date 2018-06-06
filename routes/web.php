@@ -14,6 +14,8 @@
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/', 'Auth\LoginController@showLoginForm');
     Route::post('/login', 'Auth\LoginController@login')->name('login');
+    Route::post('/logout','Auth\LoginController@logout')->name('logout');
+
 });
 Route::group(['middleware' => ['auth']], function () {
 
@@ -24,6 +26,8 @@ Route::group(['middleware' => ['auth']], function () {
     })->name('main');
 
     Route::group(['middleware' => ['General']], function () {
+        Route::post('/logout','Auth\LoginController@logout')->name('logout');
+
         Route::get('nuevocliente', function () {
             return view('nuevocliente');
         });
@@ -98,6 +102,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('nuevocliente', function () {
             return view('nuevocliente');
         });
+        Route::post('/logout','Auth\LoginController@logout')->name('logout');
 
         Route::get('user', 'UserController@index');
         Route::post('user/registrar', 'UserController@store');

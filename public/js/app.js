@@ -77222,6 +77222,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -95852,6 +95853,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
+        cerrarSesion: function cerrarSesion() {
+            axios.post('/logout').then(function (response) {
+                window.location = '/';
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
         listarUsuarios: function listarUsuarios(page, buscar, criterio) {
             var me = this;
             var url = '/user?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;

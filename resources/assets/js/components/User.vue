@@ -221,6 +221,15 @@
             }
         },
         methods: {
+            cerrarSesion(){
+                axios.post('/logout').then(function (response) {
+                    window.location = '/';
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+
             listarUsuarios(page, buscar, criterio) {
                 let me = this;
                 var url = '/user?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
