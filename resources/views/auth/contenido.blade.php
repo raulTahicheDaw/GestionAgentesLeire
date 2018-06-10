@@ -7,10 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Sistema Ventas Laravel Vue Js- IncanatoIT">
     <meta name="author" content="Incanatoit.com">
-    <meta name="keyword" content="Gestión Agentes Seguros Leire">
+    <meta name="keyword" content="Sistema ventas Laravel Vue Js, Sistema compras Laravel Vue Js">
 
-    <title>Gestion Agentes de Seguros Leire</title>
-
+    <title>Sistema Ventas - IncanatoIT</title>
     <link rel="stylesheet" href="css/all.css">
 
 </head>
@@ -29,6 +28,5 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/Chart.min.js"></script>
 <script src="js/template.js"></script>
-
 </body>
 </html>

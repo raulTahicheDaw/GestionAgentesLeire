@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     public function showLoginForm(){
-    return view('auth.login');
+        return view('auth.login');
     }
     public function login(Request $request){
         $this->validateLogin($request);
@@ -19,7 +19,6 @@ class LoginController extends Controller
         }
         return back()->withErrors(['usuario'=>trans('auth.failed')])
             ->withInput(request(['usuario']));
-
     }
     protected function validateLogin(Request $request){
         $this->validate($request,[
@@ -31,5 +30,4 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         return redirect('/');
-    }
-}
+    }}
