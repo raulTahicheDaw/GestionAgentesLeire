@@ -35,5 +35,6 @@ class ClientesSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:m:s')
             ));
         }
+        
     }
 }

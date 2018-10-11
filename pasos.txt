@@ -1,0 +1,15 @@
+crear .env
+cambiar bd
+composer install
+composer update
+npm install
+crear bd
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+
+Crear Categorias clientes
+Crear Ramos
+Crear Productos
+Modificar DatabaseSeeder
+php artisan db:seed para seedear clientes y referencias

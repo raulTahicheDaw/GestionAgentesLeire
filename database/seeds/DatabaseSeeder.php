@@ -11,8 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //$this->call('ClientesSeeder');
-        //$this->call('ReferenciasSeeder');
+        $this->call('ClientesSeeder');
+        $this->call('ReferenciasSeeder');
         $this->call('AgendasSeeder');
+        $this->call('UserSeeder'); //Inserta usuario admin/ password: 'password'
     }
 }
