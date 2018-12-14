@@ -32,8 +32,8 @@ class ReferenciasSeeder extends Seeder
                 'intereses'=>$faker->optional()->text($maxNbChars = 100),
                 'compañia_origen'=>$faker->randomElement($array=array('Ocaso','Mafre','Santa Lucía','Generali')),
                 'observaciones'=>$faker->optional()->text($maxNbChars = 100),
-                'created_at' => date('Y-m-d H:m:s'),
-                'updated_at' => date('Y-m-d H:m:s')
+                'created_at' => $faker->dateTimeThisYear($max = 'now', $timezone = null),
+                'updated_at' => $faker->dateTimeThisYear($max = 'now', $timezone = null),
             ));
         }
     

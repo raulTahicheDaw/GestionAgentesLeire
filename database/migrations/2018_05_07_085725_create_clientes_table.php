@@ -27,7 +27,7 @@ class CreateClientesTable extends Migration
             $table->string('codigoPostal',5)->nullable();
             $table->string('provincia',50)->nullable();
             $table->string('cuentaBancaria',30)->nullable();
-            $table->string('profesion',50)->nullable();
+            $table->string('profesion',150)->nullable();
             $table->string('contacto',50)->nullable();
             $table->boolean('activo')->default(1);
             $table->longText('observaciones')->nullable();

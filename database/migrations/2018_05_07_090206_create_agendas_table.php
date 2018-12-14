@@ -19,7 +19,7 @@ class CreateAgendasTable extends Migration
             $table->string('motivo',256);
             $table->string('lugar',150);
             $table->date('fecha');
-            $table->dateTime('hora',5);
+            $table->string('hora',5);
             $table->longText('acuerdos')->nullable();
             $table->longText('observaciones')->nullable();
             $table->timestamps();

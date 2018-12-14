@@ -31,8 +31,8 @@ class ClientesSeeder extends Seeder
                 'contacto'=>$faker->optional()->name($gender = null),
                 'observaciones'=>$faker->optional()->text($maxNbChars = 100),
                 'id_categoria'=>$faker->randomElement($array=array(1,2,3)),
-                'created_at' => date('Y-m-d H:m:s'),
-                'updated_at' => date('Y-m-d H:m:s')
+                'created_at' => $faker->dateTimeThisYear($max = 'now', $timezone = null),
+                'updated_at' => $faker->dateTimeThisYear($max = 'now', $timezone = null),
             ));
         }
         
